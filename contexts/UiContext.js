@@ -7,7 +7,8 @@ export const UiContext = createContext();
 const initialState = {
   isDropdownOpen: false,
   isSidebarOpen: false,
-  isUserLoggedIn: true
+  isUserLoggedIn: false,
+  isUserCandidate: true,
 };
 
 export const UiProvider = ({ children }) => {

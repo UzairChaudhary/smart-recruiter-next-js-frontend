@@ -9,7 +9,10 @@ export const actioTypes = {
   toggleSidebar: "TOGGLE_SIDEBAR",
   
   userLoggedIn: "SHOW_PROFILE_ICON",
-  userLoggedOut: "HIDE_PROFILE_ICON"
+  userLoggedOut: "HIDE_PROFILE_ICON",
+
+  userIsCandidate: "SHOW_CANDIDATE_SCREENS",
+  userIsRecruiter: "SHOW_RECRUITER_SCREENS"
 };
 
 export const uiReducer = (state, action) => {
@@ -39,6 +42,13 @@ export const uiReducer = (state, action) => {
       break;
     case actioTypes.userLoggedOut:
       return { ...state, isUserLoggedIn: false };
+      break;
+    
+      case actioTypes.userIsCandidate:
+      return { ...state, isUserCandidate: true };
+      break;
+    case actioTypes.userIsRecruiter:
+      return { ...state, isUserCandidate: false };
       break;
 
     default:
