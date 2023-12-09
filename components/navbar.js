@@ -3,8 +3,8 @@
 
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import { FiDelete, FiMoon, FiPlus, FiSun } from "react-icons/fi";
-import { BiBell, BiChevronDown, BiSearch, BiMenu } from "react-icons/bi";
+import { FiDelete} from "react-icons/fi";
+import { BiChevronDown } from "react-icons/bi";
 import { useUiContext } from "../contexts/UiContext";
 import { actioTypes } from "../reducers/uiReducer";
 import { useRouter } from "next/router";
@@ -12,7 +12,6 @@ import Image from "next/image";
 import Link from 'next/link';
 import { links } from "../data/links";
 import Dropdown from "./Dropdown";
-import ActiveLink from "./ActiveLink";
 
 const Navbar = () => {
   const [loggedIn, setLoggedIn] = useState(true);
@@ -79,7 +78,7 @@ const Navbar = () => {
         // Hamburger menu for mobile view
         <div>
           <button onClick={() => dispatch({ type: actioTypes.toggleSidebar })} >
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8  ">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8 ">
               <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
             </svg>
           </button>
@@ -92,7 +91,7 @@ const Navbar = () => {
             <div className="flex justify-between border-b dark:border-slate-800 space-x-40 p-1 ">
             <p className="uppercase">menu</p>
             <div
-              className="icon-box md:hidden cursor-pointer"
+              className="icon-box cursor-pointer"
               onClick={() => dispatch({ type: actioTypes.closeSidebar })}
             >
               <FiDelete />
