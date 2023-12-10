@@ -22,3 +22,9 @@ export const UiProvider = ({ children }) => {
 };
 
 export const useUiContext = () => useContext(UiContext);
+
+
+
+
+
+

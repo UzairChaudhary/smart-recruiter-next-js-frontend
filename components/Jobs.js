@@ -1,6 +1,21 @@
+"use client"
+import Image from "next/image";
+import { useUiContext } from "../contexts/UiContext";
+import { actioTypes } from "../reducers/uiReducer";
 import React from 'react';
-import Image from 'next/image';
+import Link from 'next/link';
+
 const JobSection = () => {
+
+
+  const { dispatch,isUserCandidate } = useUiContext();
+
+  const handleUser = () => {
+    dispatch({ type: actioTypes.toggleDropdown });
+  };
+
+
+
   const categories = [
     'All Categories',
     'Software Developer',
@@ -149,14 +164,18 @@ const JobSection = () => {
             </div>
           ))}
         </div>
-        {categories.length > 4 && (
+        {isUserCandidate && categories.length > 4 ? (
           <div className="ml-auto text-gray-500 hover:underline cursor-pointer pr-40">
             View All
           </div>
+        ):(
+          <button className="bg-teal_color text-white py-2 px-4 rounded-md ml-auto cursor-pointer pr-5 mr-40">
+              <Link href="/login">+ Post Job</Link>
+            </button>
         )}
       </div>
       
-        <div className="grid grid-cols-1 sm:grid-cols-2  md:grid-cols-3 lg:grid-cols-4 gap-6 md:ml-40 pr-40 ">
+        <div className="grid grid-cols-1 sm:grid-cols-2  md:grid-cols-2 lg:grid-cols-4 gap-6 md:ml-40 pr-40 ">
         {displayedJobs.map((job) => (
           <div key={job.id} className="bg-white p-6 rounded-3xl shadow-md mb-8 hover:bg-gradient-to-br hover:from-blue_color hover:to-yellow_color hover:text-white w-auto">
             {/* Company Logo */}
