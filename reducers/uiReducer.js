@@ -12,7 +12,10 @@ export const actioTypes = {
   userLoggedOut: "HIDE_PROFILE_ICON",
 
   userIsCandidate: "SHOW_CANDIDATE_SCREENS",
-  userIsRecruiter: "SHOW_RECRUITER_SCREENS"
+  userIsRecruiter: "SHOW_RECRUITER_SCREENS",
+
+  openLoginSidebar: "SHOW_LOGIN_SIDEBAR",
+  closeLoginSidebar: "HIDE_LOGIN_SIDEBAR",
 };
 
 export const uiReducer = (state, action) => {
@@ -44,11 +47,18 @@ export const uiReducer = (state, action) => {
       return { ...state, isUserLoggedIn: false };
       break;
     
-      case actioTypes.userIsCandidate:
+    case actioTypes.userIsCandidate:
       return { ...state, isUserCandidate: true };
       break;
     case actioTypes.userIsRecruiter:
       return { ...state, isUserCandidate: false };
+      break;
+    
+    case actioTypes.openLoginSidebar:
+      return { ...state, isLoginSidebarOpen: true };
+      break;
+    case actioTypes.closeLoginSidebar:
+      return { ...state, isLoginSidebarOpen: false };
       break;
 
     default:

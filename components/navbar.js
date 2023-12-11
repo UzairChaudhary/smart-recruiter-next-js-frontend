@@ -12,11 +12,12 @@ import Image from "next/image";
 import Link from 'next/link';
 import { links } from "../data/links";
 import Dropdown from "./Dropdown";
+import LoginSignupScreen from './LoginSignupScreen';
 
 const Navbar = () => {
   const [loggedIn, setLoggedIn] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
-  const [isMenuOpen, setMenuOpen] = useState(false);
+  const [isLoginScreenOpen, setLoginScreenOpen] = useState(false);
 
   useEffect(() => {
     const handleResize = () => {
@@ -43,22 +44,27 @@ const Navbar = () => {
   const handleLogout = () => {
     // Handle logout logic here
     setLoggedIn(false);
-    setMenuOpen(false); // Close the menu after logout
+    
   };
 
-  const toggleMenu = () => {
-    setMenuOpen(!isMenuOpen);
-  };
 
-  const { dispatch, isSidebarOpen, isUserLoggedIn } = useUiContext();
+  const { dispatch, isSidebarOpen, isUserLoggedIn, isLoginSidebarOpen } = useUiContext();
   
 
   const handleDropdown = () => {
     dispatch({ type: actioTypes.toggleDropdown });
   };
 
-  
 
+  const handleLoginClick = () => {
+    setLoginScreenOpen(true);
+    dispatch({ type: actioTypes.openLoginSidebar });
+  };
+
+  const handleLoginScreenClose = () => {
+    setLoginScreenOpen(false);
+    dispatch({ type: actioTypes.closeLoginSidebar });
+  };
 
   
 
@@ -134,9 +140,14 @@ const Navbar = () => {
             </div>
           
           ) : (
-            <button className="bg-teal_color text-white py-2 px-4 rounded-md">
-              <Link href="/login">Login</Link>
+            <div>
+              <button className="bg-teal_color text-white py-2 px-4 rounded-md" onClick={handleLoginClick}>
+              Login
             </button>
+            {/* Render LoginSignupScreen when isLoginScreenOpen is true */}
+
+            {isLoginSidebarOpen && <LoginSignupScreen onClose={handleLoginScreenClose} />}
+            </div>
           )}
         </div>
       )}

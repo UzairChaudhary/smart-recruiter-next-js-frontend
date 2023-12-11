@@ -20,7 +20,8 @@ const config: Config = {
         teal_color: '#1ABBAC', // teal color
         blue_color: '#0089B5', // blue color
         black_color: '#01042D', //black color
-        yellow_color: '#B2DB46'
+        yellow_color: '#B2DB46',
+        linear_gradient_50 : "#CFE8A9"
         
       },
       fontFamily: {

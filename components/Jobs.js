@@ -177,7 +177,7 @@ const JobSection = () => {
       
         <div className="grid grid-cols-1 sm:grid-cols-2  md:grid-cols-2 lg:grid-cols-4 gap-6 md:ml-40 pr-40 ">
         {displayedJobs.map((job) => (
-          <div key={job.id} className="bg-white p-6 rounded-3xl shadow-md mb-8 hover:bg-gradient-to-br hover:from-blue_color hover:to-yellow_color hover:text-white w-auto">
+          <div key={job.id} className="bg-white p-6 rounded-3xl mb-8 hover:bg-gradient-to-br hover:from-blue_color hover:to-yellow_color hover:text-white w-auto border border-r-6 border-gray-300">
             {/* Company Logo */}
             <Image src={job.logo_url} alt="Company Logo" className="mx-auto rounded-full p-2 mb-3 w-16 h-16 bg-white border" height={100} width={100} />
 
