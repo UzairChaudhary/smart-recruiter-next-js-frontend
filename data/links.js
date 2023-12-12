@@ -17,7 +17,7 @@ export const links = [
   {
     id: 4,
     linkText: "About Us",
-    url: "/schedule",
+    url: "/AboutUs",
   },
   
 ];

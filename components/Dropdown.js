@@ -2,12 +2,14 @@ import { BiBriefcase, BiLogOut, BiUser, BiUserCircle } from "react-icons/bi";
 import { motion } from "framer-motion";
 import { useUiContext } from "../contexts/UiContext";
 import { actioTypes } from "../reducers/uiReducer";
+import { useRouter } from "next/navigation";
 
 const Dropdown = () => {
   const {dispatch, isDropdownOpen } = useUiContext();
-
+  const router = useRouter();
   const handleLogout = () => {
     dispatch({ type: actioTypes.userLoggedOut });
+    router.push("/");
   };
 
   return (
