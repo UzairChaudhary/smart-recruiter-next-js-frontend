@@ -9,7 +9,10 @@ const initialState = {
   isSidebarOpen: false,
   isUserLoggedIn: false,
   isUserCandidate: true,
-  isLoginSidebarOpen: false
+  isLoginSidebarOpen: false,
+
+  user:null,
+  token:null
 };
 
 export const UiProvider = ({ children }) => {

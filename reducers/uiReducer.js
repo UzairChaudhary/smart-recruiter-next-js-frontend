@@ -60,6 +60,21 @@ export const uiReducer = (state, action) => {
     case actioTypes.closeLoginSidebar:
       return { ...state, isLoginSidebarOpen: false };
       break;
+    
+    case 'LOGIN':
+      return {
+        ...state,
+        user: action.payload.user,
+        token: action.payload.token,
+        
+      };
+    case 'LOGOUT':
+      return {
+        ...state,
+        user: null,
+        token: null,
+        
+      };
 
     default:
       return state;

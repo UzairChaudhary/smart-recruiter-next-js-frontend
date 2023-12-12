@@ -2,17 +2,62 @@
 import Image from "next/image";
 import { useUiContext } from "../contexts/UiContext";
 import { actioTypes } from "../reducers/uiReducer";
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 
-const JobSection = () => {
+const JobSection = (jobsData) => {
 
-
-  const { dispatch,isUserCandidate } = useUiContext();
-
+  const [jobsArray, setJobsArray] = useState([]);
+  console.log("SSR Jobs Data",jobsData)
+  
+  const { dispatch,isUserCandidate, user, token } = useUiContext();
+  console.log("user:" , user)
+  console.log("token:" , token)
+  
   const handleUser = () => {
     dispatch({ type: actioTypes.toggleDropdown });
   };
+  
+
+  useEffect(() => {
+    // Fetch data using the passed jobsData prop
+    if (jobsData && jobsData.length > 0) {
+      console.log("Server Side Rendering")
+      setJobsArray(jobsData);
+    } else {
+      // Fetch data from the API using the token
+      const fetchData = async () => {
+        const myHeaders = new Headers();
+        myHeaders.append("Cookie", "token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTZjYzljZGRkZDJiN2RiYzBiY2QyNTQiLCJpYXQiOjE3MDIzMjI3MjJ9.tAVXPVL1vCCiZycmu7uTdtlrnzO7eT2M4YxRA9RUmHQ");
+
+        const requestOptions = {
+          method: "GET",
+          headers: myHeaders,
+          redirect: "follow",
+        };
+
+        try {
+          const response = await fetch(
+            "http://localhost:3000/api/v1/job/getJobs",
+            requestOptions
+          );
+
+          if (!response.ok) {
+            throw new Error("Failed to fetch data");
+          }
+
+          const data = await response.json();
+          setJobsArray(data.jobs);
+          
+          console.log(jobsArray)
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        }
+      };
+
+      fetchData();
+    }
+  }, [jobsData, token]);
 
 
 

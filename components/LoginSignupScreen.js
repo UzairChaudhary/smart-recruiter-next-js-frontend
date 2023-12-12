@@ -194,12 +194,27 @@ const LoginSignupScreen = ({ onClose }) => {
           setFormPassword('')
           handleUserLogin()
           router.push("/");
+          
 
           if (user==="candidate"){
             dispatch({ type: actioTypes.userIsCandidate });
+            dispatch({
+              type: 'LOGIN',
+              payload:{
+                user:result.candidate,
+                token:result.token
+              }
+            })
           }
           else{
             dispatch({ type: actioTypes.userIsRecruiter });
+            dispatch({
+              type: 'LOGIN',
+              payload:{
+                user:result.recruiter,
+                token:result.token
+              }
+            })
           }
           toast.success("Login Successful")
         }
