@@ -155,7 +155,12 @@ const JobSection = () => {
 
   return (
     <div className="job-section ml-6">
-      <h2 className="text-4xl font-medium mt-10 flex md:ml-40 mb-4">Popular Jobs</h2>
+      {isUserCandidate? (
+        <h2 className="text-4xl font-medium mt-10 flex md:ml-40 mb-4">Popular Jobs</h2>
+      ):(
+        <h2 className="text-4xl font-medium mt-10 flex md:ml-40 mb-4">My Jobs</h2>
+      )}
+      
       <div className="bg-white py-4 flex items-center md:ml-40 mb-6">
         <div className="flex space-x-4">
           {displayedCategories.map((category, index) => (
@@ -197,9 +202,15 @@ const JobSection = () => {
             {/* Employment Type and Apply Button */}
             <div className="flex justify-between flex-wrap">
               <p className="mt-2">{job.type_of_employment}</p>
-              <button className="bg-black_color text-white px-6 py-2 rounded-full hover:bg-white hover:text-black">
+              {isUserCandidate?(
+                <button className="bg-black_color text-white px-6 py-2 rounded-full hover:bg-white hover:text-black">
                 Apply
               </button>
+              ):(
+                <button className="bg-black_color text-white px-6 py-2 rounded-full hover:bg-white hover:text-black">
+                Details
+              </button>
+              )}
             </div>
           </div>
         ))}

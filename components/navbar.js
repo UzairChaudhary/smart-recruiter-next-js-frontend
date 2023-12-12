@@ -58,12 +58,14 @@ const Navbar = () => {
 
   const handleLoginClick = () => {
     setLoginScreenOpen(true);
-    dispatch({ type: actioTypes.openLoginSidebar });
+    dispatch({ type: actioTypes.openLoginSidebar })
+    
   };
 
   const handleLoginScreenClose = () => {
     setLoginScreenOpen(false);
-    dispatch({ type: actioTypes.closeLoginSidebar });
+    dispatch({ type: actioTypes.closeLoginSidebar })
+    
   };
 
   
@@ -130,7 +132,7 @@ const Navbar = () => {
               onClick={handleDropdown}
             >
               <motion.img
-                src="/dp.png"
+                src="/default-dp.png"
                 alt=""
                 className="w-10 h-10 rounded-full sm:cursor-pointer dropdown-btn"
                 whileTap={{ scale: 0.5 }}
