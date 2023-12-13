@@ -13,13 +13,18 @@ import Link from 'next/link';
 import { links } from "../data/links";
 import Dropdown from "./Dropdown";
 import LoginSignupScreen from './LoginSignupScreen';
+import { getCookie, setCookie } from "cookies-next";
 
 const Navbar = () => {
   const [loggedIn, setLoggedIn] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
   const [isLoginScreenOpen, setLoginScreenOpen] = useState(false);
 
+
+  
+
   useEffect(() => {
+    setCookie("user","candidate")
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 780); // Adjust the breakpoint as needed
     };
@@ -36,10 +41,6 @@ const Navbar = () => {
     };
   }, []);
 
-  const user = {
-    name: 'John Doe',
-    profilePic: '/next.svg',
-  };
 
   const handleLogout = () => {
     // Handle logout logic here
@@ -126,7 +127,7 @@ const Navbar = () => {
           <Link href="/services">Companies</Link>
           <Link href="/pricing">About Us</Link>
 
-          {isUserLoggedIn ? (
+          {getCookie("session")==="login" ? (
             <div
               className="dropdown-btn flex flex-align-center space-x-1  md:pl-4 flex-shrink-0 relative"
               onClick={handleDropdown}
@@ -148,7 +149,7 @@ const Navbar = () => {
             </button>
             {/* Render LoginSignupScreen when isLoginScreenOpen is true */}
 
-            {isLoginSidebarOpen && <LoginSignupScreen onClose={handleLoginScreenClose} />}
+            {isLoginScreenOpen && <LoginSignupScreen onClose={handleLoginScreenClose} />}
             </div>
           )}
         </div>

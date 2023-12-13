@@ -4,15 +4,18 @@ import { useUiContext } from "../contexts/UiContext";
 import { actioTypes } from "../reducers/uiReducer";
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { getCookie, getCookies } from "cookies-next";
 
 const JobSection = () => {
 
   const [jobsArray, setJobsArray] = useState([]);
   
-  
+  console.log(getCookie("user"))
+  console.log(getCookie("token"))
+  console.log(getCookie("candidate"))
+  console.log(getCookie("recruiter"))
   const { dispatch,isUserCandidate, user, token } = useUiContext();
-  console.log("user:" , user)
-  console.log("token:" , token)
+  
   
   const handleUser = () => {
     dispatch({ type: actioTypes.toggleDropdown });
@@ -53,7 +56,7 @@ const JobSection = () => {
 
       fetchData();
     
-  }, [token]);
+  }, [token]); //jobsArray
 
 
 
@@ -196,7 +199,7 @@ const JobSection = () => {
 
   return (
     <div className="job-section ml-6">
-      {isUserCandidate? (
+      {getCookie("user")==="candidate"? (
         <h2 className="text-4xl font-medium mt-10 flex md:ml-40 mb-4">Popular Jobs</h2>
       ):(
         <h2 className="text-4xl font-medium mt-10 flex md:ml-40 mb-4">My Jobs</h2>
@@ -210,7 +213,7 @@ const JobSection = () => {
             </div>
           ))}
         </div>
-        {isUserCandidate && categories.length > 4 ? (
+        {getCookie("user")==="candidate" && categories.length > 4 ? (
           <div className="ml-auto text-gray-500 hover:underline cursor-pointer pr-40">
             View All
           </div>
@@ -246,7 +249,7 @@ const JobSection = () => {
             {/* Employment Type and Apply Button */}
             <div className="flex justify-between flex-wrap">
               <p className="mt-2">{job.jobType}</p>
-              {isUserCandidate?(
+              {getCookie("user")==="candidate"?(
                 <Link href={`/apply/${job?._id}`} className="bg-black_color text-white px-6 py-2 rounded-full hover:bg-white hover:text-black">
                 Apply
               </Link>

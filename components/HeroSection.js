@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useUiContext } from "../contexts/UiContext";
 import { actioTypes } from "../reducers/uiReducer";
+import { getCookie } from "cookies-next";
 
 export default function HeroSection() {
 
@@ -15,7 +16,7 @@ export default function HeroSection() {
   return (
     <>
       <div className="relative p-4 mt-1">
-        {isUserCandidate ? (
+        {getCookie("user")==="candidate" ? (
           <div className="flex flex-col md:flex-row justify-center items-center p-5 ml-1 space-x-40 relative z-10 flex-wrap-reverse">
           <div className="flex flex-col justify-center mr-5 mt-5 text-center md:text-left md:pl-20">
             <div className="mb-2">

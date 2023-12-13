@@ -1,4 +1,5 @@
 /* eslint-disable react/no-unescaped-entities */
+"use client"
 import { useState } from 'react';
 
 import { FiLock, FiMail} from "react-icons/fi";
@@ -13,6 +14,7 @@ import { useUiContext } from "../contexts/UiContext";
 import { actioTypes } from "../reducers/uiReducer";
 
 import { toast } from 'react-hot-toast';
+import { setCookie } from 'cookies-next';
 
 
 
@@ -164,6 +166,7 @@ const LoginSignupScreen = ({ onClose }) => {
       return ;
     }
     
+    
     else{
     // Extract user type-specific form data
     const formData = {
@@ -185,19 +188,27 @@ const LoginSignupScreen = ({ onClose }) => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(formData),
-      }).then(response => response.json())
+      }).then(response =>response.json())
       .then(result => {
-        console.log(result)
+        console.log("result", result)
+        
         if (result.success===true){
           
           setFormEmail('')
           setFormPassword('')
           handleUserLogin()
+          setCookie("token", result.token)
+          setCookie("session", "login")
+          
           router.push("/");
           
+          
+          
 
-          if (user==="candidate"){
+          if (result.candidate){
             dispatch({ type: actioTypes.userIsCandidate });
+            setCookie("candidate", result.candidate)
+            setCookie("user", "candidate")
             dispatch({
               type: 'LOGIN',
               payload:{
@@ -205,9 +216,12 @@ const LoginSignupScreen = ({ onClose }) => {
                 token:result.token
               }
             })
+            
           }
           else{
             dispatch({ type: actioTypes.userIsRecruiter });
+            setCookie("recruiter", result.recruiter)
+            setCookie("user", "recruiter")
             dispatch({
               type: 'LOGIN',
               payload:{
@@ -215,6 +229,7 @@ const LoginSignupScreen = ({ onClose }) => {
                 token:result.token
               }
             })
+            
           }
           toast.success("Login Successful")
         }
@@ -290,6 +305,7 @@ const LoginSignupScreen = ({ onClose }) => {
                 type="email"
                 value={formEmail}
                 id="email"
+                required
                 placeholder="Enter your Email"
                 className="w-full outline-none focus:outline-none placeholder-gray-400 "
                 onFocus={() => setIsEmailFocused(true)}
@@ -303,6 +319,7 @@ const LoginSignupScreen = ({ onClose }) => {
               <input
                 type="password"
                 value={formPassword}
+                required
                 id="password"
                 placeholder="Enter your Password"
                 className="w-full outline-none focus:outline-none placeholder-gray-400"
@@ -352,6 +369,7 @@ const LoginSignupScreen = ({ onClose }) => {
               <GoPerson className={`mr-2 ${isNameFocused ? 'text-teal_color' : 'text-gray-400'}`} />
               <input
                 id="name"
+                required
                 value={formName}
                 placeholder= {`Enter your ${ user==="recruiter" ? 'Company Name' : 'Name'}`}
                 className={`w-full outline-none focus:outline-none placeholder-gray-400 text-sm 
@@ -366,7 +384,7 @@ const LoginSignupScreen = ({ onClose }) => {
               <FiMail className={`mr-2 ${isEmailFocused ? 'text-teal_color' : 'text-gray-400'}`} />
               <input
                 type="email"
-                
+                required
                 id="email"
                 value={formEmail}
                 placeholder="Enter your Email"
@@ -383,7 +401,7 @@ const LoginSignupScreen = ({ onClose }) => {
               <FiLock className={`mr-2 ${isPasswordFocused ? 'text-teal_color' : 'text-gray-400'}`} />
               <input
                 type="password"
-                
+                required
                 id="password"
                 value={formPassword}
                 placeholder="Enter your password"
@@ -401,6 +419,7 @@ const LoginSignupScreen = ({ onClose }) => {
                 type="password"
                 value={formConfirmPassword}
                 id="confirm_password"
+                required
                 placeholder="Confirm Password"
                 className={`w-full outline-none focus:outline-none placeholder-gray-400 text-sm `}
                 onFocus={() => setconfirmPasswordFocused(true)}

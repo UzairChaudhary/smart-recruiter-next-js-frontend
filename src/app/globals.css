@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat&family=Mulish&family=Nunito&family=Nunito+Sans:wght@400;600&family=Poppins:ital,wght@0,400;0,500;1,300;1,400&family=Questrial&family=Raleway&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -18,6 +20,154 @@
 
 html {
   font-family: var(--font-poppins);
+  @apply scroll-smooth;
 }
 
+
+*::-webkit-scrollbar {
+  @apply w-[5px] h-[5px];
+}
+
+*::-webkit-scrollbar-thumb {
+  @apply rounded bg-slate-400;
+}
+
+*::-webkit-scrollbar-track {
+  @apply !bg-transparent;
+}
+
+
+/* General styles */
+
+a.btn {
+  @apply opacity-100;
+}
+
+footer a {
+  @apply text-sm;
+}
+
+footer a:hover {
+  @apply ml-2;
+}
+
+.image-wrapper > span {
+  @apply !relative;
+}
+
+.card {
+  @apply bg-white rounded-lg border;
+}
+
+.card-bordered {
+  @apply border ;
+}
+
+.btn {
+  @apply px-4 py-[0.35rem] rounded-md sm:cursor-pointer capitalize flex-shrink-0;
+}
+
+.btn-primary {
+  @apply text-white hover:bg-[#0a986e];
+}
+
+.btn-primary-light {
+  @apply  hover:bg-[#07ae7146];
+}
+
+.icon-box {
+  @apply w-9 h-9 rounded-full grid place-items-center hover:bg-slate-200 sm:cursor-pointer flex-shrink-0;
+}
+
+/* Back to top button */
+.back-to-top-btn {
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease-in-out;
+}
+
+.back-to-top-btn.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Loader */
+
+@keyframes rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Navbar links */
+
+
+
+/* Check box & radio box */
+.input-check label,
+.input-radio label {
+  @apply relative cursor-pointer flex items-center text-slate-500 select-none;
+}
+
+.input-check input[type="checkbox"],
+.input-radio input[type="radio"] {
+  @apply cursor-pointer opacity-0 absolute;
+}
+
+.input-check label::before {
+  content: "";
+  @apply w-4 h-4 mr-2 rounded border ;
+}
+
+.input-check input[type="checkbox"]:checked + label::before {
+  content: "✔";
+  @apply grid place-items-center text-slate-100 text-[0.7rem] ;
+}
+
+/* Pagination */
+ul.pagination li.active {
+  @apply shadow-lg rounded-full ;
+}
+ul.pagination li.active a {
+  @apply !text-white;
+}
+
+/* Filter dialog and modal */
+.filter-modal {
+  @apply fixed w-full h-full top-0 left-0 bg-black/50 z-10 opacity-0 pointer-events-none md:static md:opacity-100 md:pointer-events-auto md:bg-transparent;
+}
+
+.filter-dialog {
+  @apply absolute  p-3 md:p-0 bg-white h-screen max-w-[300px] -translate-x-[500px] w-full max-h-screen overflow-auto md:static md:max-w-full md:translate-x-0 md:max-h-fit md:h-fit ;
+}
+
+/* Inputs */
+input:autofill,
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+
+
+.form-input .input {
+  @apply outline-none h-8 border border-slate-300   rounded-md px-[0.8rem] w-full text-base mb-5;
+}
+
+.form-input label,
+.select-input label {
+  @apply absolute top-[0.15rem] left-[0.9rem] text-[#8d9193]  px-[0.15rem] pointer-events-none;
+  transition: top 0.3s ease-in-out;
+}
+
+.form-input .input:focus,
+
+
+.form-input .input:focus ~ label,
+.form-input .input:valid ~ label {
+  @apply -top-[12px] left-[15px] text-sm;
+}
+
+
+input:-webkit-autofill ~ label {
+  @apply -top-[12px] left-[15px] text-sm ;
+}
 

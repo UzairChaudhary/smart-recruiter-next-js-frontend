@@ -3,12 +3,18 @@ import { motion } from "framer-motion";
 import { useUiContext } from "../contexts/UiContext";
 import { actioTypes } from "../reducers/uiReducer";
 import { useRouter } from "next/navigation";
+import { deleteCookie, setCookie } from "cookies-next";
 
 const Dropdown = () => {
   const {dispatch, isDropdownOpen } = useUiContext();
   const router = useRouter();
   const handleLogout = () => {
     dispatch({ type: actioTypes.userLoggedOut });
+    deleteCookie("token")
+    setCookie("user", "candidate")
+    setCookie("session", "logout")
+    deleteCookie("candidate")
+    deleteCookie("recruiter")
     router.push("/");
   };
 

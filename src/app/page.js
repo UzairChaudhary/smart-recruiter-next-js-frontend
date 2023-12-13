@@ -3,10 +3,13 @@ import React from "react";
 import HeroSection from "../../components/HeroSection";
 import JobSearchForm from "../../components/SearchJob";
 import JobSection from "../../components/Jobs";
+import { setCookie } from "cookies-next";
 
 const Home = () => {
+  
   return (
     <>
+      
       <HeroSection />
       <JobSearchForm />
       <JobSection />
