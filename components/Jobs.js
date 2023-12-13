@@ -5,10 +5,10 @@ import { actioTypes } from "../reducers/uiReducer";
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 
-const JobSection = (jobsData) => {
+const JobSection = () => {
 
   const [jobsArray, setJobsArray] = useState([]);
-  console.log("SSR Jobs Data",jobsData)
+  
   
   const { dispatch,isUserCandidate, user, token } = useUiContext();
   console.log("user:" , user)
@@ -20,11 +20,7 @@ const JobSection = (jobsData) => {
   
 
   useEffect(() => {
-    // Fetch data using the passed jobsData prop
-    if (jobsData && jobsData.length > 0) {
-      console.log("Server Side Rendering")
-      setJobsArray(jobsData);
-    } else {
+    
       // Fetch data from the API using the token
       const fetchData = async () => {
         const myHeaders = new Headers();
@@ -56,8 +52,8 @@ const JobSection = (jobsData) => {
       };
 
       fetchData();
-    }
-  }, [jobsData, token]);
+    
+  }, [token]);
 
 
 
@@ -196,7 +192,7 @@ const JobSection = (jobsData) => {
   // Display only the first 4 categories
   const displayedCategories = categories.slice(1, 5);
   // Limit the array to only the first 6 jobs
-  const displayedJobs = jobs.slice(0, 8);
+  const displayedJobs = jobsArray.slice(0, 8);
 
   return (
     <div className="job-section ml-6">
@@ -224,15 +220,18 @@ const JobSection = (jobsData) => {
             </button>
         )}
       </div>
+      {displayedJobs.length ? (
+        
+      
       
         <div className="grid grid-cols-1 sm:grid-cols-2  md:grid-cols-2 lg:grid-cols-4 gap-6 md:ml-40 pr-40 ">
         {displayedJobs.map((job) => (
-          <div key={job.id} className="bg-white p-6 rounded-3xl mb-8 hover:bg-gradient-to-br hover:from-blue_color hover:to-yellow_color hover:text-white w-auto border border-r-6 border-gray-300">
+          <div key={job._id} className="bg-white p-6 rounded-3xl mb-8 hover:bg-gradient-to-br hover:from-blue_color hover:to-yellow_color hover:text-white w-auto border border-r-6 border-gray-300">
             {/* Company Logo */}
-            <Image src={job.logo_url} alt="Company Logo" className="mx-auto rounded-full p-2 mb-3 w-16 h-16 bg-white border" height={100} width={100} />
+            <Image src="/next.svg" alt="Company Logo" className="mx-auto rounded-full p-2 mb-3 w-16 h-16 bg-white border" height={100} width={100} />
 
             {/* Company Name */}
-            <p className="text-center text-sm mb-4 ">{job.companyName}</p>
+            <p className="text-center text-sm mb-4 ">{job.owner.name}</p>
             <p className="text-center font-medium text-lg mb-4">{job.title}</p>
 
             {/* Job Skills */}
@@ -246,11 +245,11 @@ const JobSection = (jobsData) => {
 
             {/* Employment Type and Apply Button */}
             <div className="flex justify-between flex-wrap">
-              <p className="mt-2">{job.type_of_employment}</p>
+              <p className="mt-2">{job.jobType}</p>
               {isUserCandidate?(
-                <button className="bg-black_color text-white px-6 py-2 rounded-full hover:bg-white hover:text-black">
+                <Link href={`/apply/${job?._id}`} className="bg-black_color text-white px-6 py-2 rounded-full hover:bg-white hover:text-black">
                 Apply
-              </button>
+              </Link>
               ):(
                 <button className="bg-black_color text-white px-6 py-2 rounded-full hover:bg-white hover:text-black">
                 Details
@@ -260,6 +259,9 @@ const JobSection = (jobsData) => {
           </div>
         ))}
       </div>
+      ):(
+        <h2 className="text-4xl font-medium mt-10 flex md:ml-40 mb-4">No Jobs Currently</h2>
+      )}
     </div>
   );
 };
