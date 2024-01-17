@@ -1,17 +1,13 @@
 /* eslint-disable react/no-unescaped-entities */
 "use client"
 import Image from "next/image";
+import { getCookie, hasCookie } from "cookies-next";
 import { useUiContext } from "../contexts/UiContext";
-import { actioTypes } from "../reducers/uiReducer";
-import { getCookie } from "cookies-next";
 
 export default function HeroSection() {
 
-  const { dispatch, isUserCandidate } = useUiContext();
-
-  const handleUser = () => {
-    dispatch({ type: actioTypes.toggleDropdown });
-  };
+  const {dispatch, isDropdownOpen,isUserCandidate } = useUiContext();
+  
 
   return (
     <>
@@ -25,7 +21,7 @@ export default function HeroSection() {
               <p className="text-4xl font-semibold text-black p-1">Smart Recruiter</p>
             </div>
             <div>
-              <Image alt="Hero" src="/line.png" width={212} height={12} className="mb-8 ml-2"></Image>
+              <img alt="Hero" src="/line.png" width={212} height={12} className="mb-8 ml-2"></img>
             </div>
             <div className="font-">
               <p>Elevate Your Recruitment Game with Smart Recruiter</p>
@@ -33,7 +29,7 @@ export default function HeroSection() {
             </div>
           </div>
           <div className="flex justify-center md:pr-40">
-            <Image alt="Hero" src="/hero-section-img.png" width={490} height={437} className="mb-2 p-3 "></Image>
+            <Image alt="Hero" src="/hero-section-img.png" priority={true} width={490} height={437} className="mb-2 p-3 "></Image>
           </div>
         </div>
         ):(
@@ -45,7 +41,7 @@ export default function HeroSection() {
               <p className="text-4xl font-semibold text-black p-1">Candidate</p>
             </div>
             <div>
-              <Image alt="Hero" src="/line.png" width={212} height={12} className="mb-8 ml-2"></Image>
+              <img alt="Hero" src="/line.png" width={212} height={12} className="mb-8 ml-2"></img>
             </div>
             <div className="font-">
               <p>Providing Smart Solutions for Smart Companies </p>

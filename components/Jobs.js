@@ -4,34 +4,42 @@ import { useUiContext } from "../contexts/UiContext";
 import { actioTypes } from "../reducers/uiReducer";
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { getCookie, getCookies } from "cookies-next";
+import { getCookie,hasCookie } from "cookies-next";
+
+import { useRouter } from "next/navigation";
+
+import { toast } from 'react-hot-toast';
 
 const JobSection = () => {
 
   const [jobsArray, setJobsArray] = useState([]);
   
-  console.log(getCookie("user"))
-  console.log(getCookie("token"))
-  console.log(getCookie("candidate"))
-  console.log(getCookie("recruiter"))
+  
+  //console.log(getCookie("token"))
+  //console.log(getCookie("candidate"))
+  //console.log(getCookie("recruiter"))
   const { dispatch,isUserCandidate, user, token } = useUiContext();
+  const router = useRouter();
   
-  
-  const handleUser = () => {
-    dispatch({ type: actioTypes.toggleDropdown });
+  const handleUserAuthentication = (e,id) => {
+    e.preventDefault()
+    if (hasCookie("token")){
+      router.push(`/apply/${id}`)
+    }
+    else{
+      toast.error("Please login first")
+      
+    }
   };
   
 
   useEffect(() => {
-    
+      //console.log('login as: ',getCookie("user"))
       // Fetch data from the API using the token
       const fetchData = async () => {
-        const myHeaders = new Headers();
-        myHeaders.append("Cookie", "token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTZjYzljZGRkZDJiN2RiYzBiY2QyNTQiLCJpYXQiOjE3MDIzMjI3MjJ9.tAVXPVL1vCCiZycmu7uTdtlrnzO7eT2M4YxRA9RUmHQ");
 
         const requestOptions = {
-          method: "GET",
-          headers: myHeaders,
+          method: "GET",  
           redirect: "follow",
         };
 
@@ -56,7 +64,7 @@ const JobSection = () => {
 
       fetchData();
     
-  }, [token]); //jobsArray
+  }, []);
 
 
 
@@ -219,7 +227,7 @@ const JobSection = () => {
           </div>
         ):(
           <button className="bg-teal_color text-white py-2 px-4 rounded-md ml-auto cursor-pointer pr-5 mr-40">
-              <Link href="/login">+ Post Job</Link>
+              <Link href="/">+ Post Job</Link>
             </button>
         )}
       </div>
@@ -250,9 +258,9 @@ const JobSection = () => {
             <div className="flex justify-between flex-wrap">
               <p className="mt-2">{job.jobType}</p>
               {getCookie("user")==="candidate"?(
-                <Link href={`/apply/${job?._id}`} className="bg-black_color text-white px-6 py-2 rounded-full hover:bg-white hover:text-black">
+                <button href={`/apply/${job?._id}`} onClick={(e)=>handleUserAuthentication(e,job._id)} className="bg-black_color text-white px-6 py-2 rounded-full hover:bg-white hover:text-black">
                 Apply
-              </Link>
+              </button>
               ):(
                 <button className="bg-black_color text-white px-6 py-2 rounded-full hover:bg-white hover:text-black">
                 Details

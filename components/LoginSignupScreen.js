@@ -93,6 +93,7 @@ const LoginSignupScreen = ({ onClose }) => {
       return ;
     }
     else{
+      
   
     const formData = {
       name: formName,
@@ -128,7 +129,7 @@ const LoginSignupScreen = ({ onClose }) => {
           toast.success("Account Created Successfully")
         }
         else{
-          toast.error("Sign Up Failed")
+          toast.error("Sign Up Failed", result)
         }
         
       })
@@ -207,8 +208,9 @@ const LoginSignupScreen = ({ onClose }) => {
 
           if (result.candidate){
             dispatch({ type: actioTypes.userIsCandidate });
-            setCookie("candidate", result.candidate)
+            
             setCookie("user", "candidate")
+            setCookie("candidate", result.candidate)
             dispatch({
               type: 'LOGIN',
               payload:{
@@ -220,8 +222,9 @@ const LoginSignupScreen = ({ onClose }) => {
           }
           else{
             dispatch({ type: actioTypes.userIsRecruiter });
-            setCookie("recruiter", result.recruiter)
+            
             setCookie("user", "recruiter")
+            setCookie("recruiter", result.recruiter)
             dispatch({
               type: 'LOGIN',
               payload:{
@@ -235,6 +238,7 @@ const LoginSignupScreen = ({ onClose }) => {
         }
         else{
           toast.error("Incorrect Credentials")
+          toast.error(result.message)
         }
         
         

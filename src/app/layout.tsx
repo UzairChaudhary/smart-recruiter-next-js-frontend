@@ -1,4 +1,3 @@
-
 import type { Metadata } from 'next'
 import { Inter, Poppins } from 'next/font/google'
 import './globals.css'
@@ -29,15 +28,15 @@ export default function RootLayout({
   return (
     <UiProvider>
       <html lang="en" className={`${inter.variable} ${poppins.variable}`}>
-      <body >
+      <body suppressHydrationWarning >
         <Toaster/>
         <NavBar/>
         
         {children}
         <Footer/>
-        </body>
+      </body>
         
-    </html>
+      </html>
     </UiProvider>
   )
 }

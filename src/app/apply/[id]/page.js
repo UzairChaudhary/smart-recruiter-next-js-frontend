@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import { BiFile, BiLink } from "react-icons/bi";
 import { FiChevronLeft } from "react-icons/fi";
 import Link from "next/link";
-import { getCookie } from "cookies-next";
+import { getCookie, hasCookie } from "cookies-next";
 import { toast } from 'react-hot-toast';
 
 import { useUiContext } from "../../../../contexts/UiContext";
@@ -14,7 +14,7 @@ const ApplyJob = ({ params }) => {
   const [jobData, setJobData] = useState(null);
   const fileInput = useRef(null);
   const [file, setFile] = useState("");
-  const [fileURL, setfileURL] = useState("");
+  const [fileURL, setfileURL] = useState(null);
 
   // const { user, token } = useUiContext();
   // console.log("user:" , user)
@@ -44,9 +44,19 @@ const ApplyJob = ({ params }) => {
         console.error('Error fetching job data:', error);
       }
     };
-
+    
     fetchJobData();
+    console.log(getCookie("token"))
+    console.log(getCookie("session"))
+    console.log(params.id)
   }, [params.id]);
+
+  useEffect(() => {
+    console.log("fileURL:", fileURL);
+    if (fileURL){
+      applyJob(fileURL)
+    }
+  }, [fileURL]);
 
   const isFileValid = (file) => {
     const allowedExtensions = ['.pdf', '.docx'];
@@ -69,9 +79,9 @@ const ApplyJob = ({ params }) => {
           await uploadFileToFirebase();
   
           // Introduce a delay of 3000 milliseconds (3 seconds) before calling applyJob
-          setTimeout(() => {
-            applyJob();
-          }, 2000);
+          // setTimeout(() => {
+          //   applyJob();
+          // }, 2000);
         } catch (error) {
           console.error('Error uploading file:', error);
         }
@@ -115,20 +125,27 @@ const ApplyJob = ({ params }) => {
     }
   };
   
-  const applyJob=()=>{
+  const applyJob=(URL)=>{
     var myHeaders2 = new Headers();
 myHeaders2.append("Content-Type", "application/json");
-myHeaders2.append("Cookie", `token=${getCookie("token")}`);
+//myHeaders2.append("Cookie", `token=${getCookie("token")}`);
+ // Retrieve the token from wherever you store it (localStorage, cookies, etc.)
+  const token = getCookie("token");
+
+//  // Set the token in the request header
+//  myHeaders2.append("Authorization", `Bearer ${token}`);
 
 var raw1 = JSON.stringify({
-  "resumeFile": fileURL,
-  "candidateId": getCookie("candidate")._id
+  "resumeFile": URL,
+  
+  
 });
 console.log(raw1)
 
 var requestOptions = {
   method: 'POST',
   headers: myHeaders2,
+  credentials: 'include',
   body: raw1,
   redirect: 'follow'
 };

@@ -24,7 +24,11 @@ const Navbar = () => {
   
 
   useEffect(() => {
-    setCookie("user","candidate")
+    
+    console.log("login as: ", getCookie("user"));
+    if(getCookie("user")===undefined){
+      setCookie("user", "candidate")
+    }
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 780); // Adjust the breakpoint as needed
     };
@@ -74,13 +78,13 @@ const Navbar = () => {
   
 
   return (
-    <nav className="bg-white py-4 flex justify-around items-center space-x-60 ">
+    <nav suppressHydrationWarning className="bg-white py-4 flex justify-around items-center space-x-60 ">
       {/* Logo on the left */}
-      <div>
+      
         <Link href="/">
           <img src="/CareerAi-logo.png" className="h-8 " alt="Smart Recruiter" />
         </Link>
-      </div>
+      
 
       
       {isMobile ? (

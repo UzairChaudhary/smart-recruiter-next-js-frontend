@@ -1,21 +1,71 @@
+import React, { useEffect, useState , useRef} from 'react';
 import { BiBriefcase, BiLogOut, BiUser, BiUserCircle } from "react-icons/bi";
 import { motion } from "framer-motion";
 import { useUiContext } from "../contexts/UiContext";
 import { actioTypes } from "../reducers/uiReducer";
 import { useRouter } from "next/navigation";
-import { deleteCookie, setCookie } from "cookies-next";
+import { deleteCookie, hasCookie, setCookie } from "cookies-next";
+
+import { toast } from "react-hot-toast";
 
 const Dropdown = () => {
+
+  const [apiURL, setapiURL] = useState();
+
   const {dispatch, isDropdownOpen } = useUiContext();
   const router = useRouter();
+
+  useEffect(() => {
+    // Check if apiURL is defined before making the API request
+    if (apiURL!==undefined) {
+      var requestOptions = {
+        method: 'GET',
+        redirect: 'follow'
+      };
+  
+      fetch(apiURL, requestOptions)
+        .then(response => response.json())
+        .then(result => {
+          console.log(result);
+  
+          if (result.success) {
+            deleteCookie("token");
+  
+            if (hasCookie("recruiter")) {
+              deleteCookie("recruiter");
+            } else {
+              deleteCookie("candidate");
+            }
+  
+            setCookie("user", "candidate");
+            setCookie("session", "logout");
+  
+            router.push("/");
+            window.location.reload();
+            toast.success("Logged out successfully");
+          } else {
+            toast.error(result.message);
+          }
+        })
+        .catch(error => console.log('error', error));
+    }
+  }, [apiURL]);
+  
+
   const handleLogout = () => {
+
     dispatch({ type: actioTypes.userLoggedOut });
-    deleteCookie("token")
-    setCookie("user", "candidate")
-    setCookie("session", "logout")
-    deleteCookie("candidate")
-    deleteCookie("recruiter")
-    router.push("/");
+
+    
+    if (hasCookie("recruiter")){
+      setapiURL("http://localhost:3000/api/v1/recruiter/logout")
+    }
+    else{
+      setapiURL("http://localhost:3000/api/v1/candidate/logout")
+    }
+    
+    
+    
   };
 
   return (
