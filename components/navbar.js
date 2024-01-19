@@ -72,11 +72,12 @@ const Navbar = () => {
   
 
   return (
-    <nav suppressHydrationWarning className="bg-white py-4 flex justify-around items-center space-x-60 ">
+    <nav suppressHydrationWarning={true} className="bg-white py-4 flex justify-around items-center space-x-60 ">
       {/* Logo on the left */}
       
-        <Link href="/">
-          <img src="/CareerAi-logo.png" className="h-8 " alt="Smart Recruiter" />
+        <Link href="/" suppressHydrationWarning={true}>
+          <Image  src="/CareerAi-logo.png" height={130} width={130} alt="Smart Recruiter" />
+         
         </Link>
       
 
@@ -126,16 +127,16 @@ const Navbar = () => {
           <Link href="/pricing">About Us</Link>
 
           {getCookie("session")==="login" ? (
-            <div
+            <div suppressHydrationWarning={true}
               className="dropdown-btn flex flex-align-center space-x-1  md:pl-4 flex-shrink-0 relative"
               onClick={handleDropdown}
             >
               <motion.img
                 src="/default-dp.png"
-                alt=""
+                alt="dp"
                 className="w-10 h-10 rounded-full sm:cursor-pointer dropdown-btn"
                 whileTap={{ scale: 0.5 }}
-              />
+              ></motion.img>
               <BiChevronDown className="dropdown-btn mt-2 w-5 h-5" />
               <Dropdown />
             </div>

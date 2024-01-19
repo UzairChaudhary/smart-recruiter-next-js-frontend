@@ -21,7 +21,7 @@ export default function HeroSection() {
               <p className="text-4xl font-semibold text-black p-1">Smart Recruiter</p>
             </div>
             <div>
-              <img alt="Hero" src="/line.png" width={212} height={12} className="mb-8 ml-2"></img>
+              <Image alt="Hero" src="/line.png" width={212} height={12} className="mb-8 ml-2"></Image>
             </div>
             <div className="font-">
               <p>Elevate Your Recruitment Game with Smart Recruiter</p>
@@ -41,7 +41,7 @@ export default function HeroSection() {
               <p className="text-4xl font-semibold text-black p-1">Candidate</p>
             </div>
             <div>
-              <img alt="Hero" src="/line.png" width={212} height={12} className="mb-8 ml-2"></img>
+              <Image alt="Hero" src="/line.png" width={212} height={12} className="mb-8 ml-2"></Image>
             </div>
             <div className="font-">
               <p>Providing Smart Solutions for Smart Companies </p>

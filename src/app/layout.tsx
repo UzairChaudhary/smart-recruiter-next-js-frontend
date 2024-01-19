@@ -28,9 +28,9 @@ export default function RootLayout({
   return (
     <UiProvider>
       <html lang="en" className={`${inter.variable} ${poppins.variable}`}>
-      <body suppressHydrationWarning >
+      <body suppressHydrationWarning={true} >
         <Toaster/>
-        <NavBar/>
+        <NavBar />
         
         {children}
         <Footer/>

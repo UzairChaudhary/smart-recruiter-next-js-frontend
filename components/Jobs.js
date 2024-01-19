@@ -2,11 +2,10 @@
 import Image from "next/image";
 import { useUiContext } from "../contexts/UiContext";
 import { actioTypes } from "../reducers/uiReducer";
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import Link from 'next/link';
 import { getCookie,hasCookie } from "cookies-next";
 
-import { LuTimer } from "react-icons/lu";
 import { WiTime10 } from "react-icons/wi";
 
 
@@ -23,6 +22,7 @@ const JobSection = () => {
   const [jobsArray, setJobsArray] = useState([]);
   const { dispatch,isUserCandidate, user, token } = useUiContext();
   const [isLoginScreenOpen, setLoginScreenOpen] = useState(false);
+  const [selectedCategory, setselectedCategory] = useState(null);
   const router = useRouter();
 
   const handleLoginClick = () => {
@@ -113,6 +113,27 @@ const JobSection = () => {
   const jobTitlesSet = new Set(jobsArray.map(job => job.title));
   displayedJobCategories = Array.from(jobTitlesSet).slice().reverse().slice(0,4);
  
+  
+
+  //Handling category selection
+  useEffect(() => {
+    console.log(selectedCategory);
+  }, [selectedCategory]);
+
+  const categoryContainerRef = useRef(null);
+  useEffect(() => {
+    const handleOutsideClick = (event) => {
+      if (categoryContainerRef.current && !categoryContainerRef.current.contains(event.target)) {
+        setselectedCategory(null);
+      }
+    };
+
+    document.addEventListener('click', handleOutsideClick);
+
+    return () => {
+      document.removeEventListener('click', handleOutsideClick);
+    };
+  }, [setselectedCategory]);
 
   return (
     <div className="job-section ml-6">
@@ -123,9 +144,17 @@ const JobSection = () => {
       )}
       
       <div className="bg-white py-4 flex items-center md:ml-40 mb-6">
-        <div className="flex space-x-4">
+        <div ref={categoryContainerRef} className="flex space-x-4">
           {displayedJobCategories.map((category, index) => (
-            <div key={index} className="text-black_color hover:bg-black_color hover:text-white cursor-pointer p-3 rounded-full">
+            <div 
+            key={index} 
+            onClick={()=>{
+              setselectedCategory(category)
+            console.log(selectedCategory)}}
+            
+            className={`${selectedCategory ===category ? 'bg-black_color text-white ' : ' hover:bg-black_color hover:text-white '} text-black_color cursor-pointer p-3 rounded-full`}
+            
+            >
               {category}
             </div>
           ))}
@@ -145,11 +174,13 @@ const JobSection = () => {
       
       
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6 md:ml-40 pr-40">
-  {displayedJobs.map((job) => (
+  {displayedJobs
+  .filter((job) => selectedCategory === null || job.title === selectedCategory)
+  .map((job) => (
     <div
       id="job-card"
       key={job._id}
-      className="bg-white p-5 rounded-3xl mb-8 hover:bg-gradient-to-br hover:from-blue_color hover:to-yellow_color hover:text-white flex flex-col justify-between h-auto border border-r-6 border-gray-300 shadow-md relative"
+      className="bg-white p-5 rounded-3xl mb-8 hover:bg-gradient-to-br hover:from-blue_color hover:to-yellow_color hover:text-white flex flex-col justify-between h-auto border border-r-6 border-gray-300 shadow-md "
     >
       {/* Company Logo */}
       <Image src="/next.svg" alt="Company Logo" className="mx-auto rounded-full p-2 mb-3 w-16 h-16 bg-white border" height={100} width={100} />

@@ -2,7 +2,7 @@
 "use client"
 import { useState } from 'react';
 
-import { FiLock, FiMail} from "react-icons/fi";
+import { FiLock, FiMail,FiEye, FiEyeOff} from "react-icons/fi";
 import { RxCross2 } from "react-icons/rx";
 import { GoPerson } from "react-icons/go";
 import { FcGoogle } from "react-icons/fc";
@@ -34,6 +34,7 @@ const LoginSignupScreen = ({ onClose }) => {
   const [isEmailValid, setIsEmailValid] = useState(true);
   const [isPasswordValid, setIsPasswordValid] = useState(true);
   const [passwordsMatch, setPasswordsMatch] = useState(true);
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
   // ... (other state variables)
 
@@ -51,11 +52,15 @@ const LoginSignupScreen = ({ onClose }) => {
   const handleUserSelection = (option) => {
     setuser(option);
   };
-  const checkNameValidation = () =>{
-    const nameRegex = /^[a-zA-Z\s]+$/;
-    setIsNameValid(nameRegex.test(formName));
-    
-  }
+
+  const checkNameValidation = () => {
+    // Regular expression to match only numbers (no alphabets)
+    const numberRegex = /^\d+$/;
+  
+    // Use the test method of the regular expression to check if the formName matches the pattern
+    setIsNameValid(!numberRegex.test(formName));
+  };
+  
   const checkEmailValidation = () =>{
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     setIsEmailValid(emailRegex.test(formEmail));
@@ -238,7 +243,7 @@ const LoginSignupScreen = ({ onClose }) => {
           toast.success("Login Successful")
         }
         else{
-          toast.error("Incorrect Credentials")
+          
           toast.error(result.message)
         }
         
@@ -267,7 +272,7 @@ const LoginSignupScreen = ({ onClose }) => {
           </button>
         </div>
         <hr className="border-t border-gray-300 my-3" />
-        <div className="flex justify-center space-x-8 mb-5 z-50">
+        <div className="flex justify-center space-x-8 mb-3 z-50">
           <button
             onClick={() => handleUserSelection('recruiter')}
             className={`${
@@ -293,7 +298,7 @@ const LoginSignupScreen = ({ onClose }) => {
             <div>
               
               <div className="text-center">
-                <h1 className="text-2xl font-semibold font-poppins mb-3">Login</h1>
+                <h1 className="text-2xl font-semibold font-poppins mb-2">Login</h1>
                 <p className="text-sm text-gray-500">
                   Login to your account
                 </p>
@@ -303,7 +308,7 @@ const LoginSignupScreen = ({ onClose }) => {
               </div>
             </div>
             <form>
-              <div style={{width:"310px"}} className={`mb-4 flex items-center ml-5 border ${isEmailFocused ? 'border-teal_color' : 'border-gray-200'} px-4 py-2 rounded-lg focus-within:border-teal_color
+              <div style={{width:"310px"}} className={`mb-2 flex items-center ml-5 border ${isEmailFocused ? 'border-teal_color' : 'border-gray-200'} px-4 py-2 rounded-lg focus-within:border-teal_color
               ${!isEmailValid ? 'border-red-500' : ''} `}>
               <FiMail className={`mr-2 ${isEmailFocused ? 'text-teal_color' : 'text-gray-400'}`} />
               <input
@@ -318,10 +323,19 @@ const LoginSignupScreen = ({ onClose }) => {
                 onChange={(e) => setFormEmail(e.target.value)}
               />
               </div>
+              {!isEmailValid && (
+                <div className='flex justify-end mb-2'>
+                  <p className='text-xs text-red-500 '>
+                Invalid email address format
+              </p>
+                </div>
+              )
+              
+              }
               <div style={{width:"310px"}}  className={`mb-4 ml-5 flex items-center border ${isPasswordFocused ? 'border-teal_color' : 'border-gray-200'} px-4 py-2 rounded-lg focus-within:border-teal_color
               ${!isPasswordValid ? 'border-red-500' : ''}`}>
               <FiLock className={`mr-2 ${isPasswordFocused ? 'text-teal_color' : 'text-gray-400'}`} />
-              <input
+              {/* <input
                 type="password"
                 value={formPassword}
                 required
@@ -331,8 +345,38 @@ const LoginSignupScreen = ({ onClose }) => {
                 onFocus={() => setIsPasswordFocused(true)}
                 onBlur={() => {setIsPasswordFocused(false);setIsPasswordValid(formPassword.length >= 6);}}
                 onChange={(e) => {setFormPassword(e.target.value);setIsPasswordValid(formPassword.length >= 6);}}
+              /> */}
+
+              <input
+                type={isPasswordVisible ? 'text' : 'password'}
+                required
+                id="password"
+                value={formPassword}
+                placeholder="Enter your password"
+                className={`w-full outline-none focus:outline-none placeholder-gray-400 text-sm`}
+                onFocus={() => setIsPasswordFocused(true)}
+                onBlur={() => {setIsPasswordFocused(false);setIsPasswordValid(formPassword.length >= 6);}}
+                onChange={(e) => {setFormPassword(e.target.value);setIsPasswordValid(formPassword.length >= 6);}}
               />
+
+              {/* Eye button to toggle password visibility */}
+              <button
+                type="button"
+                onClick={() => setIsPasswordVisible(!isPasswordVisible)}
+                className="text-gray-400 focus:outline-none"
+              >
+                {isPasswordVisible ? <FiEyeOff /> : <FiEye />}
+              </button>
               </div>
+              {!isPasswordValid && (
+                <div className='flex justify-end mb-2'>
+                  <p className='text-xs text-red-500 '>
+                Password must be atleast 6 characters
+              </p>
+                </div>
+              )
+              
+              }
               <div className='flex justify-end mb-6'>
               <a href="#" className="text-sm text-teal_color">
                 Forgot password?
@@ -369,7 +413,7 @@ const LoginSignupScreen = ({ onClose }) => {
               </div>
             </div>
             <form>
-            <div style={{width:"310px"}} className={`mb-2 flex items-center ml-5 border ${isNameFocused ? 'border-teal_color' : 'border-gray-200'} px-4 py-2 rounded-lg focus-within:border-teal_color 
+            <div style={{width:"310px"}} className={`mb-1 flex items-center ml-5 border ${isNameFocused ? 'border-teal_color' : 'border-gray-200'} px-4 py-2 rounded-lg focus-within:border-teal_color 
                 ${!isNameValid ? 'border-red-500' : ''} `}>
               <GoPerson className={`mr-2 ${isNameFocused ? 'text-teal_color' : 'text-gray-400'}`} />
               <input
@@ -384,7 +428,16 @@ const LoginSignupScreen = ({ onClose }) => {
                 onChange={(e) => setFormName(e.target.value)}
               />
               </div>
-              <div style={{width:"310px"}} className={`mb-2 flex items-center ml-5 border ${isEmailFocused ? 'border-teal_color' : 'border-gray-200'} px-4 py-2 rounded-lg focus-within:border-teal_color
+              {!isNameValid && (
+                <div className='flex justify-end mb-1'>
+                  <p className='text-xs text-red-500 '>
+                Name should not contain numbers only
+              </p>
+                </div>
+              )
+              
+              }
+              <div style={{width:"310px"}} className={`mb-1 flex items-center ml-5 border ${isEmailFocused ? 'border-teal_color' : 'border-gray-200'} px-4 py-2 rounded-lg focus-within:border-teal_color
               ${!isEmailValid ? 'border-red-500' : ''} `}>
               <FiMail className={`mr-2 ${isEmailFocused ? 'text-teal_color' : 'text-gray-400'}`} />
               <input
@@ -399,9 +452,17 @@ const LoginSignupScreen = ({ onClose }) => {
                 onChange={(e) => setFormEmail(e.target.value)}
               />
               </div>
+              {!isEmailValid && (
+                <div className='flex justify-end mb-1'>
+                  <p className='text-xs text-red-500 '>
+                Invalid email address format
+              </p>
+                </div>
+              )
               
+              }
         
-              <div style={{width:"310px"}}  className={`ml-5 mb-2 flex items-center border ${isPasswordFocused ? 'border-teal_color' : 'border-gray-200'} px-4 py-2 rounded-lg focus-within:border-teal_color
+              <div style={{width:"310px"}}  className={`ml-5 mb-1 flex items-center border ${isPasswordFocused ? 'border-teal_color' : 'border-gray-200'} px-4 py-2 rounded-lg focus-within:border-teal_color
               ${!isPasswordValid ? 'border-red-500' : ''}`}>
               <FiLock className={`mr-2 ${isPasswordFocused ? 'text-teal_color' : 'text-gray-400'}`} />
               <input
@@ -417,7 +478,16 @@ const LoginSignupScreen = ({ onClose }) => {
                 onChange={(e) => {setFormPassword(e.target.value);setIsPasswordValid(formPassword.length >= 6);}}
               />
               </div>
-              <div style={{width:"310px"}}  className={`ml-5 mb-4 flex items-center border ${confirmPasswordFocused ? 'border-teal_color' : 'border-gray-200'} px-4 py-2 rounded-lg focus-within:border-teal_color
+              {!isPasswordValid && (
+                <div className='flex justify-end mb-1'>
+                  <p className='text-xs text-red-500 '>
+                Password must be atleast 6 characters
+              </p>
+                </div>
+              )
+              
+              }
+              <div style={{width:"310px"}}  className={`ml-5 mb-1 flex items-center border ${confirmPasswordFocused ? 'border-teal_color' : 'border-gray-200'} px-4 py-2 rounded-lg focus-within:border-teal_color
               ${!passwordsMatch ? 'border-red-500' : ''}`}>
               <RiLockPasswordLine className={`mr-2 ${confirmPasswordFocused ? 'text-teal_color' : 'text-gray-400'}`} />
               <input
@@ -432,6 +502,15 @@ const LoginSignupScreen = ({ onClose }) => {
                 onChange={(e) => {setFormConfirmPassword(e.target.value);setPasswordsMatch(formPassword === formConfirmPassword);}}
               />
               </div>
+              {!passwordsMatch && (
+                <div className='flex justify-end'>
+                  <p className='text-xs text-red-500 '>
+                Passwords are not matching
+              </p>
+                </div>
+              )
+              
+              }
               
               <div className='flex justify-center pr-5 ml-8 mt-6'>
                 <button
