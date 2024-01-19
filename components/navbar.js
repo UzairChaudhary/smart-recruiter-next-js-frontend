@@ -21,7 +21,10 @@ const Navbar = () => {
   const [isLoginScreenOpen, setLoginScreenOpen] = useState(false);
 
 
-  
+  useEffect(() => {
+    // Check for the "session" cookie and update the state accordingly
+    setLoggedIn(getCookie("session") === "login");
+  }, []);
 
   useEffect(() => {
     
@@ -121,13 +124,22 @@ const Navbar = () => {
       ) : (
         // Navigation links for non-mobile view
         <div className="flex items-center space-x-6">
-          <Link href="/home">Home</Link>
-          <Link href="/about">Jobs</Link>
-          <Link href="/services">Companies</Link>
-          <Link href="/pricing">About Us</Link>
+          <div className="hover:border-b-2 hover:border-b-teal_color">
+          <Link href="/">Home</Link>
+          </div>
+          <div className="hover:border-b-2 hover:border-b-teal_color">
+          <Link href="/">Jobs</Link>
+          </div>
+          <div className="hover:border-b-2 hover:border-b-teal_color">
+          <Link href="/">Companies</Link>
+          </div>
+          <div className="hover:border-b-2 hover:border-b-teal_color">
+          <Link href="/">About Us</Link>
+          </div>
+          
 
-          {getCookie("session")==="login" ? (
-            <div suppressHydrationWarning={true}
+          {loggedIn ? (
+            <div 
               className="dropdown-btn flex flex-align-center space-x-1  md:pl-4 flex-shrink-0 relative"
               onClick={handleDropdown}
             >
@@ -148,7 +160,14 @@ const Navbar = () => {
             </button>
             {/* Render LoginSignupScreen when isLoginScreenOpen is true */}
 
+            {isLoginScreenOpen && (
+              <div
+                className="fixed top-0 left-0 right-0 bottom-0 bg-black bg-opacity-50 z-50"
+                
+              ></div>
+            )}
             {isLoginScreenOpen && <LoginSignupScreen onClose={handleLoginScreenClose} />}
+            
             </div>
           )}
         </div>

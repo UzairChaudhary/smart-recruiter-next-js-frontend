@@ -108,7 +108,7 @@ const JobSection = () => {
   else{
 
     //displayedJobs = jobsArray.reverse().slice(0, 8);
-    displayedJobs = jobsArray.slice().reverse().slice(0, 8);
+    displayedJobs = jobsArray.slice().reverse();
   }
   const jobTitlesSet = new Set(jobsArray.map(job => job.title));
   displayedJobCategories = Array.from(jobTitlesSet).slice().reverse().slice(0,4);
@@ -176,6 +176,7 @@ const JobSection = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6 md:ml-40 pr-40">
   {displayedJobs
   .filter((job) => selectedCategory === null || job.title === selectedCategory)
+  .slice(0, 8)
   .map((job) => (
     <div
       id="job-card"
@@ -227,7 +228,12 @@ const JobSection = () => {
           >
             Apply
           </button>
-
+          {isLoginScreenOpen && (
+              <div
+                className="fixed top-0 left-0 right-0 bottom-0 bg-black bg-opacity-10 z-50"
+                
+              ></div>
+            )}
           {isLoginScreenOpen && <LoginSignupScreen onClose={handleLoginScreenClose} />}
 
           </div>

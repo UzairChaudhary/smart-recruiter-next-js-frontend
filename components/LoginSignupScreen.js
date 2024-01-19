@@ -35,6 +35,7 @@ const LoginSignupScreen = ({ onClose }) => {
   const [isPasswordValid, setIsPasswordValid] = useState(true);
   const [passwordsMatch, setPasswordsMatch] = useState(true);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = useState(false);
 
   // ... (other state variables)
 
@@ -263,7 +264,7 @@ const LoginSignupScreen = ({ onClose }) => {
   };
 
   return (
-    <div className='fixed top-0 left-0 right-0 bottom-0 bg-black bg-opacity-50 z-50' >
+    <div className='fixed top-0 left-0 right-0 bottom-0 bg-opacity-50 z-50' >
       <div className="fixed top-0 right-0 h-screen bg-white z-50 rounded-tl-2xl rounded-bl-2xl shadow-lg p-8 pt-4 ">
         <div className="flex justify-end items-center mb-4">
           
@@ -298,13 +299,13 @@ const LoginSignupScreen = ({ onClose }) => {
             <div>
               
               <div className="text-center">
-                <h1 className="text-2xl font-semibold font-poppins mb-2">Login</h1>
-                <p className="text-sm text-gray-500">
+                <h1 className="text-2xl font-semibold font-poppins mb-2 text-black">Login</h1>
+                <h3 className="text-sm text-gray-500">
                   Login to your account
-                </p>
-                <p className="text-sm text-gray-500 mb-6">
+                </h3>
+                <h3 className="text-sm text-gray-500 mb-6">
                   to continue
-                </p>
+                </h3>
               </div>
             </div>
             <form>
@@ -335,17 +336,7 @@ const LoginSignupScreen = ({ onClose }) => {
               <div style={{width:"310px"}}  className={`mb-4 ml-5 flex items-center border ${isPasswordFocused ? 'border-teal_color' : 'border-gray-200'} px-4 py-2 rounded-lg focus-within:border-teal_color
               ${!isPasswordValid ? 'border-red-500' : ''}`}>
               <FiLock className={`mr-2 ${isPasswordFocused ? 'text-teal_color' : 'text-gray-400'}`} />
-              {/* <input
-                type="password"
-                value={formPassword}
-                required
-                id="password"
-                placeholder="Enter your Password"
-                className="w-full outline-none focus:outline-none placeholder-gray-400"
-                onFocus={() => setIsPasswordFocused(true)}
-                onBlur={() => {setIsPasswordFocused(false);setIsPasswordValid(formPassword.length >= 6);}}
-                onChange={(e) => {setFormPassword(e.target.value);setIsPasswordValid(formPassword.length >= 6);}}
-              /> */}
+              
 
               <input
                 type={isPasswordVisible ? 'text' : 'password'}
@@ -383,10 +374,10 @@ const LoginSignupScreen = ({ onClose }) => {
               </a>
 
               </div>
-              <div style={{width:"210px"}}  className='flex justify-center ml-14'>
+              <div style={{width:"210px"}}  className='flex justify-center ml-14 '>
                 <button
                   type="submit"
-                  className="w-auto bg-black_color text-white p-3 px-7 rounded-full mb-3 text-sm"
+                  className="login-btn border w-auto bg-black_color text-white p-3 px-7 rounded-full mb-3 text-sm"
                   onClick={(e) => handleLogin(e)}
                   >
                   Log into your account
@@ -405,10 +396,10 @@ const LoginSignupScreen = ({ onClose }) => {
             <div>
               
               <div className="text-center">
-                <h1 className="text-2xl font-semibold font-poppins mb-2">Sign Up</h1>
-                <p className="text-sm text-gray-500 mb-5">
+                <h1 className="text-2xl font-semibold font-poppins mb-2 text-black">Sign Up</h1>
+                <h3 className="text-sm text-gray-500 mb-5">
                   Create your new account
-                </p>
+                </h3>
                 
               </div>
             </div>
@@ -466,7 +457,7 @@ const LoginSignupScreen = ({ onClose }) => {
               ${!isPasswordValid ? 'border-red-500' : ''}`}>
               <FiLock className={`mr-2 ${isPasswordFocused ? 'text-teal_color' : 'text-gray-400'}`} />
               <input
-                type="password"
+                type={isPasswordVisible ? 'text' : 'password'}
                 required
                 id="password"
                 value={formPassword}
@@ -477,7 +468,15 @@ const LoginSignupScreen = ({ onClose }) => {
                 onBlur={() => {setIsPasswordFocused(false);setIsPasswordValid(formPassword.length >= 6);}}
                 onChange={(e) => {setFormPassword(e.target.value);setIsPasswordValid(formPassword.length >= 6);}}
               />
+              <button
+                type="button"
+                onClick={() => setIsPasswordVisible(!isPasswordVisible)}
+                className="text-gray-400 focus:outline-none"
+              >
+                {isPasswordVisible ? <FiEyeOff /> : <FiEye />}
+              </button>
               </div>
+              
               {!isPasswordValid && (
                 <div className='flex justify-end mb-1'>
                   <p className='text-xs text-red-500 '>
@@ -491,7 +490,7 @@ const LoginSignupScreen = ({ onClose }) => {
               ${!passwordsMatch ? 'border-red-500' : ''}`}>
               <RiLockPasswordLine className={`mr-2 ${confirmPasswordFocused ? 'text-teal_color' : 'text-gray-400'}`} />
               <input
-                type="password"
+                type={isConfirmPasswordVisible ? 'text' : 'password'}
                 value={formConfirmPassword}
                 id="confirm_password"
                 required
@@ -501,7 +500,15 @@ const LoginSignupScreen = ({ onClose }) => {
                 onBlur={() => {setconfirmPasswordFocused(false);setPasswordsMatch(formPassword === formConfirmPassword);}}
                 onChange={(e) => {setFormConfirmPassword(e.target.value);setPasswordsMatch(formPassword === formConfirmPassword);}}
               />
+              <button
+                type="button"
+                onClick={() => setIsConfirmPasswordVisible(!isConfirmPasswordVisible)}
+                className="text-gray-400 focus:outline-none"
+              >
+                {isConfirmPasswordVisible ? <FiEyeOff /> : <FiEye />}
+              </button>
               </div>
+              
               {!passwordsMatch && (
                 <div className='flex justify-end'>
                   <p className='text-xs text-red-500 '>
