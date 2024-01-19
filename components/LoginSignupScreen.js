@@ -202,6 +202,7 @@ const LoginSignupScreen = ({ onClose }) => {
           setCookie("session", "login")
           
           router.push("/");
+          window.location.reload();
           
           
           

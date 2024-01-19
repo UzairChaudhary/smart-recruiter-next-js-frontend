@@ -46,12 +46,6 @@ const Navbar = () => {
   }, []);
 
 
-  const handleLogout = () => {
-    // Handle logout logic here
-    setLoggedIn(false);
-    
-  };
-
 
   const { dispatch, isSidebarOpen, isUserLoggedIn, isLoginSidebarOpen } = useUiContext();
   

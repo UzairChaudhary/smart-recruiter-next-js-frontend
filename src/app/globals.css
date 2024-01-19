@@ -38,7 +38,17 @@ html {
 
 
 /* General styles */
-
+#job-card:hover p {
+  color:white
+}
+#job-card:hover #job-type {
+  background-color:black;
+  color:white
+}
+#job-card:hover button {
+  background-color:white;
+  color:black
+}
 a.btn {
   @apply opacity-100;
 }

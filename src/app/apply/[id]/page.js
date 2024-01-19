@@ -47,12 +47,13 @@ const ApplyJob = ({ params }) => {
     
     fetchJobData();
     console.log(getCookie("token"))
-    console.log(getCookie("session"))
-    console.log(params.id)
+    console.log("has cookie: ",hasCookie("token"))
+    //console.log(getCookie("session"))
+    //console.log(params.id)
   }, [params.id]);
 
   useEffect(() => {
-    console.log("fileURL:", fileURL);
+    //console.log("fileURL:", fileURL);
     if (fileURL){
       applyJob(fileURL)
     }

@@ -49,7 +49,7 @@ export default function HeroSection() {
             </div>
           </div>
           <div className="flex justify-center md:pr-40">
-            <Image alt="Hero" src="/recruiter-hero-section.png" width={490} height={437} className="mb-2 p-3 "></Image>
+            <Image alt="Hero" src="/recruiter-hero-section.png" priority={true} width={490} height={437} className="mb-2 p-3 "></Image>
           </div>
         </div>
         )}
