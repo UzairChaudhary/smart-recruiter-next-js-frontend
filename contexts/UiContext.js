@@ -11,6 +11,8 @@ const initialState = {
   isUserCandidate: true,
   isLoginSidebarOpen: false,
 
+  searchedJob:'',
+
   user:null,
   token:null
 };

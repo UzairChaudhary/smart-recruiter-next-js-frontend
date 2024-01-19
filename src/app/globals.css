@@ -152,12 +152,14 @@ ul.pagination li.active a {
   @apply absolute  p-3 md:p-0 bg-white h-screen max-w-[300px] -translate-x-[500px] w-full max-h-screen overflow-auto md:static md:max-w-full md:translate-x-0 md:max-h-fit md:h-fit ;
 }
 
-/* Inputs */
+/* Inputs
+
 input:autofill,
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
-
+*/
+ 
 
 .form-input .input {
   @apply outline-none h-8 border border-slate-300   rounded-md px-[0.8rem] w-full text-base mb-5;

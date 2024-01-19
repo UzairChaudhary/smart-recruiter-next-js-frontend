@@ -8,7 +8,6 @@ import { getCookie,hasCookie } from "cookies-next";
 
 import { WiTime10 } from "react-icons/wi";
 
-
 import LoginSignupScreen from './LoginSignupScreen';
 
 import { useRouter } from "next/navigation";
@@ -20,7 +19,7 @@ import { formatDistanceToNow } from 'date-fns';
 const JobSection = () => {
 
   const [jobsArray, setJobsArray] = useState([]);
-  const { dispatch,isUserCandidate, user, token } = useUiContext();
+  const { dispatch,searchedJob } = useUiContext();
   const [isLoginScreenOpen, setLoginScreenOpen] = useState(false);
   const [selectedCategory, setselectedCategory] = useState(null);
   const router = useRouter();
@@ -52,7 +51,7 @@ const JobSection = () => {
       
     }
   };
-  
+
 
   useEffect(() => {
       //console.log('login as: ',getCookie("user"))
@@ -116,9 +115,6 @@ const JobSection = () => {
   
 
   //Handling category selection
-  useEffect(() => {
-    console.log(selectedCategory);
-  }, [selectedCategory]);
 
   const categoryContainerRef = useRef(null);
   useEffect(() => {
@@ -171,85 +167,88 @@ const JobSection = () => {
       </div>
       {displayedJobs?.length ? (
         
-      
-      
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6 md:ml-40 pr-40">
-  {displayedJobs
-  .filter((job) => selectedCategory === null || job.title === selectedCategory)
-  .slice(0, 8)
-  .map((job) => (
-    <div
-      id="job-card"
-      key={job._id}
-      className="bg-white p-5 rounded-3xl mb-8 hover:bg-gradient-to-br hover:from-blue_color hover:to-yellow_color hover:text-white flex flex-col justify-between h-auto border border-r-6 border-gray-300 shadow-md "
-    >
-      {/* Company Logo */}
-      <Image src="/next.svg" alt="Company Logo" className="mx-auto rounded-full p-2 mb-3 w-16 h-16 bg-white border" height={100} width={100} />
+          {displayedJobs
+          .filter(
+            (job) =>
+              (searchedJob === '' ||
+                job.title.toLowerCase().includes(searchedJob.toLowerCase())) &&
+              (selectedCategory === null || job.title === selectedCategory)
+          )
+          .slice(0, 8)
+          .map((job) => (
+            <div
+              id="job-card"
+              key={job._id}
+              className="bg-white p-5 rounded-3xl mb-8 hover:bg-gradient-to-br hover:from-blue_color hover:to-yellow_color hover:text-white flex flex-col justify-between h-auto border border-r-6 border-gray-300 shadow-md "
+            >
+              {/* Company Logo */}
+              <Image src="/next.svg" alt="Company Logo" className="mx-auto rounded-full p-2 mb-3 w-16 h-16 bg-white border" height={100} width={100} />
 
-      {/* Company Name and Title */}
-      <div className="flex flex-col mb-5">
-        <p className="text-center text-sm mb-2">{job.owner.name}</p>
-        <p className="text-center font-medium text-lg ">{job.title}</p>
-      </div>
+              {/* Company Name and Title */}
+              <div className="flex flex-col mb-5">
+                <p className="text-center text-sm mb-2">{job.owner.name}</p>
+                <p className="text-center font-medium text-lg ">{job.title}</p>
+              </div>
 
-      {/* Job Skills */}
-      <div className="flex flex-wrap justify-center mb-auto flex-shrink-0 ">
-        {job.skills.slice(0,5).map((skill, index) => (
-          <span key={index} className="bg-white border border-gray-400 text-blue_color rounded-full px-3 py-1 text-sm mr-2 mb-2">
-            {skill}
-          </span>
-        ))}
-      </div>
+              {/* Job Skills */}
+              <div className="flex flex-wrap justify-center mb-auto flex-shrink-0 ">
+                {job.skills.slice(0,5).map((skill, index) => (
+                  <span key={index} className="bg-white border border-gray-400 text-blue_color rounded-full px-3 py-1 text-sm mr-2 mb-2">
+                    {skill}
+                  </span>
+                ))}
+              </div>
 
-      {/* Job Type */}
-      <div className="flex flex-wrap justify-center flex-shrink-0 mb-5 mt-5">
-        {job.jobType &&
-          job.jobType.split(',').map((type, index) => (
-            <span key={index} id="job-type" className="text-black_color rounded-full px-3 py-1 text-sm mr-2 mb-2">
-              {type.trim()}
-            </span>
-          ))}
-      </div>
-      
+              {/* Job Type */}
+              <div className="flex flex-wrap justify-center flex-shrink-0 mb-5 mt-5">
+                {job.jobType &&
+                  job.jobType.split(',').map((type, index) => (
+                    <span key={index} id="job-type" className="text-black_color rounded-full px-3 py-1 text-sm mr-2 mb-2">
+                      {type.trim()}
+                    </span>
+                  ))}
+              </div>
+              
 
-      {/* Employment Type and Apply Button */}
-      <div className="flex justify-between items-center mt-auto">
-        <p className="flex items-center text-sm text-black_color text-center">
-          <WiTime10 className="mr-1 mb-1 mt-1 flex-shrink-0 h-4 w-4" />
-          {formatDistanceToNow(new Date(job.createdAt), { addSuffix: true }).replace(/^about\s/, '')}
-        </p>
+              {/* Employment Type and Apply Button */}
+              <div className="flex justify-between items-center mt-auto">
+                <p className="flex items-center text-sm text-black_color text-center">
+                  <WiTime10 className="mr-1 mb-1 mt-1 flex-shrink-0 h-4 w-4" />
+                  {formatDistanceToNow(new Date(job.createdAt), { addSuffix: true }).replace(/^about\s/, '')}
+                </p>
 
-        {getCookie("user") === "candidate" ? (
-          <div>
-            <button
-            href={`/apply/${job?._id}`}
-            onClick={(e) => handleUserAuthentication(e, job._id)}
-            className="bg-black_color text-white px-6 py-2 rounded-full hover:bg-white hover:text-black"
-          >
-            Apply
-          </button>
-          {isLoginScreenOpen && (
-              <div
-                className="fixed top-0 left-0 right-0 bottom-0 bg-black bg-opacity-10 z-50"
+                {getCookie("user") === "candidate" ? (
+                  <div>
+                    <button
+                    href={`/apply/${job?._id}`}
+                    onClick={(e) => handleUserAuthentication(e, job._id)}
+                    className="bg-black_color text-white px-6 py-2 rounded-full hover:bg-white hover:text-black"
+                  >
+                    Apply
+                  </button>
+                  {isLoginScreenOpen && (
+                      <div
+                        className="fixed top-0 left-0 right-0 bottom-0 bg-black bg-opacity-10 z-50"
+                        
+                      ></div>
+                    )}
+                  {isLoginScreenOpen && <LoginSignupScreen onClose={handleLoginScreenClose} />}
+
+                  </div>
                 
-              ></div>
-            )}
-          {isLoginScreenOpen && <LoginSignupScreen onClose={handleLoginScreenClose} />}
 
-          </div>
-        
-
-        ) : (
-          <button className="bg-black_color text-white px-6 py-2 rounded-full hover:bg-white hover:text-black">
-            Details
-          </button>
-          
-        )}
+                ) : (
+                  <button className="bg-black_color text-white px-6 py-2 rounded-full hover:bg-white hover:text-black">
+                    Details
+                  </button>
+                  
+                )}
 
 
-      </div>
-    </div>
-  ))}
+              </div>
+            </div>
+          ))}
         </div>
 
       ):(

@@ -16,6 +16,9 @@ export const actioTypes = {
 
   openLoginSidebar: "SHOW_LOGIN_SIDEBAR",
   closeLoginSidebar: "HIDE_LOGIN_SIDEBAR",
+
+  searchedJob:"SEARCHED_JOB",
+  defaultJobs:"SHOW_DEFAULT_ALL_JOBS"
 };
 
 export const uiReducer = (state, action) => {
@@ -60,7 +63,26 @@ export const uiReducer = (state, action) => {
     case actioTypes.closeLoginSidebar:
       return { ...state, isLoginSidebarOpen: false };
       break;
-    
+
+
+
+
+    case actioTypes.searchedJob:
+      return { 
+        ...state,
+         searchedJob: action.payload.searchedJob
+      };
+      break;
+    case actioTypes.defaultJobs:
+    return { 
+      ...state,
+        searchedJob: ''
+    };
+    break;
+
+
+
+
     case 'LOGIN':
       return {
         ...state,
