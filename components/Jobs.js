@@ -178,6 +178,7 @@ const JobSection = () => {
           .slice(0, 8)
           .map((job) => (
             <div
+            
               id="job-card"
               key={job._id}
               className="bg-white p-5 rounded-3xl mb-8 hover:bg-gradient-to-br hover:from-blue_color hover:to-yellow_color hover:text-white flex flex-col justify-between h-auto border border-r-6 border-gray-300 shadow-md "
