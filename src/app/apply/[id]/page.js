@@ -60,13 +60,14 @@ const ApplyJob = ({ params }) => {
   }, [fileURL]);
 
   const isFileValid = (file) => {
-    const allowedExtensions = ['.pdf', '.docx'];
+    const allowedExtensions = ['.pdf'];
     const extension = file.name.toLowerCase().slice((file.name.lastIndexOf('.') + 1));
-  
+    console.log(extension)
     if (allowedExtensions.includes(`.${extension}`)) {
+      
       return true;
     } else {
-      toast.error('Please upload a valid PDF or DOCX file.');
+      toast.error('Please upload a valid PDF file only');
       return false;
     }
   };
@@ -274,10 +275,10 @@ fetch(`http://localhost:3000/api/v1/candidate/applyjob/${params.id}`, requestOpt
             </div>
           </div>
           {file && (
-            <div className="flex-align-center gap-2 text-primary">
+            <div className="flex items-center flex-align-center gap-2 text-primary">
               <BiFile />{" "}
               <p>
-                {file.name.length > 20
+                {file.name.length > 50
                   ? file.name.split(".")[0].slice(0, 20) +
                     "..." +
                     file.name.split(".")[1]
