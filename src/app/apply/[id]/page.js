@@ -62,7 +62,7 @@ const ApplyJob = ({ params }) => {
   const isFileValid = (file) => {
     const allowedExtensions = ['.pdf'];
     const extension = file.name.toLowerCase().slice((file.name.lastIndexOf('.') + 1));
-    console.log(extension)
+    
     if (allowedExtensions.includes(`.${extension}`)) {
       
       return true;
