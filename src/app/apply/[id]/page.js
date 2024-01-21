@@ -163,7 +163,12 @@ fetch(`http://localhost:3000/api/v1/candidate/applyjob/${params.id}`, requestOpt
   }
 
   return (
-    <div className=" font-poppins rounded max-w-3xl w-full mx-auto">
+    <>
+      <div className='w-full h-full bg-hero-gradient opacity-20 py-20 mb-10'>
+      </div>
+      <h1 className='text-2xl font-poppins absolute top-32 left-1/4  text-black_color font-bold'>Job Application</h1>
+      <h1 className='text-md font-poppins absolute top-40 mt-1 left-1/4  text-black_color '>Home / Apply Job</h1>
+      <div className=" font-poppins  rounded max-w-3xl w-full mx-auto">
         {/*---------------------------------------- Back to home button------------------------------------- */}
         <button className="btn flex bg-teal_color hover:bg-opacity-70 text-white">
           <Link href="/" legacyBehavior>
@@ -281,6 +286,7 @@ fetch(`http://localhost:3000/api/v1/candidate/applyjob/${params.id}`, requestOpt
           </button>
         
       </div>
+    </>
   );
 };
 
