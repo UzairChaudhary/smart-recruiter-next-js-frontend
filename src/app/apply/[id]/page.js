@@ -4,10 +4,8 @@ import { useRouter } from 'next/navigation';
 import { BiFile, BiLink } from "react-icons/bi";
 import { FiChevronLeft } from "react-icons/fi";
 import Link from "next/link";
-import { getCookie, hasCookie } from "cookies-next";
+import { getCookie } from "cookies-next";
 import { toast } from 'react-hot-toast';
-
-import { useUiContext } from "../../../../contexts/UiContext";
 
 const ApplyJob = ({ params }) => {
   const router = useRouter();
@@ -15,10 +13,6 @@ const ApplyJob = ({ params }) => {
   const fileInput = useRef(null);
   const [file, setFile] = useState("");
   const [fileURL, setfileURL] = useState(null);
-
-  // const { user, token } = useUiContext();
-  // console.log("user:" , user)
-  // console.log("token:" , token)
 
   useEffect(() => {
     const fetchJobData = async () => {
@@ -46,8 +40,7 @@ const ApplyJob = ({ params }) => {
     };
     
     fetchJobData();
-    console.log(getCookie("token"))
-    console.log("has cookie: ",hasCookie("token"))
+    
     //console.log(getCookie("session"))
     //console.log(params.id)
   }, [params.id]);
@@ -162,8 +155,7 @@ fetch(`http://localhost:3000/api/v1/candidate/applyjob/${params.id}`, requestOpt
       router.push('/')
       }
       else{
-        console.log("coooookkkkkkkkkkkieieiiiieeeeeeeeeee")
-        console.log(getCookie("token"))
+        
         toast.error(result.message)
       }
   })
@@ -233,15 +225,7 @@ fetch(`http://localhost:3000/api/v1/candidate/applyjob/${params.id}`, requestOpt
             <div className=" ">
               <p className='font-medium'>Job Description</p>
               <div className="flex gap-2 items-center justify-center mt-2 mb-2">
-                <a
-                  href={jobData?.descriptionFile}  // Provide the correct URL to the description file
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn flex items-center text-black_color gap-2 hover:bg-teal_color hover:text-white"
-                >
-                  <BiLink />
-                  <span>View Job Description File</span>
-                </a>
+                
                 {/* You can also add a button to download the file if needed */}
                 <button
                   className="btn text-black_color flex items-center gap-2  hover:bg-teal_color hover:text-white"
