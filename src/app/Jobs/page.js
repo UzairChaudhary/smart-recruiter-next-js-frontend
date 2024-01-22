@@ -5,6 +5,7 @@ import JobSearchForm from "../../../components/SearchJob";
 import JobSection from "../../../components/Jobs";
 import BackToTopButton from '../../../components/BackToTopButton'
 import Loader from "../../../loaders/Loader"
+import RingLoader from "../../../loaders/RingLoader"
 import Footer from "../../../components/Footer";
 
 const Jobs = () => {
@@ -51,7 +52,7 @@ const Jobs = () => {
           <Footer/>
         </>
       ):(
-        <Loader/>
+        <RingLoader/>
       )}
     </>
   );
