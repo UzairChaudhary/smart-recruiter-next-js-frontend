@@ -114,6 +114,8 @@ footer a:hover {
   }
 }
 
+
+
 /* Navbar links */
 .navbar ul a  {
   @apply text-base relative w-fit transition-a;

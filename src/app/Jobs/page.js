@@ -4,7 +4,7 @@ import HeroSection from "../../../components/HeroSection";
 import JobSearchForm from "../../../components/SearchJob";
 import JobSection from "../../../components/Jobs";
 import BackToTopButton from '../../../components/BackToTopButton'
-import Loader from "../../../components/Loader"
+import Loader from "../../../loaders/Loader"
 import Footer from "../../../components/Footer";
 
 const Jobs = () => {
