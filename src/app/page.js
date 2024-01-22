@@ -4,7 +4,7 @@ import HeroSection from "../../components/HeroSection";
 import JobSearchForm from "../../components/SearchJob";
 import JobSection from "../../components/Jobs";
 import BackToTopButton from '../../components/BackToTopButton'
-import Loader from "../../components/Loader";
+import SkeletonLoader from "../../components/SkeletonLoader";
 import Footer from "../../components/Footer"
 const Home = () => {
   const [renderComponents, setRenderComponents] = useState(false);
@@ -47,7 +47,7 @@ const Home = () => {
           
         </>
       ):(
-        <Loader/>
+        <SkeletonLoader/>
       )}
     </>
   );
