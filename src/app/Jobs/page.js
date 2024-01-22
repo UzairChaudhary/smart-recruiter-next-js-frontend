@@ -1,10 +1,9 @@
 "use client"
 import React, { useEffect, useState } from "react";
-import HeroSection from "../../../components/HeroSection";
 import JobSearchForm from "../../../components/SearchJob";
-import JobSection from "../../../components/Jobs";
+import AllJobs from "../../../components/Alljobs";
 import BackToTopButton from '../../../components/BackToTopButton'
-import Loader from "../../../loaders/Loader"
+
 import RingLoader from "../../../loaders/RingLoader"
 import Footer from "../../../components/Footer";
 
@@ -40,15 +39,15 @@ const Jobs = () => {
     <>
       {renderComponents ? (
         <>
-          <div className='w-full h-full bg-hero-gradient opacity-20 py-20 '>
+          <div className='w-full h-full bg-hero-gradient opacity-20 py-20 pb-32 '>
           </div>
-          <h1 className='text-2xl font-poppins absolute top-32 left-1/4  text-black_color font-bold'>All Jobs</h1>
-          <h1 className='text-md font-poppins absolute top-40 mt-1 left-1/4  text-black_color '>Jobs posted by different companies</h1>
+          <h1 className='text-2xl font-poppins absolute top-32 left-1/4  text-black_color font-bold'>Find Your Dream Job</h1>
+          <h1 className='text-md font-poppins absolute top-40 mt-1 left-1/4  text-black_color'>Home / Jobs</h1>
 
           
           <BackToTopButton showButton={showButton} />
           <JobSearchForm />
-          <JobSection />
+          <AllJobs />
           <Footer/>
         </>
       ):(

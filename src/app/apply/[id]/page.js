@@ -170,13 +170,12 @@ fetch(`http://localhost:3000/api/v1/candidate/applyjob/${params.id}`, requestOpt
       <h1 className='text-md font-poppins absolute top-40 mt-1 left-1/4  text-black_color '>Home / Apply Job</h1>
       <div className=" font-poppins  rounded max-w-3xl w-full mx-auto">
         {/*---------------------------------------- Back to home button------------------------------------- */}
-        <button className="btn flex bg-teal_color hover:bg-opacity-70 text-white">
-          <Link href="/" legacyBehavior>
-            <a className="flex-align-center flex gap-1 items-center ">
+        <button 
+        className="btn flex-align-center flex gap-1 items-center bg-teal_color hover:bg-opacity-70 text-white"
+        onClick={()=>router.back()}
+        >
               <FiChevronLeft />
               <span>back</span>
-            </a>
-          </Link>
         </button>
 
         <div className="mt-3 items-center flex flex-col">

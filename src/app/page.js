@@ -4,8 +4,8 @@ import HeroSection from "../../components/HeroSection";
 import JobSearchForm from "../../components/SearchJob";
 import JobSection from "../../components/Jobs";
 import BackToTopButton from '../../components/BackToTopButton'
-import SkeletonLoader from "../../loaders/SkeletonLoader";
 import Footer from "../../components/Footer"
+import RingLoader from "../../loaders/RingLoader";
 const Home = () => {
   const [renderComponents, setRenderComponents] = useState(false);
 
@@ -47,7 +47,7 @@ const Home = () => {
           
         </>
       ):(
-        <SkeletonLoader/>
+        <RingLoader/>
       )}
     </>
   );

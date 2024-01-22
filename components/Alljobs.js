@@ -16,7 +16,7 @@ import { toast } from 'react-hot-toast';
 
 import { formatDistanceToNow } from 'date-fns';
 
-const JobSection = () => {
+const AllJobs = () => {
 
   const [jobsArray, setJobsArray] = useState([]);
   const { dispatch,searchedJob } = useUiContext();
@@ -265,4 +265,4 @@ const JobSection = () => {
   );
 };
 
-export default JobSection;
+export default AllJobs;
