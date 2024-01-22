@@ -227,9 +227,9 @@ fetch(`http://localhost:3000/api/v1/candidate/applyjob/${params.id}`, requestOpt
         <div className="py-4 border-b dark:border-hover-color">
           <div className="">
           {jobData?.descriptionFile && (
-            <div className=" ">
-              <p className='font-medium'>Job Description</p>
-              <div className="flex gap-2 items-center justify-center mt-2 mb-2">
+            <div className=" flex items-center gap-4 ">
+              <p className='font-medium mb-2'>Job Description</p>
+              <div className="flex gap-2 items-center justify-center mb-2">
                 
                 {/* You can also add a button to download the file if needed */}
                 <button
@@ -253,13 +253,13 @@ fetch(`http://localhost:3000/api/v1/candidate/applyjob/${params.id}`, requestOpt
                 ref={fileInput}
                 onChange={(e) => setFile(e.target.files[0])}
               />
-              <p className='font-medium'>Resume/CV*</p>
+              <p className='font-medium mt-2'>Resume/CV*</p>
               <button
                 className="btn mt-2 flex items-center  text-gray-300 gap-2 bg-dark-card hover:bg-hover-color"
                 onClick={() => fileInput.current.click()}
               >
                 <BiLink />
-                <span>Attach Resume/CV</span>
+                <span className=''>Attach Resume/CV</span>
               </button>
             </div>
           </div>

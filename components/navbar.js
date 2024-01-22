@@ -14,9 +14,9 @@ import { links } from "../data/links";
 import Dropdown from "./Dropdown";
 import LoginSignupScreen from './LoginSignupScreen';
 import { getCookie, setCookie } from "cookies-next";
-
+import ActiveLink from '../components/ActiveLink'
 const Navbar = () => {
-  const [loggedIn, setLoggedIn] = useState(true);
+  const [loggedIn, setLoggedIn] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [isLoginScreenOpen, setLoginScreenOpen] = useState(false);
 
@@ -75,7 +75,7 @@ const Navbar = () => {
   
 
   return (
-    <nav suppressHydrationWarning={true} className="bg-white py-4 flex justify-around items-center space-x-60 ">
+    <nav suppressHydrationWarning={true} className="bg-white py-2 pt-4 flex justify-around items-center space-x-60 ">
       {/* Logo on the left */}
       
         <Link href="/" suppressHydrationWarning={true}>
@@ -123,19 +123,14 @@ const Navbar = () => {
         </div>
       ) : (
         // Navigation links for non-mobile view
-        <div className="flex items-center space-x-6">
-          <div className="hover:border-b-2 hover:border-b-teal_color">
-          <Link href="/">Home</Link>
-          </div>
-          <div className="hover:border-b-2 hover:border-b-teal_color">
-          <Link href="/">Jobs</Link>
-          </div>
-          <div className="hover:border-b-2 hover:border-b-teal_color">
-          <Link href="/">Companies</Link>
-          </div>
-          <div className="hover:border-b-2 hover:border-b-teal_color">
-          <Link href="/">About Us</Link>
-          </div>
+        <div className="navbar flex items-center space-x-6">
+          <ul className="hidden md:flex-align-center space-x-3 lg:space-x-6">
+              {links.map(({ id, linkText, url }) => (
+                <ActiveLink href={url} key={id}>
+                  {linkText}
+                </ActiveLink>
+              ))}
+          </ul>
           
 
           {loggedIn ? (

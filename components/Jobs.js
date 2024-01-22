@@ -65,7 +65,7 @@ const JobSection = () => {
         };
 
         try {
-          console.log("jobs page recruiter cookie: ", hasCookie("recruiter"));
+          //console.log("jobs page recruiter cookie: ", hasCookie("recruiter"));
           const apiUrl = hasCookie("recruiter") ?
         'http://localhost:3000/api/v1/recruiter/myprofile' :
         'http://localhost:3000/api/v1/job/getJobs';
@@ -110,7 +110,7 @@ const JobSection = () => {
     displayedJobs = jobsArray.slice().reverse();
   }
   const jobTitlesSet = new Set(jobsArray.map(job => job.title));
-  displayedJobCategories = Array.from(jobTitlesSet).slice().reverse().slice(0,4);
+  displayedJobCategories = Array.from(jobTitlesSet).slice().reverse().slice(0,5);
  
   
 
@@ -146,9 +146,9 @@ const JobSection = () => {
             key={index} 
             onClick={()=>{
               setselectedCategory(category)
-            console.log(selectedCategory)}}
+            }}
             
-            className={`${selectedCategory ===category ? 'bg-black_color text-white ' : ' hover:bg-black_color hover:text-white '} text-black_color cursor-pointer p-3 rounded-full`}
+            className={`${selectedCategory ===category ? 'bg-black_color text-white ' : ' hover:bg-black_color hover:text-white '} text-black_color cursor-pointer p-3 rounded-full `}
             
             >
               {category}
@@ -156,9 +156,9 @@ const JobSection = () => {
           ))}
         </div>
         {getCookie("user")==="candidate" ? (
-          <div className="ml-auto text-gray-500 hover:underline cursor-pointer pr-40">
+          <Link href='/Jobs' className="ml-auto text-gray-500 hover:underline cursor-pointer pr-40">
             View All
-          </div>
+          </Link>
         ):(
           <button className="bg-teal_color text-white py-2 px-4 rounded-md ml-auto cursor-pointer pr-5 mr-40">
               <Link href="/">+ Post Job</Link>

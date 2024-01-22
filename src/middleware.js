@@ -1,5 +1,4 @@
 import { NextResponse } from 'next/server'
-import { hasCookie } from 'cookies-next';
 // This function can be marked `async` if using `await` inside
 export function middleware(request) {
     const path = request.nextUrl.pathname

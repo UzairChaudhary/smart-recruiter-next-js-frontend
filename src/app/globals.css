@@ -55,11 +55,11 @@ a.btn {
 }
 
 footer a {
-  @apply text-sm;
+  @apply text-sm transition-a;
 }
 
 footer a:hover {
-  @apply ml-2;
+  @apply ml-2 text-teal_color;
 }
 
 .image-wrapper > span {
@@ -103,7 +103,11 @@ footer a:hover {
 }
 
 /* Loader */
-
+.loader {
+  @apply w-10 h-10 border-4 border-teal_color rounded-full;
+  border-block-start-color: transparent;
+  animation: rotate 1s ease-in-out infinite;
+}
 @keyframes rotate {
   to {
     transform: rotate(360deg);
@@ -111,8 +115,19 @@ footer a:hover {
 }
 
 /* Navbar links */
+.navbar ul a  {
+  @apply text-base relative w-fit transition-a;
+  
+}
+.navbar ul a {
+  @apply before:absolute before:w-full before:h-[2px] before:left-0 before:-bottom-2 md:before:-bottom-4 before:bg-teal_color before:scale-0 before:transition-a ;
+  
+}
 
-
+.navbar ul a.active,
+.navbar ul a:hover {
+  @apply text-teal_color before:scale-100;
+}
 
 /* Check box & radio box */
 .input-check label,

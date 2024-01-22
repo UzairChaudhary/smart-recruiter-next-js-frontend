@@ -1,11 +1,12 @@
-import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { usePathname } from 'next/navigation'
 
 const ActiveLink = ({ href, children }) => {
-  const router = useRouter();
-
+  const pathname = usePathname();
+  
   // Use the pathname of the current route to determine if the link should be active
-  const isActive = router.pathname === href;
+  const isActive = pathname === href;
+  
 
   return (
     <Link href={href} legacyBehavior>
