@@ -405,4 +405,49 @@ input:-webkit-autofill:focus,
 input:-webkit-autofill ~ label {
   @apply -top-[12px] left-[15px] text-sm ;
 }
+.scroller{
+  max-width: 1100px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.scroller__inner {
+  padding-block: 1rem;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 3rem;
+}
+
+.scroller[data-animated="true"] {
+  overflow: hidden;
+  -webkit-mask: linear-gradient(
+    90deg,
+    transparent,
+    white 200%,
+    white 800%,
+    transparent
+  );
+  mask: linear-gradient(90deg, transparent, white 20%, white 80%, transparent);
+}
+
+.scroller[data-animated="true"] .scroller__inner {
+  width: max-content;
+  flex-wrap: nowrap;
+  animation: scroll var(--_animation-duration, 50s)
+    var(--_animation-direction, forwards) linear infinite;
+}
+
+
+
+.scroller[data-speed="slow"] {
+  --_animation-duration: 45s;
+}
+
+@keyframes scroll {
+  to {
+    transform: translate(calc(-50% - 0.5rem));
+  }
+}
+
 

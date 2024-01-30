@@ -6,6 +6,7 @@ import JobSection from "../../components/Jobs";
 import BackToTopButton from '../../components/BackToTopButton'
 import Footer from "../../components/Footer"
 import RingLoader from "../../loaders/RingLoader";
+import Companies from "../../components/LandingPage/Companies";
 const Home = () => {
   const [renderComponents, setRenderComponents] = useState(false);
 
@@ -43,6 +44,7 @@ const Home = () => {
           <HeroSection />
           <JobSearchForm />
           <JobSection />
+          <Companies/>
           <Footer/>
           
         </>
