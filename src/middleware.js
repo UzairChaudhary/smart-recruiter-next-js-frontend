@@ -13,7 +13,11 @@ export function middleware(request) {
         //console.log(path)
         
         //console.log(token)
-        return NextResponse.redirect(new URL('/',request.nextUrl))
+        return NextResponse.redirect(new URL(
+            '/',
+            request.nextUrl
+        ))
+
     }
 }
  

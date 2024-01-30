@@ -13,7 +13,7 @@ const Home = () => {
     // Set a timeout to render all components after a certain time interval (e.g., 3000 milliseconds or 3 seconds)
     const timeoutId = setTimeout(() => {
       setRenderComponents(true);
-    }, 500); // Adjust the time interval as needed
+    }, 1000); // Adjust the time interval as needed
 
     // Cleanup function to clear the timeout if the component unmounts before the timeout
     return () => clearTimeout(timeoutId);

@@ -28,7 +28,7 @@ const Navbar = () => {
 
   useEffect(() => {
     
-    console.log("login as: ", getCookie("user"));
+    //console.log("login as: ", getCookie("user"));
     if(getCookie("user")===undefined){
       setCookie("user", "candidate")
     }

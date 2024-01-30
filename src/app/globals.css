@@ -29,7 +29,7 @@ html {
 }
 
 *::-webkit-scrollbar-thumb {
-  @apply rounded bg-slate-400;
+  @apply rounded bg-teal_color;
 }
 
 *::-webkit-scrollbar-track {

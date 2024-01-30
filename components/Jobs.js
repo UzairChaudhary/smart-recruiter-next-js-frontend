@@ -45,7 +45,7 @@ const JobSection = () => {
 
     e.preventDefault()
     
-    if (hasCookie("token")){
+    if ((getCookie("user")==="candidate") && hasCookie("token")){
       router.push(`/apply/${id}`)
     }
     else{
@@ -85,7 +85,7 @@ const JobSection = () => {
 
           const data = await response.json();
           if(hasCookie("recruiter")){
-            console.log(data);
+            //console.log(data);
             setJobsArray(data.recruiter.jobs);
           }
           else{
@@ -161,7 +161,7 @@ const JobSection = () => {
           ))}
         </div>
         {(getCookie("user")==="candidate")&&(!isJobsPage)&& (
-          <Link href='/Jobs' className="ml-auto text-gray-500 hover:underline cursor-pointer pr-40">
+          <Link href='/Jobs' scroll= {false} className="ml-auto text-gray-500 hover:underline cursor-pointer pr-40">
             View All Jobs
           </Link>
         )}
@@ -259,8 +259,43 @@ const JobSection = () => {
         </div>
 
       ):(
-        <h2 className="text-4xl font-medium mt-10 flex md:ml-40 mb-4">No Jobs Currently</h2>
+        <div className="flex-center-center mt-5">
+              <div className="image-wrapper">
+                <img
+                  src="/404.png"
+                  alt="404"
+                  className="mx-auto  object-contain h-[350px] w-[350px]"
+                />
+                <h1 className="text-center text-black_color mt-5 text-3xl opacity-70">
+                  Oops! No jobs found
+                </h1>
+              </div>
+            </div>
+      
       )}
+      {displayedJobs?.length && displayedJobs
+            .filter(
+            (job) =>
+                (searchedJob === '' ||
+                job.title.toLowerCase().includes(searchedJob.toLowerCase())) &&
+                (selectedCategory === null || job.title === selectedCategory)
+            ).length === 0 ? (
+              <div className="flex-center-center mt-5">
+              <div className="image-wrapper">
+                <img
+                  src="/404.png"
+                  alt="404"
+                  className="mx-auto  object-contain h-[350px] w-[350px]"
+                />
+                <h1 className="text-center text-black_color mt-5 text-3xl opacity-70">
+                  Oops! No jobs found
+                </h1>
+              </div>
+            </div>
+    ):(
+      <></>
+    
+    )}
     </div>
   );
 };

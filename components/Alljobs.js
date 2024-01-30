@@ -45,7 +45,7 @@ const AllJobs = () => {
 
     e.preventDefault()
     
-    if (hasCookie("token")){
+    if ((getCookie("user")==="candidate") && hasCookie("token")){
       router.push(`/apply/${id}`)
     }
     else{
@@ -85,7 +85,7 @@ const AllJobs = () => {
 
           const data = await response.json();
           if(hasCookie("recruiter")){
-            console.log(data);
+            //console.log(data);
             setJobsArray(data.recruiter.jobs);
           }
           else{
@@ -103,17 +103,10 @@ const AllJobs = () => {
     
   }, []);
 
-  // Limit the array to only the first 6 jobs
+  // Limit the array 
   var displayedJobs=[];
   var displayedJobCategories=[];
-  if(hasCookie("recruiter")){
-    displayedJobs = jobsArray.slice().reverse()
-  }
-  else{
-
-    //displayedJobs = jobsArray.reverse().slice(0, 8);
-    displayedJobs = jobsArray.slice().reverse();
-  }
+  displayedJobs = jobsArray.slice().reverse();
   const jobTitlesSet = new Set(jobsArray.map(job => job.title));
   displayedJobCategories = Array.from(jobTitlesSet).slice().reverse().slice(0,5);
  
@@ -160,16 +153,12 @@ const AllJobs = () => {
             </div>
           ))}
         </div>
-        {(getCookie("user")==="candidate")&&(!isJobsPage)&& (
-          <Link href='/Jobs' className="ml-auto text-gray-500 hover:underline cursor-pointer pr-40">
-            View All Jobs
-          </Link>
-        )}
         {getCookie("user")==="recruiter" &&(
           <button className="bg-teal_color text-white py-2 px-4 rounded-md ml-auto cursor-pointer pr-5 mr-40">
               <Link href="/">+ Post Job</Link>
             </button>
         )}
+        
       </div>
       {displayedJobs?.length ? (
         
@@ -181,7 +170,6 @@ const AllJobs = () => {
                 job.title.toLowerCase().includes(searchedJob.toLowerCase())) &&
               (selectedCategory === null || job.title === selectedCategory)
           )
-          .slice(0, 8)
           .map((job) => (
             <div
             
@@ -189,6 +177,8 @@ const AllJobs = () => {
               key={job._id}
               className="bg-white p-5 rounded-3xl mb-8 hover:bg-gradient-to-br hover:from-blue_color hover:to-yellow_color hover:text-white flex flex-col justify-between h-auto border border-r-6 border-gray-300 shadow-md "
             >
+
+                
               {/* Company Logo */}
               <Image src="/next.svg" alt="Company Logo" className="mx-auto rounded-full p-2 mb-3 w-16 h-16 bg-white border" height={100} width={100} />
 
@@ -228,7 +218,7 @@ const AllJobs = () => {
                 {getCookie("user") === "candidate" ? (
                   <div>
                     <button
-                    href={`/apply/${job?._id}`}
+                    
                     onClick={(e) => handleUserAuthentication(e, job._id)}
                     className="bg-black_color text-white px-6 py-2 rounded-full hover:bg-white hover:text-black"
                   >
@@ -256,11 +246,48 @@ const AllJobs = () => {
               </div>
             </div>
           ))}
+           
         </div>
+        
 
       ):(
-        <h2 className="text-4xl font-medium mt-10 flex md:ml-40 mb-4">No Jobs Currently</h2>
+        <div className="flex-center-center mt-5">
+                <div className="image-wrapper">
+                  <img
+                    src="/404.png"
+                    alt="404"
+                    className="mx-auto  object-contain h-[350px] w-[350px]"
+                  />
+                  <h1 className="text-center text-black_color mt-5 text-3xl opacity-70">
+                    Oops! No jobs found
+                  </h1>
+                </div>
+              </div>
+      
       )}
+      {displayedJobs?.length && displayedJobs
+            .filter(
+            (job) =>
+                (searchedJob === '' ||
+                job.title.toLowerCase().includes(searchedJob.toLowerCase())) &&
+                (selectedCategory === null || job.title === selectedCategory)
+            ).length === 0 ? (
+                <div className="flex-center-center mt-5">
+                <div className="image-wrapper">
+                  <img
+                    src="/404.png"
+                    alt="404"
+                    className="mx-auto  object-contain h-[350px] w-[350px]"
+                  />
+                  <h1 className="text-center text-black_color mt-5 text-3xl opacity-70">
+                    Oops! No jobs found
+                  </h1>
+                </div>
+              </div>
+    ):(
+        <></>
+        
+    )}
     </div>
   );
 };

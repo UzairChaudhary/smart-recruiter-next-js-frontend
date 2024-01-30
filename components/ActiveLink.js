@@ -9,7 +9,7 @@ const ActiveLink = ({ href, children }) => {
   
 
   return (
-    <Link href={href} legacyBehavior>
+    <Link href={href} legacyBehavior scroll= {false}>
       <a className={` ${isActive ? "active" : ""}`}>{children}</a>
     </Link>
   );
