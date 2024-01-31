@@ -31,9 +31,9 @@ const Companies = () => {
     }, []); // Run the effect only once on component mount
 
     return (
-        <section className='items-center mt-10'>
+        <section className='items-center mt-20'>
             <h3 className='text-4xl text-center'>Companies that trust <strong>Smart Recruiter</strong> for hiring</h3>
-            <div className="scroller mt-5" data-speed="slow">
+            <div className="scroller" data-speed="slow">
                 <div className="scroller__inner items-center">
                     <img src="Amd_logo_PNG1.png" height={150} width={150} alt="" />
                     <img src="Amazon.png" height={150} width={150} alt="" />

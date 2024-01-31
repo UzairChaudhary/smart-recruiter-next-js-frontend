@@ -184,7 +184,7 @@ const AllJobs = () => {
 
               {/* Company Name and Title */}
               <div className="flex flex-col mb-5">
-                <p className="text-center text-sm mb-2">{job.owner.name}</p>
+                <p className="text-center text-xs mb-2">{job.owner.name}</p>
                 <p className="text-center font-medium text-lg ">{job.title}</p>
               </div>
 

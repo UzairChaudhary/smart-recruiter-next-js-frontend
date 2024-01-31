@@ -7,6 +7,7 @@ import BackToTopButton from '../../components/BackToTopButton'
 import Footer from "../../components/Footer"
 import RingLoader from "../../loaders/RingLoader";
 import Companies from "../../components/LandingPage/Companies";
+import Content from "../../components/LandingPage/Content";
 const Home = () => {
   const [renderComponents, setRenderComponents] = useState(false);
 
@@ -45,6 +46,7 @@ const Home = () => {
           <JobSearchForm />
           <JobSection />
           <Companies/>
+          <Content/>
           <Footer/>
           
         </>
