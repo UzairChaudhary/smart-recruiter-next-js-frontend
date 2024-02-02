@@ -7,17 +7,17 @@ export const links = [
   {
     id: 2,
     linkText: "Jobs",
-    url: "/Jobs",
+    url: "#jobs-section",
   },
   {
     id: 3,
     linkText: "Companies",
-    url: "/Companies",
+    url: "#companies-section",
   },
   {
     id: 4,
     linkText: "About Us",
-    url: "/AboutUs",
+    url: "#aboutus-section",
   },
   
 ];

@@ -130,7 +130,7 @@ const AllJobs = () => {
   }, [setselectedCategory]);
 
   return (
-    <div className="job-section ml-6">
+    <div id="jobs-section" className="job-section ml-6">
       {getCookie("user")==="candidate"? (
         <h2 className="text-4xl font-medium mt-10 flex md:ml-40 mb-4">Popular Jobs</h2>
       ):(
