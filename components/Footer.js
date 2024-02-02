@@ -45,10 +45,10 @@ const Footer = () => {
           </div>
 
           <div className="flex-1 basis-[10rem] text-sm text-center">
-            <h2 className="text-xl font-semibold mb-10 mr-20 pr-5 ml-7">
+            <h2 className="text-xl font-semibold mb-10 pr-5">
               Subscribe Us
             </h2>
-            <p className="text-muted text-13 mr-10 ml-7">
+            <p className="text-muted text-13 mr-3">
               Get the lastest jobs updates
             </p>
             <div className="flex flex-col justify-start items-start ">
@@ -57,7 +57,7 @@ const Footer = () => {
                 name=""
                 id=""
                 type="text"
-                className="px-4 py-[0.45rem] card dark:shadow-none outline-none rounded-md mb-4 text-gray-500 w-60 ml-7"
+                className="px-4 py-[0.45rem] dark:shadow-none outline-none rounded-md mb-4 text-gray-500 w-60 ml-7"
                 placeholder="Enter your Email"
               />
               <button className="bg-hero-gradient rounded-2xl px-6 py-2 mr-20">Get Notified</button>

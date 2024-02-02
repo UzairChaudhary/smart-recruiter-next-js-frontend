@@ -35,7 +35,7 @@ export default function Content() {
                             <path d="M12.971 1.816A5.23 5.23 0 0 1 14.25 5.25v1.875c0 .207.168.375.375.375H16.5a5.23 5.23 0 0 1 3.434 1.279 9.768 9.768 0 0 0-6.963-6.963Z" />
                             </svg>
 
-                            Resume Analysis
+                           <p>Resume Analysis</p> 
                             </div>
                             <div class="content">
                                 <p className='heading'>Resume Analysis</p>

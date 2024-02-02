@@ -523,14 +523,11 @@ input:-webkit-autofill ~ label {
   transform: translateY(0);
 }
 
-.card:hover .img-content {
-  scale: 5.5;
-  
-  filter: blur(10px);
-}
-
 .card:hover .img-content svg {
   fill: transparent;
 }
 
-
+.card:hover .img-content {
+  fill: transparent;
+  color: transparent;
+}
