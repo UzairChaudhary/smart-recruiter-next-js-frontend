@@ -1,20 +1,19 @@
 /* eslint-disable react/no-unescaped-entities */
 "use client"
+import React, { useEffect } from 'react'
+
 import Image from "next/image";
-import { getCookie, hasCookie } from "cookies-next";
-import { useUiContext } from "../contexts/UiContext";
+import { getCookie } from "cookies-next";
 
 export default function HeroSection() {
 
-  const {dispatch, isDropdownOpen,isUserCandidate } = useUiContext();
-  
 
   return (
     <>
       <div className="relative p-4">
         {getCookie("user")==="candidate" ? (
           <div className="flex flex-col md:flex-row justify-center items-center p-5 ml-1 space-x-40 relative z-10 flex-wrap-reverse">
-          <div className="flex flex-col justify-center mr-5 mt-5 ml-10 text-center md:text-left md:pl-20">
+          <div className="animatedLeft flex flex-col justify-center mr-5 mt-5 ml-10 text-center md:text-left md:pl-20" >
             <div className="mb-2">
               <p className="text-4xl text-black p-1">Let's Get You Recruited</p>
               <p className="text-4xl text-black p-1">In Your Dream Job With</p>
@@ -28,7 +27,7 @@ export default function HeroSection() {
               <p>Unleashing the Power of AI for Smarter, Data-Driven Decisions.</p>
             </div>
           </div>
-          <div className="flex justify-center md:pr-40">
+          <div className="animatedRight flex justify-center md:pr-40">
             <Image alt="Hero" src="/hero-section-img.png" priority={true} width={490} height={437} className="mb-2 p-3 "></Image>
           </div>
         </div>
