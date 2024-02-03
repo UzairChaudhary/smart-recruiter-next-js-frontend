@@ -73,7 +73,7 @@ const Dropdown = () => {
     <>
       {isDropdownOpen && (
         <motion.div
-          className="dropdown absolute right-0 top-full mt-1 p-2 !rounded-xl w-48 card card-shadow dark:shadow-none border bg-slate-50 z-30 "
+          className="dropdown absolute right-0 top-full mt-1 p-2 !rounded-xl w-48 DropDownCard card-shadow dark:shadow-none border bg-slate-50 z-30 "
           initial={{ scale: 0.6, opacity: 0, y: 20 }}
           animate={{ scale: 1, opacity: 1, y: 0 }}
           suppressHydrationWarning={true}

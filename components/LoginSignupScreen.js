@@ -264,7 +264,7 @@ const LoginSignupScreen = ({ onClose }) => {
   };
 
   return (
-    <div className='fixed top-0 left-0 right-0 bottom-0 bg-opacity-50 z-50' >
+    <div className='fixed top-0 left-0 right-0 bottom-0 bg-opacity-50 z-20' >
       <div className="fixed top-0 right-0 h-screen bg-white z-50 rounded-tl-2xl rounded-bl-2xl shadow-lg p-8 pt-4 ">
         <div className="flex justify-end items-center mb-4">
           
@@ -273,7 +273,7 @@ const LoginSignupScreen = ({ onClose }) => {
           </button>
         </div>
         <hr className="border-t border-gray-300 my-3" />
-        <div className="flex justify-center space-x-8 mb-3 z-50">
+        <div className="flex justify-center space-x-8 mb-3">
           <button
             onClick={() => handleUserSelection('recruiter')}
             className={`${
@@ -318,17 +318,17 @@ const LoginSignupScreen = ({ onClose }) => {
                 id="email"
                 required
                 placeholder="Enter your Email"
-                className="w-full outline-none focus:outline-none placeholder-gray-400 "
+                className="w-full outline-none focus:outline-none placeholder-gray-400 text-black"
                 onFocus={() => setIsEmailFocused(true)}
                 onBlur={() => {setIsEmailFocused(false); checkEmailValidation()}}
                 onChange={(e) => setFormEmail(e.target.value)}
               />
               </div>
               {!isEmailValid && (
-                <div className='flex justify-end mb-2'>
-                  <p className='text-xs text-red-500 '>
+                <div className='flex justify-end mb-2 text-red-500'>
+                  <span className='text-xs text-red-500 '>
                 Invalid email address format
-              </p>
+              </span>
                 </div>
               )
               
@@ -344,7 +344,7 @@ const LoginSignupScreen = ({ onClose }) => {
                 id="password"
                 value={formPassword}
                 placeholder="Enter your password"
-                className={`w-full outline-none focus:outline-none placeholder-gray-400 text-sm`}
+                className={`w-full outline-none focus:outline-none placeholder-gray-400 text-sm text-black`}
                 onFocus={() => setIsPasswordFocused(true)}
                 onBlur={() => {setIsPasswordFocused(false);setIsPasswordValid(formPassword.length >= 6);}}
                 onChange={(e) => {setFormPassword(e.target.value);setIsPasswordValid(formPassword.length >= 6);}}
@@ -361,9 +361,9 @@ const LoginSignupScreen = ({ onClose }) => {
               </div>
               {!isPasswordValid && (
                 <div className='flex justify-end mb-2'>
-                  <p className='text-xs text-red-500 '>
+                  <span className='text-xs text-red-500 '>
                 Password must be atleast 6 characters
-              </p>
+              </span>
                 </div>
               )
               
@@ -377,7 +377,7 @@ const LoginSignupScreen = ({ onClose }) => {
               <div style={{width:"210px"}}  className='flex justify-center ml-14 '>
                 <button
                   type="submit"
-                  className="login-btn border w-auto bg-black_color text-white p-3 px-7 rounded-full mb-3 text-sm"
+                  className="border w-auto bg-black_color text-white p-3 px-7 rounded-full mb-3 text-sm"
                   onClick={(e) => handleLogin(e)}
                   >
                   Log into your account
@@ -412,7 +412,7 @@ const LoginSignupScreen = ({ onClose }) => {
                 required
                 value={formName}
                 placeholder= {`Enter your ${ user==="recruiter" ? 'Company Name' : 'Name'}`}
-                className={`w-full outline-none focus:outline-none placeholder-gray-400 text-sm 
+                className={`text-black w-full outline-none focus:outline-none placeholder-gray-400 text-sm 
                 `}
                 onFocus={() => setisNameFocused(true)}
                 onBlur={() => {setisNameFocused(false); checkNameValidation() }}
@@ -421,9 +421,9 @@ const LoginSignupScreen = ({ onClose }) => {
               </div>
               {!isNameValid && (
                 <div className='flex justify-end mb-1'>
-                  <p className='text-xs text-red-500 '>
+                  <span className='text-xs text-red-500 '>
                 Name should not contain numbers only
-              </p>
+              </span>
                 </div>
               )
               
@@ -437,7 +437,7 @@ const LoginSignupScreen = ({ onClose }) => {
                 id="email"
                 value={formEmail}
                 placeholder="Enter your Email"
-                className={`w-full outline-none focus:outline-none placeholder-gray-400 text-sm `}                
+                className={`text-black w-full outline-none focus:outline-none placeholder-gray-400 text-sm `}                
                 onFocus={() => setIsEmailFocused(true)}
                 onBlur={() => {setIsEmailFocused(false); checkEmailValidation()}}
                 onChange={(e) => setFormEmail(e.target.value)}
@@ -445,9 +445,9 @@ const LoginSignupScreen = ({ onClose }) => {
               </div>
               {!isEmailValid && (
                 <div className='flex justify-end mb-1'>
-                  <p className='text-xs text-red-500 '>
+                  <span className='text-xs text-red-500 '>
                 Invalid email address format
-              </p>
+              </span>
                 </div>
               )
               
@@ -462,7 +462,7 @@ const LoginSignupScreen = ({ onClose }) => {
                 id="password"
                 value={formPassword}
                 placeholder="Enter your password"
-                className={`w-full outline-none focus:outline-none placeholder-gray-400 text-sm
+                className={`text-black w-full outline-none focus:outline-none placeholder-gray-400 text-sm
                 `}
                 onFocus={() => setIsPasswordFocused(true)}
                 onBlur={() => {setIsPasswordFocused(false);setIsPasswordValid(formPassword.length >= 6);}}
@@ -479,9 +479,9 @@ const LoginSignupScreen = ({ onClose }) => {
               
               {!isPasswordValid && (
                 <div className='flex justify-end mb-1'>
-                  <p className='text-xs text-red-500 '>
+                  <span className='text-xs text-red-500 '>
                 Password must be atleast 6 characters
-              </p>
+              </span>
                 </div>
               )
               
@@ -495,7 +495,7 @@ const LoginSignupScreen = ({ onClose }) => {
                 id="confirm_password"
                 required
                 placeholder="Confirm Password"
-                className={`w-full outline-none focus:outline-none placeholder-gray-400 text-sm `}
+                className={`text-black w-full outline-none focus:outline-none placeholder-gray-400 text-sm `}
                 onFocus={() => setconfirmPasswordFocused(true)}
                 onBlur={() => {setconfirmPasswordFocused(false);setPasswordsMatch(formPassword === formConfirmPassword);}}
                 onChange={(e) => {setFormConfirmPassword(e.target.value);setPasswordsMatch(formPassword === formConfirmPassword);}}
@@ -511,9 +511,9 @@ const LoginSignupScreen = ({ onClose }) => {
               
               {!passwordsMatch && (
                 <div className='flex justify-end'>
-                  <p className='text-xs text-red-500 '>
+                  <span className='text-xs text-red-500 '>
                 Passwords are not matching
-              </p>
+              </span>
                 </div>
               )
               
@@ -546,7 +546,7 @@ const LoginSignupScreen = ({ onClose }) => {
         <div className='absolute bg-hero-gradient right-0 left-0 bottom-0 h-40 rounded-bl-2xl'>
           {selectedOption === 'login' ? (
             <div className='flex flex-col justify-center items-center mt-10 '>
-              <p className='text-sm mb-3'>Don't have an account?</p>
+              <span className='text-sm mb-3 text-black'>Don't have an account?</span>
               
               <div className='flex justify-center'>
                 <button
@@ -560,7 +560,7 @@ const LoginSignupScreen = ({ onClose }) => {
             </div>
           ) : (
             <div className='flex flex-col justify-center items-center mt-10'>
-              <p className='text-sm mb-3'>Already have an account?</p>
+              <span className='text-sm mb-3 text-black'>Already have an account?</span>
               
               <div className='flex justify-center'>
                 <button

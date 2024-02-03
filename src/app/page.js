@@ -8,6 +8,7 @@ import Footer from "../../components/Footer"
 import RingLoader from "../../loaders/RingLoader";
 import Companies from "../../components/LandingPage/Companies";
 import Content from "../../components/LandingPage/Content";
+import { getCookie } from "cookies-next";
 const Home = () => {
   const [renderComponents, setRenderComponents] = useState(false);
 
@@ -45,8 +46,14 @@ const Home = () => {
           <HeroSection />
           <JobSearchForm />
           <JobSection />
-          <Companies/>
-          <Content/>
+          {getCookie("user")==="candidate" && (
+            <div>
+              <Companies/>
+              <Content/>
+            </div>
+
+          )}
+          
           <Footer/>
           
         </>

@@ -230,13 +230,13 @@ const JobSection = () => {
                     <button
                     href={`/apply/${job?._id}`}
                     onClick={(e) => handleUserAuthentication(e, job._id)}
-                    className="bg-black_color text-white px-6 py-2 rounded-full hover:bg-white hover:text-black"
+                    className="login-btn bg-black_color text-white px-6 py-2 rounded-full hover:bg-white hover:text-black"
                   >
                     Apply
                   </button>
                   {isLoginScreenOpen && (
                       <div
-                        className="fixed top-0 left-0 right-0 bottom-0 bg-black bg-opacity-10 z-50"
+                        className="fixed top-0 left-0 right-0 bottom-0 bg-black bg-opacity-10 z-10"
                         
                       ></div>
                     )}
@@ -246,7 +246,7 @@ const JobSection = () => {
                 
 
                 ) : (
-                  <button className="bg-black_color text-white px-6 py-2 rounded-full hover:bg-white hover:text-black">
+                  <button className="login-btn bg-black_color text-white px-6 py-2 rounded-full hover:bg-white hover:text-black">
                     Details
                   </button>
                   
