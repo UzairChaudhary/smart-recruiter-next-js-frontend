@@ -15,11 +15,11 @@ const CreateJob = () => {
     const fileInput = useRef(null);
     const [file, setFile] = useState("");
     const [fileURL, setfileURL] = useState(null);
-    const defaultDP = "https://firebasestorage.googleapis.com/v0/b/final-year-project-e2eca.appspot.com/o/files%2Fdefault-dp.png?alt=media&token=efcf17aa-c16c-4ac0-9608-48576bc0c677"
     
 
     const [tag, setTag] = useState();
     const [tags, setTags] = useState([]);
+    
     const router = useRouter()
 
 useEffect(() => {
@@ -189,13 +189,15 @@ useEffect(() => {
     <>
         <div className='rounded-2xl ml-auto mr-auto max-w-7xl bg-hero-gradient py-20 pb-28 '>
         </div>
-        <button className="btn bg-black_color hover:bg-opacity-80 absolute top-28 mt-1 left-48 ">
-          <Link href="/" className="flex-align-center gap-2 text-white">
+        <button 
+        onClick={()=>router.back()}
+        className="btn flex-align-center gap-2 text-white bg-black_color hover:bg-opacity-80 absolute top-28 mt-1 left-48 ">
+          
             
               <FiChevronLeft />
               <span>back</span>
             
-          </Link>
+          
         </button>
         <h1 className='text-md font-poppins absolute top-40 mt-1 left-48  text-white'>Home / Post Job</h1>
         <div className="avatar font-poppins absolute top-40 mt-12 left-48 flex items-center gap-3" suppressHydrationWarning={true}>

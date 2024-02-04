@@ -194,7 +194,7 @@ const JobSection = () => {
               className="bg-white p-5 rounded-3xl mb-8 hover:bg-gradient-to-br hover:from-blue_color hover:to-yellow_color hover:text-white flex flex-col justify-between h-auto border border-r-6 border-gray-300 shadow-md "
             >
               {/* Company Logo */}
-              <Image src="/next.svg" alt="Company Logo" className="mx-auto rounded-full p-2 mb-3 w-16 h-16 bg-white border" height={100} width={100} />
+              <Image src={job.owner.avatar} alt="Company Logo" className="mx-auto rounded-full p-2 mb-3 w-16 h-16 bg-white border" height={100} width={100} />
 
               {/* Company Name and Title */}
               <div className="flex flex-col mb-5">

@@ -40,7 +40,7 @@ const LoginSignupScreen = ({ onClose }) => {
   // ... (other state variables)
 
   const router = useRouter();
-  const { dispatch,  isUserLoggedIn } = useUiContext();
+  const { dispatch } = useUiContext();
 
   const handleUserLogin = () => {
     dispatch({ type: actioTypes.userLoggedIn });
@@ -218,8 +218,8 @@ const LoginSignupScreen = ({ onClose }) => {
             
             setCookie("user", "candidate")
             setCookie("candidate", result.candidate)
-            setCookie("dp", result.candidate.avatar)
-            DP = result.candidate.avatar
+            
+            
             dispatch({
               type: 'LOGIN',
               payload:{
@@ -235,7 +235,7 @@ const LoginSignupScreen = ({ onClose }) => {
             setCookie("user", "recruiter")
             setCookie("recruiter", result.recruiter)
             
-            setCookie("dp", result.recruiter.avatar)
+            
             
             dispatch({
               type: 'LOGIN',

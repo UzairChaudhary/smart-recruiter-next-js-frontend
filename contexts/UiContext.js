@@ -10,6 +10,8 @@ const initialState = {
   isUserLoggedIn: false,
   isUserCandidate: true,
   isLoginSidebarOpen: false,
+  
+  isProfilePicUpdated: null,
 
   searchedJob:'',
 

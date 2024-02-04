@@ -18,7 +18,9 @@ export const actioTypes = {
   closeLoginSidebar: "HIDE_LOGIN_SIDEBAR",
 
   searchedJob:"SEARCHED_JOB",
-  defaultJobs:"SHOW_DEFAULT_ALL_JOBS"
+  defaultJobs:"SHOW_DEFAULT_ALL_JOBS",
+
+  profilePicUpdated:"PROFILE_PIC_UPDATED"
 };
 
 export const uiReducer = (state, action) => {
@@ -62,6 +64,9 @@ export const uiReducer = (state, action) => {
       break;
     case actioTypes.closeLoginSidebar:
       return { ...state, isLoginSidebarOpen: false };
+      break;
+    case actioTypes.profilePicUpdated:
+      return { ...state, isProfilePicUpdated: true };
       break;
 
 

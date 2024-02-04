@@ -5,9 +5,10 @@ import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { FiDelete} from "react-icons/fi";
 import { BiChevronDown } from "react-icons/bi";
+
 import { useUiContext } from "../contexts/UiContext";
 import { actioTypes } from "../reducers/uiReducer";
-import { useRouter } from "next/router";
+
 import Image from "next/image";
 import Link from 'next/link';
 import { links } from "../data/links";
@@ -16,11 +17,13 @@ import LoginSignupScreen from './LoginSignupScreen';
 import { getCookie, setCookie } from "cookies-next";
 import ActiveLink from '../components/ActiveLink'
 
+
 const Navbar = () => {
   const [user, setuser] = useState();
   const [loggedIn, setLoggedIn] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [isLoginScreenOpen, setLoginScreenOpen] = useState(false);
+  const { dispatch, isSidebarOpen, isProfilePicUpdated } = useUiContext();
 
 
   useEffect(() => {
@@ -54,7 +57,7 @@ const Navbar = () => {
         .catch(error => console.log('error', error));
     }
 
-  }, []);
+  }, [getCookie("recruiter"), getCookie("candidate"),isProfilePicUpdated]);
 
   useEffect(() => {
     
@@ -80,7 +83,6 @@ const Navbar = () => {
 
 
 
-  const { dispatch, isSidebarOpen, isUserLoggedIn, isLoginSidebarOpen } = useUiContext();
   
 
   const handleDropdown = () => {
@@ -170,7 +172,7 @@ const Navbar = () => {
             >
               <motion.img
                 src={user?.avatar}
-                alt="dp"
+                alt="Avatar"
                 className="w-10 h-10 rounded-full sm:cursor-pointer dropdown-btn"
                 whileTap={{ scale: 0.5 }}
               ></motion.img>

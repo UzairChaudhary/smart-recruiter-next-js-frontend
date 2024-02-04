@@ -180,7 +180,7 @@ const AllJobs = () => {
 
                 
               {/* Company Logo */}
-              <Image src="/next.svg" alt="Company Logo" className="mx-auto rounded-full p-2 mb-3 w-16 h-16 bg-white border" height={100} width={100} />
+              <Image src={job?.owner?.avatar} alt="Company Logo" className="mx-auto rounded-full p-2 mb-3 w-16 h-16 bg-white border" height={100} width={100} />
 
               {/* Company Name and Title */}
               <div className="flex flex-col mb-5">
@@ -220,7 +220,7 @@ const AllJobs = () => {
                     <button
                     
                     onClick={(e) => handleUserAuthentication(e, job._id)}
-                    className="bg-black_color text-white px-6 py-2 rounded-full hover:bg-white hover:text-black"
+                    className="bg-black_color login-btn text-white px-6 py-2 rounded-full hover:bg-white hover:text-black"
                   >
                     Apply
                   </button>
@@ -236,7 +236,7 @@ const AllJobs = () => {
                 
 
                 ) : (
-                  <button className="bg-black_color text-white px-6 py-2 rounded-full hover:bg-white hover:text-black">
+                  <button className="bg-black_color login-btn text-white px-6 py-2 rounded-full hover:bg-white hover:text-black">
                     Details
                   </button>
                   
