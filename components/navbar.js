@@ -15,7 +15,9 @@ import Dropdown from "./Dropdown";
 import LoginSignupScreen from './LoginSignupScreen';
 import { getCookie, setCookie } from "cookies-next";
 import ActiveLink from '../components/ActiveLink'
+
 const Navbar = () => {
+  const [user, setuser] = useState();
   const [loggedIn, setLoggedIn] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [isLoginScreenOpen, setLoginScreenOpen] = useState(false);
@@ -24,6 +26,34 @@ const Navbar = () => {
   useEffect(() => {
     // Check for the "session" cookie and update the state accordingly
     setLoggedIn(getCookie("session") === "login");
+    if (getCookie("session") === "login") {
+      const apiUrl = getCookie("user") === 'candidate' ?
+        'http://localhost:3000/api/v1/candidate/myprofile' :
+        'http://localhost:3000/api/v1/recruiter/myprofile';
+      var requestOptions = {
+        method: 'GET',
+        credentials:'include',
+        redirect: 'follow'
+      };
+      
+      fetch(apiUrl, requestOptions)
+        .then(response => response.json())
+        .then(result => {
+          if(result.success){
+            if(result.recruiter){
+
+              setuser(result.recruiter);
+            }
+            else{
+              setuser(result.candidate);
+            }
+  
+          }
+          //console.log(result)
+      })
+        .catch(error => console.log('error', error));
+    }
+
   }, []);
 
   useEffect(() => {
@@ -139,7 +169,7 @@ const Navbar = () => {
               onClick={handleDropdown}
             >
               <motion.img
-                src="/default-dp.png"
+                src={user?.avatar}
                 alt="dp"
                 className="w-10 h-10 rounded-full sm:cursor-pointer dropdown-btn"
                 whileTap={{ scale: 0.5 }}

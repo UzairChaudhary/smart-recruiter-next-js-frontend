@@ -17,7 +17,7 @@ import { toast } from 'react-hot-toast';
 import { setCookie } from 'cookies-next';
 
 
-
+var DP;
 const LoginSignupScreen = ({ onClose }) => {
 
   const [user, setuser] = useState('');
@@ -105,7 +105,7 @@ const LoginSignupScreen = ({ onClose }) => {
       name: formName,
       email: formEmail,
       password: formPassword,
-      
+      avatar: "https://firebasestorage.googleapis.com/v0/b/final-year-project-e2eca.appspot.com/o/files%2Fdefault-dp.png?alt=media&token=efcf17aa-c16c-4ac0-9608-48576bc0c677"
     };
 
     try {
@@ -218,6 +218,8 @@ const LoginSignupScreen = ({ onClose }) => {
             
             setCookie("user", "candidate")
             setCookie("candidate", result.candidate)
+            setCookie("dp", result.candidate.avatar)
+            DP = result.candidate.avatar
             dispatch({
               type: 'LOGIN',
               payload:{
@@ -232,6 +234,9 @@ const LoginSignupScreen = ({ onClose }) => {
             
             setCookie("user", "recruiter")
             setCookie("recruiter", result.recruiter)
+            
+            setCookie("dp", result.recruiter.avatar)
+            
             dispatch({
               type: 'LOGIN',
               payload:{
@@ -588,3 +593,4 @@ const LoginSignupScreen = ({ onClose }) => {
 };
 
 export default LoginSignupScreen;
+export {DP};

@@ -7,6 +7,7 @@ import Link from "next/link";
 import Footer from "../../../components/Footer";
 import { toast } from 'react-hot-toast';
 import { useRouter } from "next/navigation";
+import { getCookie } from "cookies-next";
 const CreateJob = () => {
     const [user, setUser] = useState();
     const [name, setname] = useState();
@@ -29,13 +30,21 @@ useEffect(() => {
       credentials:'include',
       redirect: 'follow'
     };
-    
-    fetch("http://localhost:3000/api/v1/recruiter/myprofile", requestOptions)
+    const apiUrl = getCookie("user") === 'candidate' ?
+        'http://localhost:3000/api/v1/candidate/myprofile' :
+        'http://localhost:3000/api/v1/recruiter/myprofile';
+
+    fetch(apiUrl, requestOptions)
       .then(response => response.json())
       .then(result => {
         if(result.success){
+            if (getCookie("user"==="recruiter")){
 
-            setUser(result.recruiter);
+                setUser(result.recruiter);
+            }
+            else{
+                setUser(result.candidate);
+            }
         }
         //console.log(result)
     })
@@ -197,7 +206,7 @@ useEffect(() => {
             
           </Link>
         </button>
-        <h1 className='text-md font-poppins absolute top-40 mt-1 left-48  text-white'>Home / Post Job</h1>
+        <h1 className='text-md font-poppins absolute top-40 mt-1 left-48  text-white'>Home / My Profile</h1>
         <div className="avatar font-poppins absolute top-40 mt-12 left-48 flex items-center gap-3" suppressHydrationWarning={true}>
  
             <div className="w-28 ">
@@ -214,7 +223,7 @@ useEffect(() => {
         
 
         <div className="rounded max-w-3xl w-full mx-auto font-poppins">
-        <h1 className="text-2xl font-medium mt-10 flex justify-center">Job Application Form</h1>
+        <h1 className="text-2xl font-medium mt-10 flex justify-center">Update Profile Information</h1>
         {/*---------------------------------------- Form------------------------------------- */}
 
         

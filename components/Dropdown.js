@@ -78,9 +78,11 @@ const Dropdown = () => {
           animate={{ scale: 1, opacity: 1, y: 0 }}
           suppressHydrationWarning={true}
         >
-          <div className=" flex flex-align-center space-x-3 p-2  sm:cursor-pointer hover:bg-gray-500 hover:text-white dark:hover:bg-hover-color rounded-lg">
+          <div
+          onClick={()=>router.push("/profile")}
+          className=" flex flex-align-center space-x-3 p-2  sm:cursor-pointer hover:bg-gray-500 hover:text-white dark:hover:bg-hover-color rounded-lg">
             <BiUserCircle className="text-muted mt-1 h-4 w-4" />
-            <span className="text-muted">My Profile</span>
+            <span className="text-muted ">My Profile</span>
           </div>
           
           <div className="flex flex-align-center space-x-3 p-2 sm:cursor-pointer hover:bg-gray-500 hover:text-white  dark:hover:bg-hover-color rounded-lg">

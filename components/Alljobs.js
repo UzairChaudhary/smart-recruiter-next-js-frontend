@@ -155,7 +155,7 @@ const AllJobs = () => {
         </div>
         {getCookie("user")==="recruiter" &&(
           <button className="bg-teal_color text-white py-2 px-4 rounded-md ml-auto cursor-pointer pr-5 mr-40">
-              <Link href="/">+ Post Job</Link>
+              <Link href="/createJob">+ Post Job</Link>
             </button>
         )}
         

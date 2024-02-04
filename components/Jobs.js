@@ -16,6 +16,8 @@ import { toast } from 'react-hot-toast';
 
 import { formatDistanceToNow } from 'date-fns';
 
+
+
 const JobSection = () => {
 
   const [jobsArray, setJobsArray] = useState([]);
@@ -23,7 +25,7 @@ const JobSection = () => {
   const [isLoginScreenOpen, setLoginScreenOpen] = useState(false);
   const [selectedCategory, setselectedCategory] = useState(null);
   const router = useRouter();
-
+ 
   const pathname = usePathname();
   
   // Use the pathname of the current route to determine if the link should be active
@@ -87,9 +89,11 @@ const JobSection = () => {
           if(hasCookie("recruiter")){
             //console.log(data);
             setJobsArray(data.recruiter.jobs);
+            
           }
           else{
             setJobsArray(data.jobs);
+            
 
           }
           
@@ -167,7 +171,7 @@ const JobSection = () => {
         )}
         {getCookie("user")==="recruiter" &&(
           <button className="bg-teal_color text-white py-2 px-4 rounded-md ml-auto cursor-pointer pr-5 mr-40">
-              <Link href="/">+ Post Job</Link>
+              <Link href="/createjob">+ Post Job</Link>
             </button>
         )}
       </div>
@@ -301,3 +305,4 @@ const JobSection = () => {
 };
 
 export default JobSection;
+
