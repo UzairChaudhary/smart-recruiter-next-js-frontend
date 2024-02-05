@@ -208,7 +208,7 @@ useEffect(() => {
               />
             ) : (
               <div className="w-28 h-16 rounded-full grid place-items-center  top-1 -bottom-8 absolute dark:border-hover-color">
-                <img src={user?.avatar} className="rounded-full"></img>
+                <img src={user?.avatar} className="rounded-full border border-blue_color"></img>
                 <FaCamera className="text-3xl opacity-60 dark:text-slate-500 absolute mt-32 " />
                 
               </div>

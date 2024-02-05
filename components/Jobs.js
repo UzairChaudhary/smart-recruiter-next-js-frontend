@@ -233,7 +233,7 @@ const JobSection = () => {
                 {getCookie("user") === "candidate" ? (
                   <div>
                     <button
-                    href={`/apply/${job?._id}`}
+                    
                     onClick={(e) => handleUserAuthentication(e, job._id)}
                     className="login-btn bg-black_color text-white px-6 py-2 rounded-full hover:bg-white hover:text-black"
                   >
@@ -251,9 +251,12 @@ const JobSection = () => {
                 
 
                 ) : (
-                  <button className="login-btn bg-black_color text-white px-6 py-2 rounded-full hover:bg-white hover:text-black">
+                  <Link
+                    href={`/jobDetails/${job?._id}`}
+                    
+                   className="login-btn bg-black_color text-white px-6 py-2 rounded-full hover:bg-white hover:text-black">
                     Details
-                  </button>
+                  </Link>
                   
                 )}
 

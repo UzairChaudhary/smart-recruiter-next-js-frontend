@@ -210,7 +210,7 @@ useEffect(() => {
         <div className="avatar font-poppins absolute top-40 mt-12 left-48 flex items-center gap-3" suppressHydrationWarning={true}>
  
             <div className="w-28 ">
-                <img src={user?.avatar} className="rounded-full" />
+                <img src={user?.avatar} className="rounded-full border border-blue_color" />
             </div>
             
            

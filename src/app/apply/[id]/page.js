@@ -3,9 +3,11 @@ import React, { useEffect, useState , useRef} from 'react';
 import { useRouter } from 'next/navigation';
 import { BiFile, BiLink } from "react-icons/bi";
 import { FiChevronLeft } from "react-icons/fi";
-import Link from "next/link";
+import { IoMdDownload } from "react-icons/io";
+
 import { getCookie } from "cookies-next";
 import { toast } from 'react-hot-toast';
+import Footer from '../../../../components/Footer';
 
 const ApplyJob = ({ params }) => {
   const router = useRouter();
@@ -229,13 +231,30 @@ fetch(`http://localhost:3000/api/v1/candidate/applyjob/${params.id}`, requestOpt
             <div className=" flex items-center gap-4 ">
               <p className='font-medium mb-2'>Job Description</p>
               <div className="flex gap-2 items-center justify-center mb-2">
-                
+                {/* <iframe
+                  className="w-full h-96"
+                  src={jobData?.descriptionFile}
+                  allowFullScreen
+                  title="Job Description"
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+
+
+
+                ></iframe> */}
+                <button
+                  className="btn text-black_color flex items-center gap-2  hover:bg-teal_color hover:text-white"
+                  onClick={() => {}}
+                >
+                  <BiFile />
+                  <span>View Job Description File</span>
+                </button> 
                 {/* You can also add a button to download the file if needed */}
                 <button
                   className="btn text-black_color flex items-center gap-2  hover:bg-teal_color hover:text-white"
                   onClick={() => window.open(jobData?.descriptionFile, '_blank')}
                 >
-                  <BiFile />
+                  <IoMdDownload />
                   <span>Download Job Description File</span>
                 </button> 
               </div>
@@ -285,6 +304,7 @@ fetch(`http://localhost:3000/api/v1/candidate/applyjob/${params.id}`, requestOpt
           </button>
         
       </div>
+      <Footer/>
     </>
   );
 };
