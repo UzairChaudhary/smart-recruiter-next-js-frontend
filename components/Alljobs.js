@@ -180,7 +180,7 @@ const AllJobs = () => {
 
                 
               {/* Company Logo */}
-              <Image src={job?.owner?.avatar} alt="Company Logo" className="mx-auto rounded-full p-2 mb-3 w-16 h-16 bg-white border" height={100} width={100} />
+              <Image src={job?.avatar} alt="Company Logo" className="mx-auto rounded-full p-2 mb-3 w-16 h-16 bg-white border" height={100} width={100} />
 
               {/* Company Name and Title */}
               <div className="flex flex-col mb-5">
@@ -226,7 +226,7 @@ const AllJobs = () => {
                   </button>
                   {isLoginScreenOpen && (
                       <div
-                        className="fixed top-0 left-0 right-0 bottom-0 bg-black bg-opacity-10 z-50"
+                        className="fixed top-0 left-0 right-0 bottom-0 bg-black bg-opacity-10 z-10"
                         
                       ></div>
                     )}

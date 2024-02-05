@@ -3,10 +3,11 @@ import { useRef, useState,useEffect } from "react";
 import { BiLink,BiFile } from "react-icons/bi";
 import { FaTimes } from "react-icons/fa";
 import { FiChevronLeft } from "react-icons/fi";
-import Link from "next/link";
 import Footer from "../../../components/Footer";
 import { toast } from 'react-hot-toast';
 import { useRouter } from "next/navigation";
+import Loader from "../../../loaders/Loader"
+
 const CreateJob = () => {
     const [user, setUser] = useState();
     const [name, setname] = useState();
@@ -15,11 +16,13 @@ const CreateJob = () => {
     const fileInput = useRef(null);
     const [file, setFile] = useState("");
     const [fileURL, setfileURL] = useState(null);
+
+    const [isLoading, setIsLoading] = useState(false);
     
 
     const [tag, setTag] = useState();
     const [tags, setTags] = useState([]);
-    
+
     const router = useRouter()
 
 useEffect(() => {
@@ -78,6 +81,7 @@ useEffect(() => {
     
       const handlePostJob = async (e) => {
         e.preventDefault()
+        setIsLoading(true)
         if(name===undefined){
           toast.error('Please enter Job Title');
           return
@@ -104,10 +108,12 @@ useEffect(() => {
               await uploadFileToFirebase();
       
             } catch (error) {
+              setIsLoading(false)
               console.error('Error uploading file:', error);
             }
           }
         } else {
+          setIsLoading(false)
           toast.error('Please select a file');
           console.log('error');
           return
@@ -171,11 +177,12 @@ useEffect(() => {
         console.log(result)
         if(result.success){
           console.log('Form submitted successfully!');
+          setIsLoading(false)
           toast.success("Job Created Successfully")
           router.push('/')
           }
           else{
-            
+            setIsLoading(false)
             toast.error(result.message)
           }
       })
@@ -328,6 +335,7 @@ useEffect(() => {
         post job
         </button>
       </div>
+        {isLoading && <Loader/>}
           
           
           

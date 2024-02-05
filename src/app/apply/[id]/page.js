@@ -152,7 +152,7 @@ fetch(`http://localhost:3000/api/v1/candidate/applyjob/${params.id}`, requestOpt
     if(result.success){
       console.log('Form submitted successfully!');
       toast.success(result.message)
-      router.push('/')
+      router.back()
       }
       else{
         

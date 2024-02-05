@@ -1,7 +1,7 @@
 const Loader = () => {
   return (
-    <div className="fixed top-0 left-0 z-50 w-full h-full flex-center-center dark:bg-dark-main">
-      <div className="circleloader"></div>
+    <div className="fixed bg-black bg-opacity-50 top-0 left-0 z-50 w-full h-full flex-center-center dark:bg-dark-main">
+      <div className="circleloader "></div>
     </div>
 
     

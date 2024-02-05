@@ -10,13 +10,14 @@ import { getCookie, setCookie } from "cookies-next";
 
 import { useUiContext } from "../../../contexts/UiContext";
 import { actioTypes } from "../../../reducers/uiReducer";
+import Loader from "../../../loaders/Loader"
 const CreateJob = () => {
     const [user, setUser] = useState();
     const [fileURL, setfileURL] = useState(null);
     const logoInput = useRef(null);
     const [logo, setLogo] = useState("");
     const router = useRouter()
-    const defaultDP = "https://firebasestorage.googleapis.com/v0/b/final-year-project-e2eca.appspot.com/o/files%2Fdefault-dp.png?alt=media&token=efcf17aa-c16c-4ac0-9608-48576bc0c677"
+    const [isLoading, setIsLoading] = useState(false);
 
     const { dispatch } = useUiContext();
 
@@ -67,17 +68,18 @@ useEffect(() => {
     
       const handleSaveProfile = async (e) => {
         e.preventDefault()
-        
+       setIsLoading(true)
         if (logo) {
             try {
                 // Upload file to Firebase
                 await uploadFileToFirebase();
         
               } catch (error) {
+                setIsLoading(false)
                 console.error('Error uploading file:', error);
               }
         } else {
-          
+          setIsLoading(false)
           console.log('NO Changes');
           toast.error("You haven't made any changes to your profile");
           return
@@ -140,6 +142,7 @@ useEffect(() => {
         
         if(result.success){
           console.log('Profile Updated successfully!');
+          setIsLoading(false)
           toast.success(result.message)
           dispatch({ type: actioTypes.profilePicUpdated });
           if(getCookie("user")==="recruiter"){
@@ -153,7 +156,7 @@ useEffect(() => {
           router.push('/')
           }
           else{
-            
+            setIsLoading(false)
             toast.error(result.message)
           }
       })
@@ -177,7 +180,7 @@ useEffect(() => {
             
           
         </button>
-        <h1 className='text-md font-poppins absolute top-40 mt-1 left-48  text-white'>Home / Post Job</h1>
+        <h1 className='text-md font-poppins absolute top-40 mt-1 left-48  text-white'>Home / Profile information</h1>
         <div className="avatar font-poppins absolute top-40 mt-12 left-48 flex items-center gap-3" suppressHydrationWarning={true}>
  
             <div className="w-28 relative">
@@ -206,7 +209,7 @@ useEffect(() => {
             ) : (
               <div className="w-28 h-16 rounded-full grid place-items-center  top-1 -bottom-8 absolute dark:border-hover-color">
                 <img src={user?.avatar} className="rounded-full"></img>
-                <FaCamera className="text-3xl opacity-60 dark:text-slate-500 fixed mt-32 " />
+                <FaCamera className="text-3xl opacity-60 dark:text-slate-500 absolute mt-32 " />
                 
               </div>
             )}
@@ -225,18 +228,6 @@ useEffect(() => {
 
         <div className="rounded max-w-3xl w-full mx-auto font-poppins">
         <h1 className="text-2xl font-medium mt-10 flex justify-center">Update Profile Information</h1>
-        {/*---------------------------------------- Form------------------------------------- */}
-
-        
-          
-          
-        
-        
-        
-        
-        
-        
-        
         
         
         <button 
@@ -246,6 +237,7 @@ useEffect(() => {
         Save Information
         </button>
       </div>
+        {isLoading && <Loader/>}
           
           
           
