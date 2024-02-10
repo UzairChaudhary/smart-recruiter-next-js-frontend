@@ -7,6 +7,7 @@ import Footer from "../../../components/Footer";
 import { toast } from 'react-hot-toast';
 import { useRouter } from "next/navigation";
 import Loader from "../../../loaders/Loader"
+import './style.css'
 
 const CreateJob = () => {
     const [user, setUser] = useState();
@@ -24,6 +25,30 @@ const CreateJob = () => {
     const [tags, setTags] = useState([]);
 
     const router = useRouter()
+
+    const [jobType1, setJobType1] = useState("");
+  const [jobType2, setJobType2] = useState("");
+
+  const handleJobType1Change = (event) => {
+    setJobType1(event.target.value);
+  };
+
+  const handleJobType2Change = (event) => {
+    setJobType2(event.target.value);
+  };
+
+  const handleSubmitJobType = () => {
+    const selectedJobType = jobType1 + ", " + jobType2;
+    console.log("Selected Job Type:", selectedJobType);
+    setjobtype(selectedJobType)
+    // Here you can use the selectedJobType as needed (e.g., send it to the server)
+  };
+
+  useEffect(() => {
+    if (jobType1 && jobType2) {
+      handleSubmitJobType();
+    }
+  }, [jobType1, jobType2]);
 
 useEffect(() => {
     
@@ -47,11 +72,11 @@ useEffect(() => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (tag) {
-        setTags([...tags,  tag ]);
+        if (tag && !tags.includes(tag)) {
+          setTags([...tags, tag]);
         }
         setTag("");
-        console.log(tags)
+        //console.log(tags)
     };
 
     const removeTag = (index) => {
@@ -74,6 +99,7 @@ useEffect(() => {
           return true;
         } else {
           toast.error('Please upload a valid PDF file only');
+          setIsLoading(false)
           return false;
         }
       };
@@ -84,19 +110,23 @@ useEffect(() => {
         setIsLoading(true)
         if(name===undefined){
           toast.error('Please enter Job Title');
+          setIsLoading(false)
           return
         }
         if (tags.length===0){
             toast.error('Please enter Skills');
+            setIsLoading(false)
             return
           }
         if(experience===undefined){
           toast.error('Please enter Experience');
+          setIsLoading(false)
           return
 
         }
         if (jobtype===""){
           toast.error('Please select Job Type');
+          setIsLoading(false)
           return
         }
         
@@ -157,7 +187,7 @@ useEffect(() => {
       "title": name,
       "descriptionFile": URL,
       "jobType":jobtype,
-      "experience":experience,
+      "experienceLevel":experience,
       "skills":tags
       
     });
@@ -284,16 +314,95 @@ useEffect(() => {
           />
           <label htmlFor="experience">Experience Required</label>
         </div>
-        <div className="form-input w-full sm:flex-1 relative">
-          <input
-            type="text"
-            className="input"
-            value={jobtype}
-            onChange={(e) => {setjobtype(e.target.value)}}
-            required
-          />
-          <label htmlFor="Job Type">Job Type</label>
+        <div className="jobtype-card">
+  
+          <form>
+            <p className="text-[#8d9193] px-4 font-poppins">Job Type</p>
+            <div className="radio-wrapper">
+              <input
+                className="jobtype1-radio-buttons "
+                id="fulltime"
+                value="Full Time"
+                name="jobtype1"
+                type="radio"
+                onChange={handleJobType1Change}
+              />
+              <label className="jobtype1label fulltimebutton text-gray-500 bg-white hover:text-white border" htmlFor="fulltime">
+                
+                Full Time
+              </label>
+
+              <input
+                className="jobtype1-radio-buttons "
+                id="parttime"
+                value="Part Time"
+                name="jobtype1"
+                type="radio"
+                onChange={handleJobType1Change}
+              />
+              <label className="jobtype1label parttimebutton  text-gray-500 bg-white hover:text-white border " htmlFor="parttime">
+              
+                Part Time
+              </label>
+
+              
+            </div>
+          </form>
+          
         </div>
+
+        {/*JOB TYPE 2*/}
+
+        <div className="jobtype-card ">
+  
+          <form>
+            
+            <div className="radio-wrapper mb-5">
+              <input
+                className="jobtype2-radio-buttons "
+                id="onsite"
+                value="On Site"
+                name="jobtype2"
+                type="radio"
+                onChange={handleJobType2Change}
+              />
+              <label className="jobtype2label onsitebutton text-gray-500 bg-white hover:text-white border" htmlFor="onsite">
+                
+                On Site
+              </label>
+
+              <input
+                className="jobtype2-radio-buttons "
+                id="remote"
+                value="Remote"
+                name="jobtype2"
+                type="radio"
+                onChange={handleJobType2Change}
+              />
+              <label className="jobtype2label remotebutton  text-gray-500 bg-white hover:text-white border " htmlFor="remote">
+              
+                Remote
+              </label>
+
+              <input
+                className="jobtype2-radio-buttons "
+                id="hybrid"
+                value="Hybrid"
+                name="jobtype2"
+                type="radio"
+                onChange={handleJobType2Change}
+              />
+              <label className="jobtype2label hybridbutton  text-gray-500 bg-white hover:text-white border " htmlFor="hybrid">
+              
+                Hybrid
+              </label>
+
+              
+            </div>
+          </form>
+          
+        </div>
+
         
         {/* Upload Job description File */}
         <div className=" w-full sm:flex-1 relative border rounded-md border-slate-300 ">

@@ -110,7 +110,7 @@ const JobSection = () => {
 
   // Limit the array to only the first 6 jobs
   var displayedJobs=[];
-  var displayedJobCategories=[];
+  
   if(hasCookie("recruiter")){
     displayedJobs = jobsArray.slice().reverse()
   }
@@ -119,9 +119,23 @@ const JobSection = () => {
     //displayedJobs = jobsArray.reverse().slice(0, 8);
     displayedJobs = jobsArray.slice().reverse();
   }
-  const jobTitlesSet = new Set(jobsArray.map(job => job.title));
-  displayedJobCategories = Array.from(jobTitlesSet).slice().reverse().slice(0,5);
- 
+  // const jobTitlesSet = new Set(jobsArray.map(job => job.title));
+  // displayedJobCategories = Array.from(jobTitlesSet).slice().reverse().slice(0,5);
+ // Assuming jobsArray contains the list of jobs with 'title' attribute
+
+// Create a Set to store unique job titles
+const jobTitlesSet = new Set();
+
+// Iterate through jobsArray and add capitalized job titles to the set
+jobsArray.forEach(job => {
+  const capitalizedTitle = job.title.charAt(0).toUpperCase() + job.title.slice(1).toLowerCase();
+  jobTitlesSet.add(capitalizedTitle);
+});
+// Convert the set back to an array, reverse it to get the latest job titles, and slice it to get the latest five job titles
+const displayedJobCategories = Array.from(jobTitlesSet).reverse().slice(0, 5);
+
+// displayedJobTitles now contains the latest five unique job titles, ignoring case differences
+
   
 
   //Handling category selection
@@ -184,7 +198,7 @@ const JobSection = () => {
             (job) =>
               (searchedJob === '' ||
                 job.title.toLowerCase().includes(searchedJob.toLowerCase())) &&
-              (selectedCategory === null || job.title === selectedCategory)
+              (selectedCategory === null || job.title.toLowerCase() === selectedCategory.toLowerCase())
           )
           .slice(0, 8)
           .map((job) => (
@@ -195,7 +209,13 @@ const JobSection = () => {
               className="bg-white p-5 rounded-3xl mb-8 hover:bg-gradient-to-br hover:from-blue_color hover:to-yellow_color hover:text-white flex flex-col justify-between h-auto border border-r-6 border-gray-300 shadow-md "
             >
               {/* Company Logo */}
-              <Image src={job.avatar} alt="Company Logo" className="mx-auto rounded-full p-2 mb-3 w-16 h-16 bg-white border" height={100} width={100} />
+              {getCookie("user")==="recruiter"?(
+              <Image src={job?.avatar} alt="Company Logo" className="mx-auto rounded-full p-2 mb-3 w-16 h-16 bg-white border" height={100} width={100} />
+
+              ):(
+                <Image src={job?.owner?.avatar} alt="Company Logo" className="mx-auto rounded-full p-2 mb-3 w-16 h-16 bg-white border" height={100} width={100} />
+
+              )}
 
               {/* Company Name and Title */}
               <div className="flex flex-col mb-5">

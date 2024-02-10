@@ -9,7 +9,7 @@ export function middleware(request) {
     // }
     //console.log("request token: ", token)
     
-    if (path.includes('/apply') && token===null){
+    if ((path.includes('/apply') || path.includes('/createjob')|| path.includes('/jobDetails')) && token===null){
         //console.log(path)
         
         //console.log(token)

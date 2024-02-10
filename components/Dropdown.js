@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { useUiContext } from "../contexts/UiContext";
 import { actioTypes } from "../reducers/uiReducer";
 import { useRouter } from "next/navigation";
-import { deleteCookie, hasCookie, setCookie } from "cookies-next";
+import { deleteCookie, getCookie, hasCookie, setCookie } from "cookies-next";
 
 import { toast } from "react-hot-toast";
 
@@ -84,11 +84,13 @@ const Dropdown = () => {
             <BiUserCircle className="text-muted mt-1 h-4 w-4" />
             <span className="text-muted ">My Profile</span>
           </div>
-          
+          {getCookie("candidate")&&(
+
           <div className="flex flex-align-center space-x-3 p-2 sm:cursor-pointer hover:bg-gray-500 hover:text-white  dark:hover:bg-hover-color rounded-lg">
             <BiBriefcase className="text-muted mt-1 h-4 w-4" />
             <span className="text-muted">My Jobs</span>
           </div>
+          )}
           <div className="flex flex-align-center space-x-3 p-2 sm:cursor-pointer hover:bg-gray-500 hover:text-white  dark:hover:bg-hover-color rounded-lg">
             <BiLogOut className="text-muted mt-1 h-4 w-4" />
             <span className="text-muted" onClick={handleLogout}>Sign out</span>

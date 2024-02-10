@@ -20,7 +20,7 @@
 
 html {
   font-family: var(--font-poppins);
-  @apply scroll-smooth;
+  @apply scroll-smooth font-poppins;
 }
 
 
@@ -384,12 +384,12 @@ input:-webkit-autofill:focus,
  
 
 .form-input .input {
-  @apply outline-none h-8 border border-slate-300   rounded-md px-[0.8rem] w-full text-base mb-5;
+  @apply outline-none h-8 border border-slate-300   rounded-md px-[0.8rem] w-full text-base mb-7;
 }
 
 .form-input label,
 .select-input label {
-  @apply absolute top-[0.15rem] left-[0.9rem] text-[#8d9193]  px-[0.15rem] pointer-events-none;
+  @apply absolute top-[0.13rem] left-[0.9rem] text-[#8d9193]  px-[0.15rem] pointer-events-none;
   transition: top 0.3s ease-in-out;
 }
 
@@ -398,7 +398,7 @@ input:-webkit-autofill:focus,
 
 .form-input .input:focus ~ label,
 .form-input .input:valid ~ label {
-  @apply -top-[12px] left-[15px] text-sm;
+  @apply -top-[18px] left-[15px] text-sm;
 }
 
 

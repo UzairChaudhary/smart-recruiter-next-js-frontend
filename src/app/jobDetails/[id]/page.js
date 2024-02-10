@@ -1,32 +1,73 @@
 "use client"
-import { FiChevronLeft } from "react-icons/fi"
 import { useState, useEffect } from "react";
+
 import { useRouter } from "next/navigation";
+
+import { FiChevronLeft } from "react-icons/fi"
+import { IoMdDownload } from "react-icons/io";
+import { RiErrorWarningLine,RiDeleteBin6Line } from "react-icons/ri";
+import Footer from "../../../../components/Footer";
+
+import { toast } from 'react-hot-toast';
+
+import SweetAlert from 'react-bootstrap-sweetalert';
 
 
 export default function JobDetails  ({params}) {
-    const [user, setUser] = useState();
+    const [jobDetails, setJobDetails] = useState();
+    const [confirmOpen, setConfirmOpen] = useState(false);
     const router = useRouter();
 
     useEffect(() => {
     
         var requestOptions = {
           method: 'GET',
-          credentials:'include',
           redirect: 'follow'
         };
         
-        fetch("http://localhost:3000/api/v1/recruiter/myprofile", requestOptions)
+        fetch(`http://localhost:3000/api/v1/job/getJobById/${params.id}`, requestOptions)
           .then(response => response.json())
           .then(result => {
             if(result.success){
     
-                setUser(result.recruiter);
+                //setJobDetails(result.job);
+                // Sort applicants based on resumeAnalysisScore in descending order
+          const sortedApplicants = result.job.applicants.sort(
+            (a, b) =>
+              parseFloat(b.resumeAnalysisScore) -
+              parseFloat(a.resumeAnalysisScore)
+          );
+          setJobDetails({ ...result.job, applicants: sortedApplicants });
+                
             }
             //console.log(result)
         })
           .catch(error => console.log('error', error));
     }, [])
+
+    
+    //handle delete job
+    const handleDeleteClicked = async () => {
+      try {
+        // Make an API request to delete the job
+        const response = await fetch(`http://localhost:3000/api/v1/job/${params.id}`, {
+          method: 'DELETE',
+          credentials: 'include',
+        });
+        const data = await response.json();
+        if (data.success) {
+          console.log("Job deleted successfully");
+          
+          // Redirect to the home page
+          router.push('/');
+        } else {
+          toast.error(data.message)
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    };
+    
 
     return(
         <>
@@ -46,15 +87,148 @@ export default function JobDetails  ({params}) {
         <div className="avatar font-poppins absolute top-40 mt-12 left-48 flex items-center gap-3" suppressHydrationWarning={true}>
  
             <div className="w-28 ">
-                <img src={user?.avatar} className="rounded-full border border-blue_color" />
+                <img src={jobDetails?.avatar} className="rounded-full border border-blue_color" />
             </div>
             
            
             <div className="flex flex-col mt-8">
-            <span className="text-lg font-bold">{user?.name}</span>
-            <span className="text-sm text-blue_color">{user?.email}</span>
+            <span className="text-lg font-bold">{jobDetails?.owner.name}</span>
+            <span className="text-sm text-blue_color">{jobDetails?.owner.email}</span>
             </div>
         </div>
+        <div className="flex ml-auto mr-auto max-w-7xl mt-32">
+            <div className="flex flex-col w-1/3 gap-4">
+                <h1 className="text-lg font-semibold font-poppins ml-5">Job Details</h1>
+                <div className="flex flex-col border rounded-2xl shadow-lg p-10 w-full ">
+                    <div className="mb-4">
+                        <span className=" text-gray-500">Title</span>
+                        <div className="border-b-2 mt-2">{jobDetails?.title}</div>
+                    </div>
+                    <div className="mb-4">
+                        <span className="mb-2 text-gray-500">Job Type</span>
+                        <div className="border-b-2 mt-2">{jobDetails?.jobType}</div>
+                    </div>
+                    <div className="mb-4">
+                        <span className="mb-2 text-gray-500">Experience </span>
+                        <div className="border-b-2 mt-2">{jobDetails?.experienceLevel}</div>
+                    </div>
+                    <div className="mb-4">
+                        <span className="mb-2 text-gray-500">Skills </span>
+                        
+                        <div className="border-b-2 mt-2">
+                        {jobDetails?.skills && (
+            <div className="">
+              
+              <div className="flex gap-1">
+                {jobDetails?.skills?.map((skill, index) => (
+                  <span
+                    key={index}
+                    className=" text-sm"
+                    
+                  >
+                    {skill}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+                        </div>
+                    </div>
+                    <div className="">
+                        <span className="mb-2 text-gray-500">Job Description</span>
+                        <button
+                  className="btn mt-2 flex items-center gap-2 bg-teal_color text-white"
+                  onClick={() => window.open(jobDetails?.descriptionFile, '_blank')}
+                >
+                  <IoMdDownload />
+                  <span>Download Job Description File</span>
+                </button> 
+                    </div>
+
+                </div>
+                <div>
+                    <h1 className="text-lg font-semibold font-poppins mb-4 mt-5 ml-5">Actions</h1>
+                    <div className="flex flex-col border rounded-2xl shadow-lg p-7 w-full ">
+                    <div className="mb-4 flex items-center gap-2 hover:cursor-pointer">
+                        <RiErrorWarningLine/>
+                        <div className="">Stop accepting resume</div>
+                    </div>
+                    <div className="mb-4 flex items-center gap-2 hover:cursor-pointer"
+                    >
+                        <RiDeleteBin6Line/>
+                        <div className=""onClick={()=>{
+                          setConfirmOpen(true)
+                        }}>Delete Job</div>
+                        {confirmOpen && (
+
+                        <SweetAlert
+                          warning
+                          showCancel
+                          confirmBtnText="Yes, delete it!"
+                          confirmBtnStyle={{color: 'white', backgroundColor:"darkred"}}
+                          title="Are you sure?"
+                          onConfirm={handleDeleteClicked}
+                          onCancel={()=> setConfirmOpen(false)}
+                          
+                        >
+                          You will not be able to recover this job!
+                        </SweetAlert>
+                        )}
+                        
+                    </div>
+                    </div>
+                </div>
+            </div>
+            <div className=" flex flex-col ml-5">
+                <div className=" flex gap-28 px-10 ">
+                  <h1 className="text-lg font-semibold font-poppins">Applicants <span className="text-gray-500 font-normal ml-1">({jobDetails?.applicants.length})</span></h1>
+                  <span className="text-lg font-semibold font-poppins">sort by: <span className="font-normal ml-1 text-blue_color">Resume Analysis</span></span>
+                </div>
+                {/* <div>{jobDetails?.applicants?.map((applicant, index)=>(
+                  <span key={index}>{applicant?.applicant?.name}</span>
+                ))}</div> */}
+                {jobDetails?.applicants?.length ? (
+                  
+                    <div className="items-center justify-center gap-4 p-4">
+                      {jobDetails?.applicants?.map((applicants, index)=>(
+                      <div 
+                      key={applicants.applicant._id}
+                      className="applicant-card mb-2 flex items-center justify-around py-4 border rounded-2xl shadow-lg cursor-pointer"
+                      >
+                        <div className="flex items-center gap-4">
+
+                      <img src={applicants.applicant.avatar} className="rounded-full w-20"></img>
+                      <div>
+                        <h1 className="text-xl font-poppins">{applicants.applicant.name}</h1>
+                        <h1 className="text-sm text-gray-500  font-poppins">{applicants.applicant.email}</h1>
+                        <div className="flex items-center">
+                        <h1 className="text-sm text-teal_color">Resume Score: <span className="text-base font-medium">{applicants.resumeAnalysisScore}</span></h1>
+
+                      </div>
+                      </div>
+                        </div>
+                      
+                      <div className="flex flex-col items-center">
+                        <h1 className="text-lg text-blue_color font-poppins"># <span className="text-3xl font-bold">{index+1}</span></h1>
+                        <h1 className="text-xs text-gray-500">Rank</h1>
+
+                      </div>
+                      
+                      </div>
+
+                    ))}
+                    </div>
+                  
+                ):(
+                  <div className="flex justify-center items-center h-96">
+                    <h1 className="text-lg font-semibold font-poppins">No Applicants</h1>
+                  </div>
+        
+                )
+              }
+            </div>
+        </div>
+        <Footer/>
         </>
     )
 }

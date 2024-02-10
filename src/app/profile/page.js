@@ -153,7 +153,7 @@ useEffect(() => {
 
             setCookie("candidate", result.candidate)
           }
-          router.push('/')
+          router.back()
           }
           else{
             setIsLoading(false)

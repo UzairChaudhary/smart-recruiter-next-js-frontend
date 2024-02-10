@@ -19,6 +19,7 @@ const poppins = Poppins({
 export const metadata: Metadata = {
   title: 'Smart Recruiter',
   description: 'Automated Recruitment System',
+  
 }
 
 export default function RootLayout({

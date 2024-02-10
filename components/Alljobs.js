@@ -104,12 +104,22 @@ const AllJobs = () => {
   }, []);
 
   // Limit the array 
-  var displayedJobs=[];
-  var displayedJobCategories=[];
-  displayedJobs = jobsArray.slice().reverse();
-  const jobTitlesSet = new Set(jobsArray.map(job => job.title));
-  displayedJobCategories = Array.from(jobTitlesSet).slice().reverse().slice(0,5);
- 
+  //var displayedJobs=[];
+  //var displayedJobCategories=[];
+  const displayedJobs = jobsArray.slice().reverse();
+  // const jobTitlesSet = new Set(jobsArray.map(job => job.title));
+  // displayedJobCategories = Array.from(jobTitlesSet).slice().reverse().slice(0,5);
+ // Create a Set to store unique job titles
+const jobTitlesSet = new Set();
+
+// Iterate through jobsArray and add capitalized job titles to the set
+jobsArray.forEach(job => {
+  const capitalizedTitle = job.title.charAt(0).toUpperCase() + job.title.slice(1).toLowerCase();
+  jobTitlesSet.add(capitalizedTitle);
+});
+// Convert the set back to an array, reverse it to get the latest job titles, and slice it to get the latest five job titles
+const displayedJobCategories = Array.from(jobTitlesSet).reverse().slice(0, 5);
+
   
 
   //Handling category selection
@@ -168,7 +178,7 @@ const AllJobs = () => {
             (job) =>
               (searchedJob === '' ||
                 job.title.toLowerCase().includes(searchedJob.toLowerCase())) &&
-              (selectedCategory === null || job.title === selectedCategory)
+              (selectedCategory === null || job.title.toLowerCase() === selectedCategory.toLowerCase())
           )
           .map((job) => (
             <div
@@ -180,7 +190,7 @@ const AllJobs = () => {
 
                 
               {/* Company Logo */}
-              <Image src={job?.avatar} alt="Company Logo" className="mx-auto rounded-full p-2 mb-3 w-16 h-16 bg-white border" height={100} width={100} />
+              <Image src={job?.owner.avatar} alt="Company Logo" className="mx-auto rounded-full p-2 mb-3 w-16 h-16 bg-white border" height={100} width={100} />
 
               {/* Company Name and Title */}
               <div className="flex flex-col mb-5">

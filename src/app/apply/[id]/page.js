@@ -8,13 +8,27 @@ import { IoMdDownload } from "react-icons/io";
 import { getCookie } from "cookies-next";
 import { toast } from 'react-hot-toast';
 import Footer from '../../../../components/Footer';
+import Loader from '../../../../loaders/Loader';
+
+
+
 
 const ApplyJob = ({ params }) => {
   const router = useRouter();
+  const [viewJobDescription, setViewJobDescription] = useState(false);
   const [jobData, setJobData] = useState(null);
   const fileInput = useRef(null);
   const [file, setFile] = useState("");
   const [fileURL, setfileURL] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [analysisScore, setAnalysisScore] = useState();
+
+  
+  
+
+  const toggleViewJobDescription = () => {
+    setViewJobDescription(!viewJobDescription);
+  };
 
   useEffect(() => {
     const fetchJobData = async () => {
@@ -43,16 +57,27 @@ const ApplyJob = ({ params }) => {
     
     fetchJobData();
     
-    //console.log(getCookie("session"))
-    //console.log(params.id)
+    
   }, [params.id]);
 
   useEffect(() => {
-    //console.log("fileURL:", fileURL);
+    
     if (fileURL){
-      applyJob(fileURL)
+      performResumeAnalysis(fileURL)
+      
     }
   }, [fileURL]);
+  useEffect(() => {
+    console.log(analysisScore)
+    if (analysisScore){
+      
+      applyJob(fileURL)
+    }
+    else{
+      setLoading(false)
+      
+    }
+  }, [analysisScore]);
 
   const isFileValid = (file) => {
     const allowedExtensions = ['.pdf'];
@@ -69,23 +94,23 @@ const ApplyJob = ({ params }) => {
   
 
   const handleSubmit = async () => {
+    setLoading(true)
     if (file) {
       if (isFileValid(file)) {
         try {
           // Upload file to Firebase
           await uploadFileToFirebase();
   
-          // Introduce a delay of 3000 milliseconds (3 seconds) before calling applyJob
-          // setTimeout(() => {
-          //   applyJob();
-          // }, 2000);
+          
         } catch (error) {
           console.error('Error uploading file:', error);
+          setLoading(false)
         }
       }
     } else {
       toast.error('Please select a file');
       console.log('error');
+      setLoading(false)
     }
   };
   
@@ -115,9 +140,11 @@ const ApplyJob = ({ params }) => {
       } else {
         // Handle the case where the upload was not successful
         console.error('File upload failed:', result.message);
+        setLoading(false)
       }
     } catch (error) {
       console.error('Error uploading file:', error);
+      setLoading(false)
       throw error; // Propagate the error to the caller
     }
   };
@@ -125,15 +152,10 @@ const ApplyJob = ({ params }) => {
   const applyJob=(URL)=>{
     var myHeaders2 = new Headers();
 myHeaders2.append("Content-Type", "application/json");
-//myHeaders2.append("Cookie", `token=${getCookie("token")}`);
- // Retrieve the token from wherever you store it (localStorage, cookies, etc.)
-  const token = getCookie("token");
-
-//  // Set the token in the request header
-//  myHeaders2.append("Authorization", `Bearer ${token}`);
 
 var raw1 = JSON.stringify({
   "resumeFile": URL,
+  "resumeAnalysisScore":analysisScore
   
   
 });
@@ -152,6 +174,7 @@ fetch(`http://localhost:3000/api/v1/candidate/applyjob/${params.id}`, requestOpt
   .then(result => {
     console.log(result)
     if(result.success){
+      setLoading(false)
       console.log('Form submitted successfully!');
       toast.success(result.message)
       router.back()
@@ -159,9 +182,39 @@ fetch(`http://localhost:3000/api/v1/candidate/applyjob/${params.id}`, requestOpt
       else{
         
         toast.error(result.message)
+        setLoading(false)
       }
   })
   .catch(error => console.log('error', error));
+  }
+  const performResumeAnalysis=async (URL)=>{
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    var raw = JSON.stringify({
+      "resumeUrl":URL ,
+      "jobDescriptionUrl":jobData?.descriptionFile 
+    });
+    console.log(raw)
+    var requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: raw,
+      redirect: 'follow'
+    };
+
+    fetch("http://localhost:3000/api/v1/recruiter/resumeAnalysis", requestOptions)
+      .then(response => response.json())
+      .then(result => {
+        console.log(result)
+        if(result.error) {
+          toast.error(result.error)
+          setLoading(false)
+          return 
+        }
+        setAnalysisScore(result.similarity_percentage)
+      })
+      .catch(error => console.log('error', error));
   }
 
   return (
@@ -231,20 +284,10 @@ fetch(`http://localhost:3000/api/v1/candidate/applyjob/${params.id}`, requestOpt
             <div className=" flex items-center gap-4 ">
               <p className='font-medium mb-2'>Job Description</p>
               <div className="flex gap-2 items-center justify-center mb-2">
-                {/* <iframe
-                  className="w-full h-96"
-                  src={jobData?.descriptionFile}
-                  allowFullScreen
-                  title="Job Description"
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-
-
-
-                ></iframe> */}
+                
                 <button
                   className="btn text-black_color flex items-center gap-2  hover:bg-teal_color hover:text-white"
-                  onClick={() => {}}
+                  onClick={() => {toggleViewJobDescription()}}
                 >
                   <BiFile />
                   <span>View Job Description File</span>
@@ -257,9 +300,27 @@ fetch(`http://localhost:3000/api/v1/candidate/applyjob/${params.id}`, requestOpt
                   <IoMdDownload />
                   <span>Download Job Description File</span>
                 </button> 
+                
+
+
               </div>
             </div>
           )}
+          {viewJobDescription && (
+            <iframe
+            className="w-full h-96"
+            src={jobData?.descriptionFile}
+            allowFullScreen
+            title="Job Description"
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+
+
+
+          ></iframe>
+          )}
+            
+
             
 
             {/*---------------------------------------- File upload------------------------------------- */}
@@ -304,6 +365,7 @@ fetch(`http://localhost:3000/api/v1/candidate/applyjob/${params.id}`, requestOpt
           </button>
         
       </div>
+      {loading && <Loader />}
       <Footer/>
     </>
   );
