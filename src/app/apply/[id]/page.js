@@ -8,7 +8,7 @@ import { IoMdDownload } from "react-icons/io";
 import { getCookie } from "cookies-next";
 import { toast } from 'react-hot-toast';
 import Footer from '../../../../components/Footer';
-import Loader from '../../../../loaders/Loader';
+import ProgressLoader from '../../../../loaders/progressLoader';
 
 
 
@@ -68,7 +68,7 @@ const ApplyJob = ({ params }) => {
     }
   }, [fileURL]);
   useEffect(() => {
-    console.log(analysisScore)
+    
     if (analysisScore){
       
       applyJob(fileURL)
@@ -132,7 +132,7 @@ const ApplyJob = ({ params }) => {
       const response = await fetch('http://localhost:3000/api/v1/uploadFile', requestOptions);
       const result = await response.json();
   
-      console.log(result);
+      
   
       if (result.success) {
         // Update fileURL state
@@ -159,7 +159,7 @@ var raw1 = JSON.stringify({
   
   
 });
-console.log(raw1)
+
 
 var requestOptions = {
   method: 'POST',
@@ -195,7 +195,7 @@ fetch(`http://localhost:3000/api/v1/candidate/applyjob/${params.id}`, requestOpt
       "resumeUrl":URL ,
       "jobDescriptionUrl":jobData?.descriptionFile 
     });
-    console.log(raw)
+   
     var requestOptions = {
       method: 'POST',
       headers: myHeaders,
@@ -365,7 +365,7 @@ fetch(`http://localhost:3000/api/v1/candidate/applyjob/${params.id}`, requestOpt
           </button>
         
       </div>
-      {loading && <Loader />}
+      {loading && <ProgressLoader />}
       <Footer/>
     </>
   );

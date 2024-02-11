@@ -6,6 +6,7 @@ import JobSection from "../../components/Jobs";
 import BackToTopButton from '../../components/BackToTopButton'
 import Footer from "../../components/Footer"
 import RingLoader from "../../loaders/RingLoader";
+import ProgressLoader from "../../loaders/progressLoader";
 import Companies from "../../components/LandingPage/Companies";
 import Content from "../../components/LandingPage/Content";
 import { getCookie } from "cookies-next";

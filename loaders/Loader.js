@@ -1,7 +1,10 @@
 const Loader = () => {
   return (
-    <div className="fixed bg-black bg-opacity-50 top-0 left-0 z-50 w-full h-full flex-center-center dark:bg-dark-main">
+    <div className="fixed bg-black bg-opacity-50 top-0 left-0 z-50 w-full h-full flex-col flex-center-center dark:bg-dark-main">
       <div className="circleloader "></div>
+      <div className="progress-loader mt-10">
+      <div className="progress"></div>
+      </div>
     </div>
 
     

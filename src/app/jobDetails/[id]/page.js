@@ -137,7 +137,7 @@ export default function JobDetails  ({params}) {
                     <div className="">
                         <span className="mb-2 text-gray-500">Job Description</span>
                         <button
-                  className="btn mt-2 flex items-center gap-2 bg-teal_color text-white"
+                  className="btn mt-2 flex justify-center items-center gap-3 bg-teal_color text-white w-full"
                   onClick={() => window.open(jobDetails?.descriptionFile, '_blank')}
                 >
                   <IoMdDownload />

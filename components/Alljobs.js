@@ -46,7 +46,35 @@ const AllJobs = () => {
     e.preventDefault()
     
     if ((getCookie("user")==="candidate") && hasCookie("token")){
-      router.push(`/apply/${id}`)
+      
+      var myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/json");
+
+        var raw = JSON.stringify({
+          "jobId": id
+        });
+
+        var requestOptions = {
+          method: 'POST',
+          headers: myHeaders,
+          body: raw,
+          credentials:'include',
+          redirect: 'follow'
+        };
+     
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/candidate/alreadyApplyJob`, requestOptions)
+          .then(response => response.json())
+          .then(result => {
+            
+            if(result.success){
+              router.push(`/apply/${id}`)
+            }
+            else{
+              toast.error(result.message)
+            }
+          })
+          .catch(error => console.log('error', error));
+      
     }
     else{
       handleLoginClick()
