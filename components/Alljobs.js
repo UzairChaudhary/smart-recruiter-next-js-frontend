@@ -170,12 +170,12 @@ const displayedJobCategories = Array.from(jobTitlesSet).reverse().slice(0, 5);
   return (
     <div id="jobs-section" className="job-section ml-6">
       {getCookie("user")==="candidate"? (
-        <h2 className="text-4xl font-medium mt-10 flex md:ml-40 mb-4">Popular Jobs</h2>
+        <h2 className="text-4xl font-medium mt-10 flex mx-28 mb-4">Popular Jobs</h2>
       ):(
-        <h2 className="text-4xl font-medium mt-10 flex md:ml-40 mb-4">My Jobs</h2>
+        <h2 className="text-4xl font-medium mt-10 flex mx-28 mb-4">My Jobs</h2>
       )}
       
-      <div className="bg-white py-4 flex items-center md:ml-40 mb-6">
+      <div className="bg-white py-4 flex items-center mx-28 mb-6">
         <div ref={categoryContainerRef} className="flex space-x-4">
           {displayedJobCategories.map((category, index) => (
             <div 
@@ -200,7 +200,7 @@ const displayedJobCategories = Array.from(jobTitlesSet).reverse().slice(0, 5);
       </div>
       {displayedJobs?.length ? (
         
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6 md:ml-40 pr-40">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6 mx-20">
           {displayedJobs
           .filter(
             (job) =>
@@ -213,12 +213,12 @@ const displayedJobCategories = Array.from(jobTitlesSet).reverse().slice(0, 5);
             
               id="job-card"
               key={job._id}
-              className="bg-white p-5 rounded-3xl mb-8 hover:bg-gradient-to-br hover:from-blue_color hover:to-yellow_color hover:text-white flex flex-col justify-between h-auto border border-r-6 border-gray-300 shadow-md "
+              className="bg-white p-3 rounded-3xl mb-8 hover:bg-gradient-to-br hover:from-blue_color hover:to-yellow_color hover:text-white flex flex-col justify-between h-auto border border-r-6 border-gray-300 shadow-md "
             >
 
                 
               {/* Company Logo */}
-              <Image src={job?.owner.avatar} alt="Company Logo" className="mx-auto rounded-full p-2 mb-3 w-16 h-16 bg-white border" height={100} width={100} />
+              <Image src={job?.owner.avatar} alt="Company Logo" className="mx-auto rounded-full mb-3 w-16 h-16 bg-white border" height={100} width={100} />
 
               {/* Company Name and Title */}
               <div className="flex flex-col mb-5">

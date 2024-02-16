@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unescaped-entities */
 "use client"
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import { FiLock, FiMail,FiEye, FiEyeOff} from "react-icons/fi";
 import { RxCross2 } from "react-icons/rx";
@@ -14,10 +14,12 @@ import { useUiContext } from "../contexts/UiContext";
 import { actioTypes } from "../reducers/uiReducer";
 
 import { toast } from 'react-hot-toast';
-import { setCookie } from 'cookies-next';
+import { deleteCookie, setCookie } from 'cookies-next';
 
+//import { useSession, signIn, signOut } from "next-auth/react"
+import { useGoogleLogin,googleLogout } from '@react-oauth/google';
 
-var DP;
+import axios from 'axios';
 const LoginSignupScreen = ({ onClose }) => {
 
   const [user, setuser] = useState('');
@@ -36,11 +38,13 @@ const LoginSignupScreen = ({ onClose }) => {
   const [passwordsMatch, setPasswordsMatch] = useState(true);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = useState(false);
-
+  const [accessToken, setaccessToken] = useState();
   // ... (other state variables)
 
   const router = useRouter();
   const { dispatch } = useUiContext();
+  //const session = useSession()
+ 
 
   const handleUserLogin = () => {
     dispatch({ type: actioTypes.userLoggedIn });
@@ -267,6 +271,129 @@ const LoginSignupScreen = ({ onClose }) => {
     }
   }
   };
+  const googleLogin =()=>{
+    if (user===''){
+      toast.error('Please choose your role');
+      return ;
+    }
+    else{
+      handleGoogleLogin()
+      
+    }
+  }
+  useEffect(() => {
+    
+    
+    if(accessToken){
+      const formData = {
+      
+        googleAccessToken: accessToken,
+        
+        
+      };
+  
+      try {
+        // Conditionally choose the API endpoint based on the user type
+        const apiUrl = user === 'candidate' ?
+          'http://localhost:3000/api/v1/candidate/continueWithGoogle' :
+          'http://localhost:3000/api/v1/recruiter/continueWithGoogle';
+  
+        fetch(apiUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
+        }).then(response =>response.json())
+        .then(result => {
+          console.log("result", result)
+          
+          if (result.success===true){
+            
+            
+            handleUserLogin()
+            setCookie("token", result.token)
+            setCookie("session", "login")
+            
+            router.push("/");
+            window.location.reload();
+            
+            
+            
+  
+            if (result.candidate){
+              dispatch({ type: actioTypes.userIsCandidate });
+              
+              setCookie("user", "candidate")
+              setCookie("candidate", result.candidate)
+              
+              
+              dispatch({
+                type: 'LOGIN',
+                payload:{
+                  user:result.candidate,
+                  token:result.token
+                }
+              })
+              
+            }
+            else{
+              dispatch({ type: actioTypes.userIsRecruiter });
+              
+              setCookie("user", "recruiter")
+              setCookie("recruiter", result.recruiter)
+              
+              
+              
+              dispatch({
+                type: 'LOGIN',
+                payload:{
+                  user:result.recruiter,
+                  token:result.token
+                }
+              })
+              
+            }
+            toast.success("Login Successful")
+          }
+          else{
+            
+            toast.error(result.message)
+          }
+          
+          
+  
+  
+          
+        })
+        .catch(error => console.log('error', error));
+        
+      } catch (error) {
+        // Handle general error, e.g., network issue
+        console.error('Error:', error.message);
+        
+      }
+    }
+    
+  }, [accessToken])
+
+  const handleGoogleLogin = useGoogleLogin({
+    
+    onSuccess: async (response) => {
+      
+      setaccessToken(response.access_token)
+      
+    
+      
+    },
+    
+    onError: error => {console.log(error);return},
+    
+
+  });
+  
+    
+  
 
   return (
     <div className='fixed top-0 left-0 right-0 bottom-0 bg-opacity-50 z-20' >
@@ -321,7 +448,7 @@ const LoginSignupScreen = ({ onClose }) => {
                 type="email"
                 value={formEmail}
                 id="email"
-                required
+                
                 placeholder="Enter your Email"
                 className="w-full outline-none focus:outline-none placeholder-gray-400 text-black"
                 onFocus={() => setIsEmailFocused(true)}
@@ -345,7 +472,7 @@ const LoginSignupScreen = ({ onClose }) => {
 
               <input
                 type={isPasswordVisible ? 'text' : 'password'}
-                required
+                
                 id="password"
                 value={formPassword}
                 placeholder="Enter your password"
@@ -388,11 +515,15 @@ const LoginSignupScreen = ({ onClose }) => {
                   Log into your account
                 </button>
               </div>
-              <div style={{width:"210px"}} className={`mb-4 flex items-center w-60 justify-start space-x-2 ml-14 border px-1 py-1 pr-2 rounded-full focus-within:border-teal_color`}>
+              <div
+              onClick={() => {
+                googleLogin()
+            }}
+               style={{width:"210px"}} className={`mb-4 flex hover:cursor-pointer items-center w-60 justify-start space-x-2 ml-14 border px-1 py-1 pr-2 rounded-full focus-within:border-teal_color`}>
               <div className='flex justify-start bg-gray-100 rounded-full p-1 '>
               <FcGoogle className="w-7 h-7" />
               </div>
-              <button type="text" className='text-teal_color text-sm w-full'> Continue with Google</button>
+              <div type="text" className='text-teal_color text-sm w-full'> Continue with Google</div>
               </div>
             </form>
           </div>
@@ -414,7 +545,7 @@ const LoginSignupScreen = ({ onClose }) => {
               <GoPerson className={`mr-2 ${isNameFocused ? 'text-teal_color' : 'text-gray-400'}`} />
               <input
                 id="name"
-                required
+                
                 value={formName}
                 placeholder= {`Enter your ${ user==="recruiter" ? 'Company Name' : 'Name'}`}
                 className={`text-black w-full outline-none focus:outline-none placeholder-gray-400 text-sm 
@@ -438,7 +569,7 @@ const LoginSignupScreen = ({ onClose }) => {
               <FiMail className={`mr-2 ${isEmailFocused ? 'text-teal_color' : 'text-gray-400'}`} />
               <input
                 type="email"
-                required
+                
                 id="email"
                 value={formEmail}
                 placeholder="Enter your Email"
@@ -463,7 +594,7 @@ const LoginSignupScreen = ({ onClose }) => {
               <FiLock className={`mr-2 ${isPasswordFocused ? 'text-teal_color' : 'text-gray-400'}`} />
               <input
                 type={isPasswordVisible ? 'text' : 'password'}
-                required
+                
                 id="password"
                 value={formPassword}
                 placeholder="Enter your password"
@@ -498,7 +629,7 @@ const LoginSignupScreen = ({ onClose }) => {
                 type={isConfirmPasswordVisible ? 'text' : 'password'}
                 value={formConfirmPassword}
                 id="confirm_password"
-                required
+                
                 placeholder="Confirm Password"
                 className={`text-black w-full outline-none focus:outline-none placeholder-gray-400 text-sm `}
                 onFocus={() => setconfirmPasswordFocused(true)}
@@ -536,11 +667,15 @@ const LoginSignupScreen = ({ onClose }) => {
               </div>
               
             </form>
-            <div style={{width:"210px"}} className={` flex items-center w-60 justify-start space-x-2 ml-16 border px-1 py-1 pr-2 rounded-full focus-within:border-teal_color`}>
+            <div style={{width:"210px"}}
+            onClick={() => {
+              googleLogin()
+          }}
+             className={`hover:cursor-pointer flex items-center w-60 justify-start space-x-2 ml-16 border px-1 py-1 pr-2 rounded-full focus-within:border-teal_color`}>
               <div className='flex justify-start bg-gray-100 rounded-full p-1 '>
               <FcGoogle className="w-7 h-7" />
               </div>
-              <button type="text" className='text-teal_color text-sm w-full'> Continue with Google</button>
+              <div type="text" className='text-teal_color text-sm w-full'> Continue with Google</div>
               </div>
           </div>
           )
@@ -593,4 +728,3 @@ const LoginSignupScreen = ({ onClose }) => {
 };
 
 export default LoginSignupScreen;
-export {DP};

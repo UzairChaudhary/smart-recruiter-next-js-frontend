@@ -12,8 +12,8 @@ export default function HeroSection() {
     <>
       <div className="relative p-4">
         {getCookie("user")==="candidate" ? (
-          <div className="flex flex-col md:flex-row justify-center items-center p-5 ml-1 space-x-40 relative z-10 flex-wrap-reverse">
-          <div className="animatedLeft flex flex-col justify-center mr-5 mt-5 ml-10 text-center md:text-left md:pl-20" >
+          <div className="flex flex-col md:flex-row justify-center gap-20 items-center p-5 ml-1 space-x-40 relative z-10 flex-wrap-reverse">
+          <div className="animatedLeft flex flex-col justify-center mr-5 mt-5  text-center md:text-left " >
             <div className="mb-2">
               <p className="text-4xl text-black p-1">Let's Get You Recruited</p>
               <p className="text-4xl text-black p-1">In Your Dream Job With</p>
@@ -27,8 +27,8 @@ export default function HeroSection() {
               <p>Unleashing the Power of AI for Smarter, Data-Driven Decisions.</p>
             </div>
           </div>
-          <div className="animatedRight flex justify-center md:pr-40">
-            <Image alt="Hero" src="/hero-section-img.png" priority={true} width={490} height={437} className="mb-2 p-3 "></Image>
+          <div className="animatedRight  ">
+            <Image alt="Hero" src="/hero-section-img.png" priority={true} width={490} height={437} className="mb-2 p-3 ml-5 "></Image>
           </div>
         </div>
         ):(

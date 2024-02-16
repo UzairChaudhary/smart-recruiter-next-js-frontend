@@ -91,6 +91,7 @@ const Navbar = () => {
 
 
   const handleLoginClick = () => {
+    
     setLoginScreenOpen(true);
     dispatch({ type: actioTypes.openLoginSidebar })
     
@@ -107,7 +108,7 @@ const Navbar = () => {
   
 
   return (
-    <nav suppressHydrationWarning={true} className="bg-white py-2 pt-4 flex justify-around items-center space-x-60 ">
+    <nav suppressHydrationWarning={true} className="bg-white py-2 pt-4 flex justify-around items-center space-x-96 ">
       {/* Logo on the left */}
       
         <Link href="/" suppressHydrationWarning={true}>
@@ -182,9 +183,9 @@ const Navbar = () => {
           
           ) : (
             <div>
-              <button className="bg-teal_color text-white py-2 px-4 rounded-md" onClick={handleLoginClick}>
+              <div className="bg-teal_color hover:cursor-pointer text-white py-2 px-4 rounded-md" onClick={handleLoginClick}>
               Login
-            </button>
+            </div>
             {/* Render LoginSignupScreen when isLoginScreenOpen is true */}
 
             {isLoginScreenOpen && (
