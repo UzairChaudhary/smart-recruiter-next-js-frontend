@@ -423,7 +423,7 @@ const LoginSignupScreen = ({ onClose }) => {
         
         if (result.success===true){
           toast.success(result.message)
-          handleOptionClick('login')
+          handleOptionClick('resetpassword')
         }
         else{
           toast.error(result.message)
@@ -760,6 +760,13 @@ const LoginSignupScreen = ({ onClose }) => {
           </div>
         
         )}
+        {selectedOption==="resetpassword" && (
+          <div className="flex mt-5 max-w-xs justify-center flex-col items-center">
+            <p className="mb-6 text-base font-medium px-5 text-gray-500">
+              Enter the code sent to your email to reset your password
+            </p>
+            </div>
+        )}
         
         
         <div className='absolute bg-hero-gradient right-0 left-0 bottom-0 h-40 rounded-bl-2xl'>
@@ -795,6 +802,7 @@ const LoginSignupScreen = ({ onClose }) => {
             </div>
           )
           }
+          
         </div>
 
         
