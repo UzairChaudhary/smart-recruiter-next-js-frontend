@@ -392,7 +392,47 @@ const LoginSignupScreen = ({ onClose }) => {
 
   });
   
+  const handleResetPassword=(e)=>{
+    e.preventDefault()
+    if (user===''){
+      toast.error('Please choose your role');
+      return ;
+    }
+    if (formEmail==''){
+      toast.error('Please enter your email');
+      return ;
+    }
+    if (!isEmailValid) {
+      toast.error('Enter email in correct format');
+      return ;
+    }
     
+      const apiUrl = user === 'candidate' ?
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/candidate/forgetpassword` :
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruiter/forgetpassword`;
+
+      fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({email:formEmail}),
+      }).then(response =>response.json())
+      .then(result => {
+        console.log("result", result)
+        
+        if (result.success===true){
+          toast.success(result.message)
+          handleOptionClick('login')
+        }
+        else{
+          toast.error(result.message)
+        }
+        
+      })
+      .catch(error => console.log('error', error));
+    
+  }
   
 
   return (
@@ -707,11 +747,11 @@ const LoginSignupScreen = ({ onClose }) => {
                 onChange={(e) => setFormEmail(e.target.value)}
               />
               </div>
-              <div style={{width:"210px"}} className='flex justify-center ml-14 '>
+              <div style={{width:"210px"}} className='flex justify-center ml-14 mt-3 '>
                 <button
                   type="submit"
                   className="border w-auto bg-black_color text-white p-3 px-7 rounded-full mb-3 text-sm"
-                  onClick={(e) => handleLogin(e)}
+                  onClick={(e) => handleResetPassword(e)}
                   >
                   Reset Password
                 </button>
@@ -723,7 +763,7 @@ const LoginSignupScreen = ({ onClose }) => {
         
         
         <div className='absolute bg-hero-gradient right-0 left-0 bottom-0 h-40 rounded-bl-2xl'>
-          {selectedOption === 'login' ? (
+          {(selectedOption === 'login' || selectedOption === 'forgetpassword') && (
             <div className='flex flex-col justify-center items-center mt-10 '>
               <span className='text-sm mb-3 text-black'>Don't have an account?</span>
               
@@ -737,7 +777,9 @@ const LoginSignupScreen = ({ onClose }) => {
                 </button>
                 </div>
             </div>
-          ) : (
+          )} 
+         
+          {selectedOption==="signup" && (
             <div className='flex flex-col justify-center items-center mt-10'>
               <span className='text-sm mb-3 text-black'>Already have an account?</span>
               
