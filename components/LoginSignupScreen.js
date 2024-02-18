@@ -14,9 +14,12 @@ import { useUiContext } from "../contexts/UiContext";
 import { actioTypes } from "../reducers/uiReducer";
 
 import { toast } from 'react-hot-toast';
-import { deleteCookie, setCookie } from 'cookies-next';
 
-import { useGoogleLogin,googleLogout } from '@react-oauth/google';
+import { setCookie } from 'cookies-next';
+
+import { useGoogleLogin } from '@react-oauth/google';
+import EnterCode from './forms/VerificationCode';
+
 
 const LoginSignupScreen = ({ onClose }) => {
 
@@ -38,13 +41,11 @@ const LoginSignupScreen = ({ onClose }) => {
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = useState(false);
   const [accessToken, setaccessToken] = useState();
 
-  const [forgetPassword, setforgetPassword] = useState(false);
   // ... (other state variables)
 
   const router = useRouter();
   const { dispatch } = useUiContext();
-  //const session = useSession()
- 
+
 
   const handleUserLogin = () => {
     dispatch({ type: actioTypes.userLoggedIn });
@@ -392,7 +393,7 @@ const LoginSignupScreen = ({ onClose }) => {
 
   });
   
-  const handleResetPassword=(e)=>{
+  const handleForgetPassword=(e)=>{
     e.preventDefault()
     if (user===''){
       toast.error('Please choose your role');
@@ -434,6 +435,45 @@ const LoginSignupScreen = ({ onClose }) => {
     
   }
   
+  const handleCodeSubmit = async (code) => {
+
+    try {
+      // const payload = new FormData();
+      // payload.append("resetPasswordToken", code);
+      const myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+
+      const raw = JSON.stringify({
+        "resetPasswordToken": code
+      });
+
+      const requestOptions = {
+        method: "POST",
+        headers: myHeaders,
+        body: raw,
+        redirect: "follow"
+      };
+      const apiUrl = user === 'candidate' ?
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/candidate/resetpassword`:
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruiter/resetpassword`;
+      fetch(apiUrl, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result)
+        if(result.success){
+          toast.success(result.message)
+        }
+        else toast.error(result.message)
+        
+      })
+      .catch((error) => console.error(error));
+      
+      
+    } catch (err) {
+      console.log(`Error: ${err.message}`);
+    } 
+  }
+
 
   return (
     <div className='fixed top-0 left-0 right-0 bottom-0 bg-opacity-50 z-20' >
@@ -449,16 +489,16 @@ const LoginSignupScreen = ({ onClose }) => {
           <button
             onClick={() => handleUserSelection('recruiter')}
             className={`${
-              user === 'recruiter' ? 'border-b-2 border-black' : 'bg-white'
-            } px-2 py-2 text-black font-medium`}
+              user === 'recruiter' ? 'border-b-2 border-black text-black' : 'bg-white text-gray-400'
+            } px-2 py-2 `}
           >
             Recruiter
           </button>
           <button
             onClick={() => handleUserSelection('candidate')}
             className={`${
-              user === 'candidate' ? 'border-b-2 border-black' : 'bg-white'
-            } px-2 py-2 text-black font-medium`}
+              user === 'candidate' ? 'border-b-2 border-black text-black' : 'bg-white text-gray-400'
+            } px-2 py-2  `}
           >
             Candidate
           </button>
@@ -751,7 +791,7 @@ const LoginSignupScreen = ({ onClose }) => {
                 <button
                   type="submit"
                   className="border w-auto bg-black_color text-white p-3 px-7 rounded-full mb-3 text-sm"
-                  onClick={(e) => handleResetPassword(e)}
+                  onClick={(e) => handleForgetPassword(e)}
                   >
                   Reset Password
                 </button>
@@ -765,7 +805,10 @@ const LoginSignupScreen = ({ onClose }) => {
             <p className="mb-6 text-base font-medium px-5 text-gray-500">
               Enter the code sent to your email to reset your password
             </p>
-            </div>
+            <div className="flex flex-col gap-6">
+            <EnterCode callback={handleCodeSubmit} />
+          </div>
+          </div>
         )}
         
         
