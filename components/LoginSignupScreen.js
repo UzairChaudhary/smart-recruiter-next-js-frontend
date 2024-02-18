@@ -16,10 +16,8 @@ import { actioTypes } from "../reducers/uiReducer";
 import { toast } from 'react-hot-toast';
 import { deleteCookie, setCookie } from 'cookies-next';
 
-//import { useSession, signIn, signOut } from "next-auth/react"
 import { useGoogleLogin,googleLogout } from '@react-oauth/google';
 
-import axios from 'axios';
 const LoginSignupScreen = ({ onClose }) => {
 
   const [user, setuser] = useState('');
@@ -39,6 +37,8 @@ const LoginSignupScreen = ({ onClose }) => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = useState(false);
   const [accessToken, setaccessToken] = useState();
+
+  const [forgetPassword, setforgetPassword] = useState(false);
   // ... (other state variables)
 
   const router = useRouter();
@@ -476,7 +476,7 @@ const LoginSignupScreen = ({ onClose }) => {
                 id="password"
                 value={formPassword}
                 placeholder="Enter your password"
-                className={`w-full outline-none focus:outline-none placeholder-gray-400 text-sm text-black`}
+                className={`w-full outline-none focus:outline-none placeholder-gray-400 text-black`}
                 onFocus={() => setIsPasswordFocused(true)}
                 onBlur={() => {setIsPasswordFocused(false);setIsPasswordValid(formPassword.length >= 6);}}
                 onChange={(e) => {setFormPassword(e.target.value);setIsPasswordValid(formPassword.length >= 6);}}
@@ -500,11 +500,9 @@ const LoginSignupScreen = ({ onClose }) => {
               )
               
               }
-              <div className='flex justify-end mb-6'>
-              <a href="#" className="text-sm text-teal_color">
+              <div className='flex text-sm text-teal_color hover:cursor-pointer justify-end mb-6'>
                 Forgot password?
-              </a>
-
+              
               </div>
               <div style={{width:"210px"}}  className='flex justify-center ml-14 '>
                 <button
@@ -681,6 +679,7 @@ const LoginSignupScreen = ({ onClose }) => {
           )
 
         }
+        
         
         
         <div className='absolute bg-hero-gradient right-0 left-0 bottom-0 h-40 rounded-bl-2xl'>
