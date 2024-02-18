@@ -425,7 +425,7 @@ const LoginSignupScreen = ({ onClose }) => {
           
         </div>
 
-        {selectedOption === 'login' ? (
+        {selectedOption === 'login' && (
 
           <div className="">
             <div>
@@ -500,7 +500,9 @@ const LoginSignupScreen = ({ onClose }) => {
               )
               
               }
-              <div className='flex text-sm text-teal_color hover:cursor-pointer justify-end mb-6'>
+              <div
+              onClick={()=> {handleOptionClick("forgetpassword")}} 
+              className='flex text-sm text-teal_color hover:cursor-pointer justify-end mb-6'>
                 Forgot password?
               
               </div>
@@ -525,7 +527,8 @@ const LoginSignupScreen = ({ onClose }) => {
               </div>
             </form>
           </div>
-        ) : (
+        )}
+        {selectedOption==="signup" &&  (
           <div className="">
             <div>
               
@@ -679,7 +682,44 @@ const LoginSignupScreen = ({ onClose }) => {
           )
 
         }
+        {selectedOption==="forgetpassword" &&(
+          <div className="flex flex-col items-center">
+            <div className="text-center">
+              <h1 className="text-2xl font-semibold font-poppins mb-2 text-black">Forgot Password</h1>
+              <h3 className="text-sm text-gray-500 mb-5">
+                Enter your email to reset your password
+              </h3>
+              
+            </div>
+            <form>
+              <div style={{width:"310px"}} className={`mb-1 flex items-center ml-5 border ${isEmailFocused ? 'border-teal_color' : 'border-gray-200'} px-4 py-2 rounded-lg focus-within:border-teal_color
+              ${!isEmailValid ? 'border-red-500' : ''} `}>
+              <FiMail className={`mr-2 ${isEmailFocused ? 'text-teal_color' : 'text-gray-400'}`} />
+              <input
+                type="email"
+                value={formEmail}
+                id="email"
+                
+                placeholder="Enter your Email"
+                className="w-full outline-none focus:outline-none placeholder-gray-400 text-black"
+                onFocus={() => setIsEmailFocused(true)}
+                onBlur={() => {setIsEmailFocused(false); checkEmailValidation()}}
+                onChange={(e) => setFormEmail(e.target.value)}
+              />
+              </div>
+              <div style={{width:"210px"}} className='flex justify-center ml-14 '>
+                <button
+                  type="submit"
+                  className="border w-auto bg-black_color text-white p-3 px-7 rounded-full mb-3 text-sm"
+                  onClick={(e) => handleLogin(e)}
+                  >
+                  Reset Password
+                </button>
+              </div>
+            </form>
+          </div>
         
+        )}
         
         
         <div className='absolute bg-hero-gradient right-0 left-0 bottom-0 h-40 rounded-bl-2xl'>
