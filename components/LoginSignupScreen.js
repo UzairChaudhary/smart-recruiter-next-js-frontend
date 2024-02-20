@@ -92,19 +92,19 @@ const LoginSignupScreen = ({ onClose }) => {
       toast.error('Name should not contain any number');
       return ;
     }
-    else if (!isEmailValid) {
+    if (!isEmailValid) {
       toast.error('Enter email in correct format');
       return ;
     }
-    else if (!isPasswordValid) {
+    if (!isPasswordValid) {
       toast.error('Password must be atleast 6 characters');
       return ;
     }
-    else if (!passwordsMatch) {
+    if (!passwordsMatch) {
       toast.error('Passwords are not matching');
       return ;
     }
-    else{
+    
       
   
     const formData = {
@@ -117,8 +117,8 @@ const LoginSignupScreen = ({ onClose }) => {
     try {
       // Conditionally choose the API endpoint based on the user type
       const apiUrl = user === 'candidate' ?
-        'http://localhost:3000/api/v1/candidate/register' :
-        'http://localhost:3000/api/v1/recruiter/register';
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/candidate/register` :
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruiter/register`;
 
       fetch(apiUrl, {
         method: 'POST',
@@ -128,7 +128,7 @@ const LoginSignupScreen = ({ onClose }) => {
         body: JSON.stringify(formData),
       }).then(response => response.json())
       .then(result => {
-        console.log(result)
+        //console.log(result)
         if (result.success===true){
           
           setFormName('')
@@ -151,7 +151,7 @@ const LoginSignupScreen = ({ onClose }) => {
       // Handle general error, e.g., network issue
       console.error('Error:', error.message);
     }
-  }
+  
   
 };
   
@@ -422,7 +422,7 @@ const LoginSignupScreen = ({ onClose }) => {
         body: JSON.stringify({email:formEmail}),
       }).then(response =>response.json())
       .then(result => {
-        console.log("result", result)
+        //console.log("result", result)
         
         if (result.success===true){
           setisLoading(false)
@@ -464,7 +464,7 @@ const LoginSignupScreen = ({ onClose }) => {
       fetch(apiUrl, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        console.log(result)
+        //console.log(result)
         if(result.success){
           setisLoading(false)
           setPasswordResetEmail(result.email)
@@ -514,17 +514,17 @@ const LoginSignupScreen = ({ onClose }) => {
         `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruiter/setnewpassword`;
 
       fetch(apiUrl, {
-        method: 'POST',
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(formData),
       }).then(response => response.json())
       .then(result => {
-        console.log(result)
+        //console.log(result)
         if (result.success===true){
           
-          
+          setisLoading(false)
           setFormEmail('')
           setFormPassword('')
           setFormConfirmPassword('')
@@ -534,6 +534,7 @@ const LoginSignupScreen = ({ onClose }) => {
           toast.success("Password reset successfully")
         }
         else{
+          setisLoading(false)
           toast.error("Password reset Failed", result.message)
         }
         
@@ -554,7 +555,7 @@ const LoginSignupScreen = ({ onClose }) => {
           </button>
         </div>
         <hr className="border-t border-gray-300 my-3" />
-        {(selectedOption==='login'||selectedOption==='signup') && (
+        {(selectedOption==='login'||selectedOption==='signup'||selectedOption==='forgetpassword') && (
           <div className="flex justify-center space-x-8 mb-3">
           <button
             onClick={() => handleUserSelection('recruiter')}
@@ -834,7 +835,7 @@ const LoginSignupScreen = ({ onClose }) => {
 
         }
         {selectedOption==="forgetpassword" &&(
-          <div className="flex flex-col items-center">
+          <div className="flex flex-col items-center mt-5">
             <div className="text-center">
               <h1 className="text-2xl font-semibold font-poppins mb-2 text-black">Forgot Password</h1>
               <h3 className="text-sm text-gray-500 mb-5">
@@ -861,10 +862,19 @@ const LoginSignupScreen = ({ onClose }) => {
               <div style={{width:"210px"}} className='flex justify-center ml-14 mt-3 '>
                 <button
                   type="submit"
-                  className="border w-auto bg-black_color text-white p-3 px-7 rounded-full mb-3 text-sm"
+                  className="border w-auto bg-black_color hover:bg-opacity-90 text-white p-3 px-7 rounded-full text-sm"
                   onClick={(e) => handleForgetPassword(e)}
                   >
                   Send Code
+                </button>
+              </div>
+              <div style={{width:"210px"}} className='flex justify-center ml-14 '>
+                <button
+                  type="submit"
+                  className="border border-black w-auto hover:bg-black_color hover:text-white p-2 text-sm px-11 rounded-full mb-3 mt-1"
+                  onClick={(e) => {e.preventDefault();handleOptionClick("login")}}
+                  >
+                  Back
                 </button>
               </div>
             </form>
