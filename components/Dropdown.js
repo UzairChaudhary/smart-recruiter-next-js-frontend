@@ -60,10 +60,10 @@ const Dropdown = () => {
 
     
     if (hasCookie("recruiter")){
-      setapiURL("http://localhost:3000/api/v1/recruiter/logout")
+      setapiURL(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruiter/logout`)
     }
     else{
-      setapiURL("http://localhost:3000/api/v1/candidate/logout")
+      setapiURL(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/candidate/logout`)
     }
     
     

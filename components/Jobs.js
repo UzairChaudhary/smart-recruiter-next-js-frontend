@@ -270,7 +270,7 @@ const displayedJobCategories = Array.from(jobTitlesSet).reverse().slice(0, 5);
               
 
               {/* Employment Type and Apply Button */}
-              <div className="flex justify-between items-center mt-auto">
+              <div className="flex justify-between items-center mt-auto px-2 mb-2">
                 <p className="flex items-center text-sm text-black_color text-center">
                   <WiTime10 className="mr-1 mb-1 mt-1 flex-shrink-0 h-4 w-4" />
                   {formatDistanceToNow(new Date(job.createdAt), { addSuffix: true }).replace(/^about\s/, '')}
