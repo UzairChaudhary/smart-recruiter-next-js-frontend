@@ -19,7 +19,7 @@ import { setCookie } from 'cookies-next';
 
 import { useGoogleLogin } from '@react-oauth/google';
 import EnterCode from './forms/VerificationCode';
-
+import Loader from '../loaders/Loader'
 
 const LoginSignupScreen = ({ onClose }) => {
 
@@ -40,7 +40,8 @@ const LoginSignupScreen = ({ onClose }) => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = useState(false);
   const [accessToken, setaccessToken] = useState();
-
+  const [passwordResetEmail, setPasswordResetEmail] = useState();
+  const [isLoading, setisLoading] = useState(false);
   // ... (other state variables)
 
   const router = useRouter();
@@ -440,6 +441,7 @@ const LoginSignupScreen = ({ onClose }) => {
     try {
       // const payload = new FormData();
       // payload.append("resetPasswordToken", code);
+      setisLoading(true)
       const myHeaders = new Headers();
       myHeaders.append("Content-Type", "application/json");
 
@@ -461,15 +463,22 @@ const LoginSignupScreen = ({ onClose }) => {
       .then((result) => {
         console.log(result)
         if(result.success){
+          setisLoading(false)
+          setPasswordResetEmail(result.email)
+          handleOptionClick('setpassword')
           toast.success(result.message)
         }
-        else toast.error(result.message)
+        else {
+          setisLoading(false)
+          toast.error(result.message)
+        }
         
       })
       .catch((error) => console.error(error));
       
       
     } catch (err) {
+      setisLoading(false)
       console.log(`Error: ${err.message}`);
     } 
   }
@@ -793,7 +802,7 @@ const LoginSignupScreen = ({ onClose }) => {
                   className="border w-auto bg-black_color text-white p-3 px-7 rounded-full mb-3 text-sm"
                   onClick={(e) => handleForgetPassword(e)}
                   >
-                  Reset Password
+                  Send Code
                 </button>
               </div>
             </form>
@@ -810,6 +819,91 @@ const LoginSignupScreen = ({ onClose }) => {
           </div>
           </div>
         )}
+        {isLoading && <Loader/>}
+        {selectedOption==="setpassword" && (
+          <div className="flex mt-5 max-w-xs justify-center flex-col items-center">
+            <p className="mb-6 text-base font-medium  text-gray-500">
+              Set a new password for your account
+            </p>
+            <div style={{width:"310px"}}  className={`ml-5 mb-1 flex items-center border ${isPasswordFocused ? 'border-teal_color' : 'border-gray-200'} px-4 py-2 rounded-lg focus-within:border-teal_color
+              ${!isPasswordValid ? 'border-red-500' : ''}`}>
+              <FiLock className={`mr-2 ${isPasswordFocused ? 'text-teal_color' : 'text-gray-400'}`} />
+              <input
+                type={isPasswordVisible ? 'text' : 'password'}
+                
+                id="password"
+                value={formPassword}
+                placeholder="Enter your password"
+                className={`text-black w-full outline-none focus:outline-none placeholder-gray-400 text-sm
+                `}
+                onFocus={() => setIsPasswordFocused(true)}
+                onBlur={() => {setIsPasswordFocused(false);setIsPasswordValid(formPassword.length >= 6);}}
+                onChange={(e) => {setFormPassword(e.target.value);setIsPasswordValid(formPassword.length >= 6);}}
+              />
+              <button
+                type="button"
+                onClick={() => setIsPasswordVisible(!isPasswordVisible)}
+                className="text-gray-400 focus:outline-none"
+              >
+                {isPasswordVisible ? <FiEyeOff /> : <FiEye />}
+              </button>
+              </div>
+              
+              {!isPasswordValid && (
+                <div className='flex justify-end mb-1'>
+                  <span className='text-xs text-red-500 '>
+                Password must be atleast 6 characters
+              </span>
+                </div>
+              )
+              
+              }
+              <div style={{width:"310px"}}  className={`ml-5 mb-1 flex items-center border ${confirmPasswordFocused ? 'border-teal_color' : 'border-gray-200'} px-4 py-2 rounded-lg focus-within:border-teal_color
+              ${!passwordsMatch ? 'border-red-500' : ''}`}>
+              <RiLockPasswordLine className={`mr-2 ${confirmPasswordFocused ? 'text-teal_color' : 'text-gray-400'}`} />
+              <input
+                type={isConfirmPasswordVisible ? 'text' : 'password'}
+                value={formConfirmPassword}
+                id="confirm_password"
+                
+                placeholder="Confirm Password"
+                className={`text-black w-full outline-none focus:outline-none placeholder-gray-400 text-sm `}
+                onFocus={() => setconfirmPasswordFocused(true)}
+                onBlur={() => {setconfirmPasswordFocused(false);setPasswordsMatch(formPassword === formConfirmPassword);}}
+                onChange={(e) => {setFormConfirmPassword(e.target.value);setPasswordsMatch(formPassword === formConfirmPassword);}}
+              />
+              <button
+                type="button"
+                onClick={() => setIsConfirmPasswordVisible(!isConfirmPasswordVisible)}
+                className="text-gray-400 focus:outline-none"
+              >
+                {isConfirmPasswordVisible ? <FiEyeOff /> : <FiEye />}
+              </button>
+              </div>
+              
+              {!passwordsMatch && (
+                <div className='flex justify-end'>
+                  <span className='text-xs text-red-500 '>
+                Passwords are not matching
+              </span>
+                </div>
+                
+              )
+              
+              }
+              <div style={{width:"210px"}} className='flex justify-center ml-14 mt-3 '>
+                <button
+                  type="submit"
+                  className="border w-auto bg-black_color text-white p-3 px-7 rounded-full mb-3 text-sm"
+                  onClick={(e) => handleResetPassword(e)}
+                  >
+                  Reset Password
+                </button>
+              </div>
+          </div>
+        )}
+            
+            
         
         
         <div className='absolute bg-hero-gradient right-0 left-0 bottom-0 h-40 rounded-bl-2xl'>
@@ -845,6 +939,12 @@ const LoginSignupScreen = ({ onClose }) => {
             </div>
           )
           }
+          {selectedOption==='setpassword'&&(
+            <div className='bg-[#01042D] h-full w-full flex justify-center items-center'>
+
+              <img src='/logos/CareerAi.png' height={150} width={150} alt='logo'></img>
+            </div>
+          )}
           
         </div>
 
