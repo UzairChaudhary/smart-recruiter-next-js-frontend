@@ -396,6 +396,7 @@ const LoginSignupScreen = ({ onClose }) => {
   
   const handleForgetPassword=(e)=>{
     e.preventDefault()
+    setisLoading(true)
     if (user===''){
       toast.error('Please choose your role');
       return ;
@@ -424,10 +425,12 @@ const LoginSignupScreen = ({ onClose }) => {
         console.log("result", result)
         
         if (result.success===true){
+          setisLoading(false)
           toast.success(result.message)
           handleOptionClick('resetpassword')
         }
         else{
+          setisLoading(false)
           toast.error(result.message)
         }
         
@@ -494,7 +497,8 @@ const LoginSignupScreen = ({ onClose }) => {
           </button>
         </div>
         <hr className="border-t border-gray-300 my-3" />
-        <div className="flex justify-center space-x-8 mb-3">
+        {(selectedOption==='login'||selectedOption==='signup') && (
+          <div className="flex justify-center space-x-8 mb-3">
           <button
             onClick={() => handleUserSelection('recruiter')}
             className={`${
@@ -513,6 +517,7 @@ const LoginSignupScreen = ({ onClose }) => {
           </button>
           
         </div>
+        )}
 
         {selectedOption === 'login' && (
 
@@ -850,7 +855,7 @@ const LoginSignupScreen = ({ onClose }) => {
               </div>
               
               {!isPasswordValid && (
-                <div className='flex justify-end mb-1'>
+                <div className='flex justify-end mb-1 ml-20'>
                   <span className='text-xs text-red-500 '>
                 Password must be atleast 6 characters
               </span>
@@ -882,7 +887,7 @@ const LoginSignupScreen = ({ onClose }) => {
               </div>
               
               {!passwordsMatch && (
-                <div className='flex justify-end'>
+                <div className='flex justify-end ml-36'>
                   <span className='text-xs text-red-500 '>
                 Passwords are not matching
               </span>
@@ -891,7 +896,7 @@ const LoginSignupScreen = ({ onClose }) => {
               )
               
               }
-              <div style={{width:"210px"}} className='flex justify-center ml-14 mt-3 '>
+              <div style={{width:"210px"}} className='flex justify-center ml-2 mt-3 '>
                 <button
                   type="submit"
                   className="border w-auto bg-black_color text-white p-3 px-7 rounded-full mb-3 text-sm"
