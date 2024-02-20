@@ -486,7 +486,64 @@ const LoginSignupScreen = ({ onClose }) => {
     } 
   }
 
+  const handleResetPassword=(e)=>{
+    e.preventDefault()
+    // Validation
+    if (formPassword === '' || formConfirmPassword === '' ){
+      toast.error('Please enter your required information');
+      return ;
+    }
+    
+    if (!isPasswordValid) {
+      toast.error('Password must be atleast 6 characters');
+      return ;
+    }
+    if (!passwordsMatch) {
+      toast.error('Passwords are not matching');
+      return ;
+    }
+    const formData = {
+      
+      email: passwordResetEmail,
+      password: formPassword,
+    };
+    try{
+      setisLoading(true)
+      const apiUrl = user === 'candidate' ?
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/candidate/setnewpassword` :
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/recruiter/setnewpassword`;
 
+      fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      }).then(response => response.json())
+      .then(result => {
+        console.log(result)
+        if (result.success===true){
+          
+          
+          setFormEmail('')
+          setFormPassword('')
+          setFormConfirmPassword('')
+          handleOptionClick('login')
+
+          
+          toast.success("Password reset successfully")
+        }
+        else{
+          toast.error("Password reset Failed", result.message)
+        }
+        
+      })
+      .catch(error => console.log('error', error));
+    }
+    catch(err){
+      console.log(err)
+    }
+  }
   return (
     <div className='fixed top-0 left-0 right-0 bottom-0 bg-opacity-50 z-20' >
       <div className="fixed top-0 right-0 h-screen bg-white z-50 rounded-tl-2xl rounded-bl-2xl shadow-lg p-8 pt-4 ">
