@@ -34,7 +34,10 @@ function JobSearchForm() {
       value={searchItem}
       className="flex-grow block w-full p-4 text-sm text-gray-500 rounded-full border-none focus:outline-none"
       placeholder="Search your dream job"
-      onChange={(e)=>setsearchItem(e.target.value)}
+      onChange={(e)=>{
+        setsearchItem(e.target.value)
+        dispatch({type:actioTypes.searchedJob,payload:{searchedJob:searchItem}})
+      }}
       required
     />
     <button
