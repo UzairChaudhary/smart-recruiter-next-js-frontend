@@ -251,7 +251,7 @@ const displayedJobCategories = Array.from(jobTitlesSet).reverse().slice(0, 5);
 
               {/* Job Skills */}
               <div className="flex flex-wrap justify-center mb-auto flex-shrink-0 ">
-                {job.skills.slice(0,5).map((skill, index) => (
+                {job.skills.slice(0,3).map((skill, index) => (
                   <span key={index} className="bg-white border border-gray-400 text-blue_color rounded-full px-3 py-1 text-sm mr-2 mb-2">
                     {skill}
                   </span>
