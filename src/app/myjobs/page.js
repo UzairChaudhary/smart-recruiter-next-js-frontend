@@ -1,3 +1,4 @@
+import Footer from "../../../components/Footer";
 import Applied from "../../../components/history/Applied"
 import Offers from "../../../components/history/Offers"
 import { getCookie } from "cookies-next"
@@ -29,7 +30,7 @@ const MyJobs= () =>{
 
     return (
         <>
-        
+            
             <div className='w-full h-full bg-hero-gradient opacity-20 py-20 pb-32 '>
             </div>
           
@@ -45,6 +46,7 @@ const MyJobs= () =>{
                 {/* <div className="flex-1 basis-[16rem]">
                     <Offers />
                 </div> */}
+                <Footer/>
             
         </div>
           
