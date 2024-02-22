@@ -70,7 +70,7 @@ const AllJobs = () => {
               router.push(`/apply/${id}`)
             }
             else{
-              toast.error(result.message)
+              toast.error("Already Applied. Give Interview in My Jobs Section")
             }
           })
           .catch(error => console.log('error', error));
