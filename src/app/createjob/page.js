@@ -237,7 +237,7 @@ useEffect(() => {
           
         </button>
         <h1 className='text-md font-poppins absolute top-40 mt-1 left-48  text-white'>Home / Post Job</h1>
-        <div className="avatar font-poppins absolute top-40 mt-12 left-48 flex items-center gap-3" suppressHydrationWarning={true}>
+        <div className="avatar font-poppins absolute top-40 mt-12 left-48 flex items-center" suppressHydrationWarning={true}>
  
             <div className="w-28 ">
                 <img src={user?.avatar} className="rounded-full border border-blue_color" />
@@ -245,7 +245,7 @@ useEffect(() => {
             
            
             <div className="flex flex-col mt-8">
-            <span className="text-lg font-bold">{user?.name}</span>
+            <span className="text-lg font-bold mt-3">{user?.name}</span>
             <span className="text-sm text-blue_color">{user?.email}</span>
             </div>
         </div>
@@ -287,7 +287,7 @@ useEffect(() => {
             <div className="flex-align-center gap-2 flex-wrap">
               {tags?.map(( tag, index ) => (
                 <div
-                  className="flex-center-between gap-1 p-1 mb-5 bg-blue_color rounded-md text-white dark:bg-hover-color"
+                  className="flex-center-between gap-3 px-2 py-2 mb-10 bg-blue_color rounded-lg text-white dark:bg-hover-color"
                   key={index}
                 >
                   <span className="text-sm capitalize">{tag}</span>

@@ -433,7 +433,7 @@ input:-webkit-autofill:focus,
 
 .form-input .input:focus ~ label,
 .form-input .input:valid ~ label {
-  @apply -top-[18px] left-[15px] text-sm;
+  @apply -top-[18px] left-[15px] text-sm ;
 }
 
 

@@ -39,15 +39,17 @@
   #parttime:checked + .parttimebutton {
     background-color: #0089B5;
     color: white;
-    transform: scale(1.1);
+    
   }
   #fulltime:checked + .fulltimebutton {
     background-color: #0089B5;
     color: white;
-    transform: scale(1.1);
+    
   }
   
-  /* JOB TYPE 2*/
+  /* JOB TYPE 2
+  transform: scale(1.1);
+  */
 
   .jobtype2-radio-buttons {
     display: none;
@@ -82,15 +84,15 @@
   #remote:checked + .remotebutton {
     background-color: #0089B5;
     color: white;
-    transform: scale(1.1);
+    
   }
   #onsite:checked + .onsitebutton {
     background-color: #0089B5;
     color: white;
-    transform: scale(1.1);
+   
   }
   #hybrid:checked + .hybridbutton {
     background-color: #0089B5;
     color: white;
-    transform: scale(1.1);
+    
   }

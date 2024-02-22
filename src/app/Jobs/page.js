@@ -42,13 +42,13 @@ const Jobs = () => {
           <div className='w-full h-full bg-hero-gradient opacity-20 py-20 pb-32 '>
           </div>
           {getCookie("user")==="recruiter" ? (
-            <h1 className='text-2xl font-poppins absolute top-32 left-48  text-black_color font-bold'>Your Posted Jobs</h1>
+            <h1 className='text-2xl font-poppins absolute top-32 left-40  text-black_color font-bold'>Your Posted Jobs</h1>
 
           ):(
-            <h1 className='text-2xl font-poppins absolute top-32 left-48  text-black_color font-bold'>Find Your Dream Job</h1>
+            <h1 className='text-2xl font-poppins absolute top-32 left-40  text-black_color font-bold'>Find Your Dream Job</h1>
 
           )}
-          <h1 className='text-md font-poppins absolute top-40 mt-1 left-48  text-black_color'>Home / Jobs</h1>
+          <h1 className='text-md font-poppins absolute top-40 mt-1 left-40  text-black_color'>Home / Jobs</h1>
 
           
           <BackToTopButton showButton={showButton} />
