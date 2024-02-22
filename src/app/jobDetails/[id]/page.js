@@ -84,7 +84,7 @@ export default function JobDetails  ({params}) {
           
         </button>
         <h1 className='text-md font-poppins absolute top-40 mt-1 left-48  text-white'>Home / Job Details</h1>
-        <div className="avatar font-poppins absolute top-40 mt-12 left-48 flex items-center " suppressHydrationWarning={true}>
+        <div className="avatar gap-2 font-poppins absolute top-40 mt-12 left-48 flex items-center " suppressHydrationWarning={true}>
  
             <div className="w-28 ">
                 <img src={jobDetails?.avatar} className="rounded-full border border-blue_color" />
@@ -184,18 +184,16 @@ export default function JobDetails  ({params}) {
                   <h1 className="text-lg font-semibold font-poppins">Applicants <span className="text-gray-500 font-normal ml-1">({jobDetails?.applicants.length})</span></h1>
                   <span className="text-lg font-semibold font-poppins">sort by: <span className="font-normal ml-1 text-blue_color">Resume Analysis</span></span>
                 </div>
-                {/* <div>{jobDetails?.applicants?.map((applicant, index)=>(
-                  <span key={index}>{applicant?.applicant?.name}</span>
-                ))}</div> */}
+                
                 {jobDetails?.applicants?.length ? (
                   
                     <div className="items-center justify-center gap-4 p-4">
                       {jobDetails?.applicants?.map((applicants, index)=>(
                       <div 
                       key={applicants.applicant._id}
-                      className="applicant-card mb-2 flex items-center justify-around py-4 border rounded-2xl shadow-lg cursor-pointer"
+                      className="applicant-card mb-2 flex items-center justify-between py-4 px-12 border rounded-2xl card-shadow cursor-pointer"
                       >
-                        <div className="flex items-center gap-4">
+                        <div className="flex items-center gap-4 ">
 
                       <img src={applicants.applicant.avatar} className="rounded-full w-20"></img>
                       <div>
