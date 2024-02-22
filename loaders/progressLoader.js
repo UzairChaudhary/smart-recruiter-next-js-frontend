@@ -4,7 +4,7 @@ const ProgressLoader = () => {
         <div className="bg-black p-10 rounded-lg bg-opacity-10">
         <div className="text-white mb-2">Processing...</div>
         <div className="progress-loader mt-5">
-        <div className="progress bg-teal_color bg-opacity-50"></div>
+        <div className="progress bg-teal_color "></div>
         </div>
         </div>
       </div>

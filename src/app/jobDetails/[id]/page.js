@@ -84,14 +84,14 @@ export default function JobDetails  ({params}) {
           
         </button>
         <h1 className='text-md font-poppins absolute top-40 mt-1 left-48  text-white'>Home / Job Details</h1>
-        <div className="avatar font-poppins absolute top-40 mt-12 left-48 flex items-center gap-3" suppressHydrationWarning={true}>
+        <div className="avatar font-poppins absolute top-40 mt-12 left-48 flex items-center " suppressHydrationWarning={true}>
  
             <div className="w-28 ">
                 <img src={jobDetails?.avatar} className="rounded-full border border-blue_color" />
             </div>
             
            
-            <div className="flex flex-col mt-8">
+            <div className="flex flex-col mt-11">
             <span className="text-lg font-bold">{jobDetails?.owner.name}</span>
             <span className="text-sm text-blue_color">{jobDetails?.owner.email}</span>
             </div>

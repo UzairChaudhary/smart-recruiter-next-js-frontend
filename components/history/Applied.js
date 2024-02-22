@@ -59,7 +59,7 @@ const Applied = () => {
               <Image src={job?.avatar} alt="Company Logo" className="mx-auto rounded-full p-2 mb-3 w-16 h-16 bg-white border" height={100} width={100} />
 
               ):(
-                <Image src={job?.owner?.avatar} alt="Company Logo" className="mx-auto rounded-full p-2 mb-3 w-16 h-16 bg-white border" height={100} width={100} />
+                <Image src={job?.owner?.avatar} alt="Company Logo" className="mx-auto rounded-full mb-3 w-16 h-16 bg-white " height={100} width={100} />
 
               )}
 

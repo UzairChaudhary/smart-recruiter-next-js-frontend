@@ -21,7 +21,6 @@ const ApplyJob = ({ params }) => {
   const [file, setFile] = useState("");
   const [fileURL, setfileURL] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [analysisScore, setAnalysisScore] = useState();
 
   
   
@@ -67,17 +66,17 @@ const ApplyJob = ({ params }) => {
       
     }
   }, [fileURL]);
-  useEffect(() => {
+  // useEffect(() => {
     
-    if (analysisScore){
+  //   if (analysisScore){
       
-      applyJob(fileURL)
-    }
-    else{
-      setLoading(false)
+  //     applyJob(fileURL)
+  //   }
+  //   else{
+  //     setLoading(false)
       
-    }
-  }, [analysisScore]);
+  //   }
+  // }, [analysisScore]);
 
   const isFileValid = (file) => {
     const allowedExtensions = ['.pdf'];
@@ -149,13 +148,13 @@ const ApplyJob = ({ params }) => {
     }
   };
   
-  const applyJob=(URL)=>{
+  const applyJob=(URL,AnalysisScore)=>{
     var myHeaders2 = new Headers();
 myHeaders2.append("Content-Type", "application/json");
 
 var raw1 = JSON.stringify({
   "resumeFile": URL,
-  "resumeAnalysisScore":analysisScore
+  "resumeAnalysisScore":AnalysisScore
   
   
 });
@@ -212,7 +211,8 @@ fetch(`http://localhost:3000/api/v1/candidate/applyjob/${params.id}`, requestOpt
           setLoading(false)
           return 
         }
-        setAnalysisScore(result.similarity_percentage)
+        const AnalysisScore = result.similarity_percentage
+        applyJob(URL,AnalysisScore)
       })
       .catch(error => console.log('error', error));
   }

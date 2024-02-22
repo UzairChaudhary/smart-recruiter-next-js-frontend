@@ -234,10 +234,10 @@ const displayedJobCategories = Array.from(jobTitlesSet).reverse().slice(0, 5);
               {/* Company Logo */}
               {getCookie("user")==="recruiter" ? (
 
-                <Image src={job?.avatar} alt="Company Logo" className="mx-auto rounded-full mb-3 w-16 h-16 border" height={70} width={70} />
+                <Image src={job?.avatar} alt="Company Logo" className="mx-auto rounded-full mb-3 w-16 h-16 " height={70} width={70} />
               ):(
 
-                <Image src={job?.owner?.avatar} alt="Company Logo" className="mx-auto rounded-full mb-3 w-16 h-16 border" height={70} width={70} />
+                <Image src={job?.owner?.avatar} alt="avatar" className="mx-auto rounded-full mb-3 w-16 h-16 " height={70} width={70} />
               )}
               
 

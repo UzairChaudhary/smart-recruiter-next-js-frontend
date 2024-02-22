@@ -218,7 +218,7 @@ const displayedJobCategories = Array.from(jobTitlesSet).reverse().slice(0, 5);
 
                 
               {/* Company Logo */}
-              <Image src={job?.owner.avatar} alt="Company Logo" className="mx-auto rounded-full mb-3 w-16 h-16 bg-white border" height={100} width={100} />
+              <Image src={job?.owner.avatar} alt="Company Logo" className="mx-auto rounded-full mb-3 w-16 h-16 bg-white " height={100} width={100} />
 
               {/* Company Name and Title */}
               <div className="flex flex-col mb-5">
