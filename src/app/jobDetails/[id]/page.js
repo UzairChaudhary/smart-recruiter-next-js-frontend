@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 import { FiChevronLeft } from "react-icons/fi"
 import { IoMdDownload } from "react-icons/io";
@@ -137,12 +138,12 @@ export default function JobDetails  ({params}) {
                     <div className="">
                         <span className="mb-2 text-gray-500">Job Description</span>
                         <button
-                  className="btn mt-2 flex justify-center items-center gap-3 bg-teal_color text-white w-full"
-                  onClick={() => window.open(jobDetails?.descriptionFile, '_blank')}
-                >
-                  <IoMdDownload />
-                  <span>Download Job Description File</span>
-                </button> 
+                          className="btn mt-2 flex justify-center items-center gap-3 bg-teal_color text-white w-full"
+                          onClick={() => window.open(jobDetails?.descriptionFile, '_blank')}
+                        >
+                          <IoMdDownload />
+                          <span>Download Job Description File</span>
+                        </button> 
                     </div>
 
                 </div>
@@ -181,22 +182,30 @@ export default function JobDetails  ({params}) {
               </div>
                 )}
             </div>
-            {getCookie("user")==="candidate" ? (
+            {getCookie("user")==="candidate" && (
               <div className="flex flex-col ">
                 <h1 className="text-lg font-semibold font-poppins ml-5">Interview Instructions</h1>
                 <p>Before we begin, please take a moment to review the instructions for the interview process:</p>
                 <ul className="list-disc">
-                  <li>Ensure you have a stable internet connection and a working webcam and microphone</li>
+                  <li>Ensure you have a stable internet connection, a working webcam and microphone</li>
                   <li>Maintain eye contact with the camera and speak clearly to convey your thoughts effectively.</li>
                   <li>Avoid interruptions and distractions during the interview session.</li>
                   <li>Stay composed and confident throughout the process to make a positive impression.</li>
                   <li>The interview consists of a series of questions that you will answer one by one.</li>
                   <li>Each question has a time limit for response, which will be displayed on the screen.</li>
                   <li>Click on the "Next" button to proceed to the next question after answering.</li>
-                  <li>When you're ready, click the "Start Interview" button to begin the video interview process</li>
+                  <li>Click on the "End Interview" button to end the interview</li>
                 </ul>
+                  <p>When you're ready, click the "Start Interview" button to begin the video interview process</p>
+                  <Link
+                    href={'/interview/' + params.id}
+                    className="btn mt-2 flex justify-center items-center gap-3 bg-teal_color text-white"
+                  >    
+                  Start Interview
+                  </Link> 
               </div>
-            ):(
+            )}
+            {getCookie("user")==="recruiter" &&(
               <div className=" flex flex-col ml-5">
                 <div className=" flex gap-28 px-10 ">
                   <h1 className="text-lg font-semibold font-poppins">Applicants <span className="text-gray-500 font-normal ml-1">({jobDetails?.applicants.length})</span></h1>
