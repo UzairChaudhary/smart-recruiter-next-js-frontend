@@ -181,7 +181,21 @@ export default function JobDetails  ({params}) {
               </div>
                 )}
             </div>
-            <div className=" flex flex-col ml-5">
+            {getCookie("user")==="candidate" ? (
+              <div className="flex flex-col ">
+                <h1 className="text-lg font-semibold font-poppins ml-5">Interview Instructions</h1>
+                <p>Before we begin, please take a moment to review the instructions for the interview process:</p>
+                <p>Ensure you have a stable internet connection and a working webcam and microphone</p>
+                <p>Maintain eye contact with the camera and speak clearly to convey your thoughts effectively.</p>
+                <p>Avoid interruptions and distractions during the interview session.</p>
+                <p>Stay composed and confident throughout the process to make a positive impression.</p>
+                <p>The interview consists of a series of questions that you will answer one by one.</p>
+                <p>Each question has a time limit for response, which will be displayed on the screen.</p>
+                <p>Click on the "Next" button to proceed to the next question after answering.</p>
+                <p>When you're ready, click the "Start Interview" button to begin the video interview process</p>
+              </div>
+            ):(
+              <div className=" flex flex-col ml-5">
                 <div className=" flex gap-28 px-10 ">
                   <h1 className="text-lg font-semibold font-poppins">Applicants <span className="text-gray-500 font-normal ml-1">({jobDetails?.applicants.length})</span></h1>
                   <span className="text-lg font-semibold font-poppins">sort by: <span className="font-normal ml-1 text-blue_color">Resume Analysis</span></span>
@@ -227,6 +241,7 @@ export default function JobDetails  ({params}) {
                 )
               }
             </div>
+            )}
         </div>
         <Footer/>
         </>
