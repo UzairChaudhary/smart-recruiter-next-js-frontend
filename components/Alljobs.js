@@ -131,13 +131,9 @@ const AllJobs = () => {
     
   }, []);
 
-  // Limit the array 
-  //var displayedJobs=[];
-  //var displayedJobCategories=[];
+  
   const displayedJobs = jobsArray.slice().reverse();
-  // const jobTitlesSet = new Set(jobsArray.map(job => job.title));
-  // displayedJobCategories = Array.from(jobTitlesSet).slice().reverse().slice(0,5);
- // Create a Set to store unique job titles
+  
 const jobTitlesSet = new Set();
 
 // Iterate through jobsArray and add capitalized job titles to the set
