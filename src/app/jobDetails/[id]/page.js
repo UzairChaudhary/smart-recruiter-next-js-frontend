@@ -191,24 +191,24 @@ export default function JobDetails  ({params}) {
                 )}
             </div>
             {user==="candidate" && (
-              <div className="flex flex-col ">
-                <h1 className="text-lg font-semibold font-poppins ml-5">Interview Instructions</h1>
+              <div className="flex flex-col ml-12">
+                <h1 className="text-lg flex justify-center font-semibold font-poppins mb-5">Interview Instructions</h1>
                 <p>Before we begin, please take a moment to review the instructions for the interview process:</p>
-                <ul className="list-disc">
-                  <li>Ensure you have a stable internet connection, a working webcam and microphone</li>
+                <ul className="list-disc p-5">
+                  <li>Ensure you have a stable <span className="font-medium ">internet connection</span>, a working <span className="font-medium">webcam</span> and <span className="font-medium">microphone</span></li>
                   <li>Maintain eye contact with the camera and speak clearly to convey your thoughts effectively.</li>
                   <li>Avoid interruptions and distractions during the interview session.</li>
                   <li>Stay composed and confident throughout the process to make a positive impression.</li>
                   <li>The interview consists of a series of questions that you will answer one by one.</li>
                   <li>Each question has a time limit for response, which will be displayed on the screen.</li>
-                  <li>Click on the "Next" button to proceed to the next question after answering.</li>
-                  <li>Click on the "End Interview" button to end the interview</li>
+                  <li>Click on the <span className="font-medium">"Next"</span> button to proceed to the next question after answering.</li>
+                  <li>Click on the <span className="font-medium">"End Interview"</span> button to end the interview.</li>
                 </ul>
-                  <p>When you're ready, click the "Start Interview" button to begin the video interview process</p>
+                  <p>When you're ready, click the <span className="font-medium"><span className="font-medium">"Start Interview"</span></span> button to begin the online video interview process.</p>
                   <div className="flex justify-center">
                   <Link
                     href={'/interview/' + params.id}
-                    className="btn mt-2 items-center bg-black_color text-white"
+                    className="btn mt-4 items-center bg-black_color text-white"
                   >    
                   Start Interview
                   </Link> 
