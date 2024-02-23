@@ -116,22 +116,22 @@ export default function JobDetails  ({params}) {
                         <span className="mb-2 text-gray-500">Skills </span>
                         
                         <div className="border-b-2 mt-2">
-                        {jobDetails?.skills && (
-            <div className="">
-              
-              <div className="flex gap-1">
-                {jobDetails?.skills?.map((skill, index) => (
-                  <span
-                    key={index}
-                    className=" text-sm"
-                    
-                  >
-                    {skill}
-                  </span>
-                ))}
-              </div>
-            </div>
-          )}
+                          {jobDetails?.skills && (
+                              <div className="">
+                                
+                                <div className="flex gap-1">
+                                  {jobDetails?.skills?.map((skill, index) => (
+                                    <span
+                                      key={index}
+                                      className=" text-sm"
+                                      
+                                    >
+                                      {skill}
+                                    </span>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
                         </div>
                     </div>
                     <div className="">

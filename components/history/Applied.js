@@ -97,13 +97,13 @@ const Applied = () => {
                 </p>
 
                 <div>
-                    <button
+                    <Link
                     
-                    
-                    className="login-btn bg-black_color text-white px-6 py-2 rounded-full hover:bg-white hover:text-black"
+                    href={`/jobDetails/${job._id}`}
+                    className="login-btn bg-black_color text-white px-4 py-2 rounded-full hover:bg-white hover:text-black"
                   >
-                    Start Interview
-                  </button>
+                    Give Interview
+                  </Link>
                   
 
                   </div>
