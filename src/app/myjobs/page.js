@@ -34,8 +34,8 @@ const MyJobs= () =>{
             <div className='w-full h-full bg-hero-gradient opacity-20 py-20 pb-32 '>
             </div>
           
-            <h1 className='text-2xl font-poppins absolute top-32 left-48  text-black_color font-bold'>Applied Jobs History</h1>
-            <h1 className='text-md font-poppins absolute top-40 mt-1 left-48  text-black_color'>Home / My Jobs</h1>
+            <h1 className='text-2xl font-poppins absolute top-32 left-40  text-black_color font-bold'>Applied Jobs History</h1>
+            <h1 className='text-md font-poppins absolute top-40 mt-1 left-40  text-black_color'>Home / My Jobs</h1>
             
             <div className="mt-5">
             
@@ -46,9 +46,9 @@ const MyJobs= () =>{
                 {/* <div className="flex-1 basis-[16rem]">
                     <Offers />
                 </div> */}
-                <Footer/>
             
-        </div>
+            </div>
+                <Footer/>
           
         </>
     )
