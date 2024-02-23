@@ -208,7 +208,7 @@ export default function JobDetails  ({params}) {
                   <div className="flex justify-center">
                   <Link
                     href={'/interview/' + params.id}
-                    className="btn mt-2 flex justify-center items-center gap-3 bg-teal_color text-white"
+                    className="btn mt-2 items-center bg-black_color text-white"
                   >    
                   Start Interview
                   </Link> 
