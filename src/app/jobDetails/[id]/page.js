@@ -17,6 +17,7 @@ import { getCookie } from "cookies-next";
 export default function JobDetails  ({params}) {
     const [jobDetails, setJobDetails] = useState();
     const [confirmOpen, setConfirmOpen] = useState(false);
+    const [user, setuser] = useState("candidate");
     const router = useRouter();
 
     useEffect(() => {
@@ -45,6 +46,13 @@ export default function JobDetails  ({params}) {
         })
           .catch(error => console.log('error', error));
     }, [])
+    useEffect(() => {
+      if(getCookie("user")==="recruiter"){
+        setuser("recruiter")
+      }
+      else setuser("candidate")
+    },[]);
+    
 
     
     //handle delete job
@@ -97,7 +105,7 @@ export default function JobDetails  ({params}) {
             <span className="text-sm text-blue_color">{jobDetails?.owner.email}</span>
             </div>
         </div>
-        <div className="flex ml-auto mr-auto max-w-7xl mt-32">
+        <div suppressHydrationWarning={true} className="flex ml-auto mr-auto max-w-7xl mt-32">
             <div className="flex flex-col w-1/3 gap-4">
                 <h1 className="text-lg font-semibold font-poppins ml-5">Job Details</h1>
                 <div className="flex flex-col border rounded-2xl shadow-lg p-10 w-full ">
@@ -147,7 +155,7 @@ export default function JobDetails  ({params}) {
                     </div>
 
                 </div>
-                {getCookie("user")==="recruiter" &&(
+                {user==="recruiter" &&(
                   <div>
                   <h1 className="text-lg font-semibold font-poppins mb-4 mt-5 ml-5">Actions</h1>
                   <div className="flex flex-col border rounded-2xl shadow-lg p-7 w-full ">
@@ -182,7 +190,7 @@ export default function JobDetails  ({params}) {
               </div>
                 )}
             </div>
-            {getCookie("user")==="candidate" && (
+            {user==="candidate" && (
               <div className="flex flex-col ">
                 <h1 className="text-lg font-semibold font-poppins ml-5">Interview Instructions</h1>
                 <p>Before we begin, please take a moment to review the instructions for the interview process:</p>
@@ -197,15 +205,17 @@ export default function JobDetails  ({params}) {
                   <li>Click on the "End Interview" button to end the interview</li>
                 </ul>
                   <p>When you're ready, click the "Start Interview" button to begin the video interview process</p>
+                  <div className="flex justify-center">
                   <Link
                     href={'/interview/' + params.id}
-                    className="btn mt-2 flex justify-center items-center gap-3 bg-teal_color text-white"
+                    className="btn mt-2 items-center bg-black_color text-white"
                   >    
                   Start Interview
                   </Link> 
+                  </div>
               </div>
             )}
-            {getCookie("user")==="recruiter" &&(
+            {user==="recruiter" &&(
               <div className=" flex flex-col ml-5">
                 <div className=" flex gap-28 px-10 ">
                   <h1 className="text-lg font-semibold font-poppins">Applicants <span className="text-gray-500 font-normal ml-1">({jobDetails?.applicants.length})</span></h1>
