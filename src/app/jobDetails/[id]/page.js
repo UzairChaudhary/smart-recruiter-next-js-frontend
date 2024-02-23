@@ -185,14 +185,16 @@ export default function JobDetails  ({params}) {
               <div className="flex flex-col ">
                 <h1 className="text-lg font-semibold font-poppins ml-5">Interview Instructions</h1>
                 <p>Before we begin, please take a moment to review the instructions for the interview process:</p>
-                <p>Ensure you have a stable internet connection and a working webcam and microphone</p>
-                <p>Maintain eye contact with the camera and speak clearly to convey your thoughts effectively.</p>
-                <p>Avoid interruptions and distractions during the interview session.</p>
-                <p>Stay composed and confident throughout the process to make a positive impression.</p>
-                <p>The interview consists of a series of questions that you will answer one by one.</p>
-                <p>Each question has a time limit for response, which will be displayed on the screen.</p>
-                <p>Click on the "Next" button to proceed to the next question after answering.</p>
-                <p>When you're ready, click the "Start Interview" button to begin the video interview process</p>
+                <ul className="list-disc">
+                  <li>Ensure you have a stable internet connection and a working webcam and microphone</li>
+                  <li>Maintain eye contact with the camera and speak clearly to convey your thoughts effectively.</li>
+                  <li>Avoid interruptions and distractions during the interview session.</li>
+                  <li>Stay composed and confident throughout the process to make a positive impression.</li>
+                  <li>The interview consists of a series of questions that you will answer one by one.</li>
+                  <li>Each question has a time limit for response, which will be displayed on the screen.</li>
+                  <li>Click on the "Next" button to proceed to the next question after answering.</li>
+                  <li>When you're ready, click the "Start Interview" button to begin the video interview process</li>
+                </ul>
               </div>
             ):(
               <div className=" flex flex-col ml-5">
