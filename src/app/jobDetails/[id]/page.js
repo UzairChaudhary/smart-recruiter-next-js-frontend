@@ -12,7 +12,7 @@ import { toast } from 'react-hot-toast';
 
 import SweetAlert from 'react-bootstrap-sweetalert';
 
-
+import { getCookie } from "cookies-next";
 export default function JobDetails  ({params}) {
     const [jobDetails, setJobDetails] = useState();
     const [confirmOpen, setConfirmOpen] = useState(false);
@@ -146,38 +146,40 @@ export default function JobDetails  ({params}) {
                     </div>
 
                 </div>
-                <div>
-                    <h1 className="text-lg font-semibold font-poppins mb-4 mt-5 ml-5">Actions</h1>
-                    <div className="flex flex-col border rounded-2xl shadow-lg p-7 w-full ">
-                    <div className="mb-4 flex items-center gap-2 hover:cursor-pointer">
-                        <RiErrorWarningLine/>
-                        <div className="">Stop accepting resume</div>
-                    </div>
-                    <div className="mb-4 flex items-center gap-2 hover:cursor-pointer"
-                    >
-                        <RiDeleteBin6Line/>
-                        <div className=""onClick={()=>{
-                          setConfirmOpen(true)
-                        }}>Delete Job</div>
-                        {confirmOpen && (
+                {getCookie("user")==="recruiter" &&(
+                  <div>
+                  <h1 className="text-lg font-semibold font-poppins mb-4 mt-5 ml-5">Actions</h1>
+                  <div className="flex flex-col border rounded-2xl shadow-lg p-7 w-full ">
+                  <div className="mb-4 flex items-center gap-2 hover:cursor-pointer">
+                      <RiErrorWarningLine/>
+                      <div className="">Stop accepting resume</div>
+                  </div>
+                  <div className="mb-4 flex items-center gap-2 hover:cursor-pointer"
+                  >
+                      <RiDeleteBin6Line/>
+                      <div className=""onClick={()=>{
+                        setConfirmOpen(true)
+                      }}>Delete Job</div>
+                      {confirmOpen && (
 
-                        <SweetAlert
-                          warning
-                          showCancel
-                          confirmBtnText="Yes, delete it!"
-                          confirmBtnStyle={{color: 'white', backgroundColor:"darkred"}}
-                          title="Are you sure?"
-                          onConfirm={handleDeleteClicked}
-                          onCancel={()=> setConfirmOpen(false)}
-                          
-                        >
-                          You will not be able to recover this job!
-                        </SweetAlert>
-                        )}
+                      <SweetAlert
+                        warning
+                        showCancel
+                        confirmBtnText="Yes, delete it!"
+                        confirmBtnStyle={{color: 'white', backgroundColor:"darkred"}}
+                        title="Are you sure?"
+                        onConfirm={handleDeleteClicked}
+                        onCancel={()=> setConfirmOpen(false)}
                         
-                    </div>
-                    </div>
-                </div>
+                      >
+                        You will not be able to recover this job!
+                      </SweetAlert>
+                      )}
+                      
+                  </div>
+                  </div>
+              </div>
+                )}
             </div>
             <div className=" flex flex-col ml-5">
                 <div className=" flex gap-28 px-10 ">
