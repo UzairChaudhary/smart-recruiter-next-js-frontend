@@ -31,8 +31,8 @@ export default function page({params}) {
     const [initialIndex, setinitialIndex] = useState(Number)
 
     const [nextButton, setNextButton] = useState("")
-
-    const videosrc="https://files.heygen.ai/aws_pacific/avatar_tmp/7740845df6884d7e896875db7a46faf8/7ba707a3da1a40cdac5edb6b77f83e76.mp4?Expires=1709637238&Signature=jUyvwpJfRmi0STMWiWcx18tF8FYRnFLW257t6J7eJF5qu4-xbu7Ubw0lME9w-8HL62kkgSxoKusIDEvhINajxuNzXyg8GD09-NJlDRlSaoamZjHTrvngJ0npcIWIi9A2jFHwDd2kT35F9-wrFKyRIhFF~3lFQ0Wg0zCy9VN2tFguSoLDb7X5R7S0K87Lvtna3Y10hoRPCGLorS8jTM1I7MSQulmvtQb8D3wUy0JGGfgGkBtC0z-4FbHFFijjvt612pUmE5~OvFAE5TrDShIPkKKlmINKAxnvG4i~1~SRzgIuSXp6hXphLpnpXTpZaHaJBI6s3HQaQWj15AFEznYBsQ__&Key-Pair-Id=K49TZTO9GZI6K"
+    var displayURLs=[]
+    //const videosrc="https://files.heygen.ai/aws_pacific/avatar_tmp/7740845df6884d7e896875db7a46faf8/7ba707a3da1a40cdac5edb6b77f83e76.mp4?Expires=1709637238&Signature=jUyvwpJfRmi0STMWiWcx18tF8FYRnFLW257t6J7eJF5qu4-xbu7Ubw0lME9w-8HL62kkgSxoKusIDEvhINajxuNzXyg8GD09-NJlDRlSaoamZjHTrvngJ0npcIWIi9A2jFHwDd2kT35F9-wrFKyRIhFF~3lFQ0Wg0zCy9VN2tFguSoLDb7X5R7S0K87Lvtna3Y10hoRPCGLorS8jTM1I7MSQulmvtQb8D3wUy0JGGfgGkBtC0z-4FbHFFijjvt612pUmE5~OvFAE5TrDShIPkKKlmINKAxnvG4i~1~SRzgIuSXp6hXphLpnpXTpZaHaJBI6s3HQaQWj15AFEznYBsQ__&Key-Pair-Id=K49TZTO9GZI6K"
     
 
 
@@ -50,19 +50,17 @@ export default function page({params}) {
           .then(response => response.json())
           .then(result => {
             if(result.success){
-                console.log(result)
+                //console.log("result")
                 setvideoQuestionURLs(result.videoURLs)
                 setinterviewQuestions(result.job.interviewQuestions)
+                displayURLs = result.videoURLs
+                //console.log(displayURLs)
             }
         })
           .catch(error => console.log('error', error));
     }, [])
-
-    useEffect(() => {
-        console.log(interviewQuestions)
-        console.log(videoQuestionURLs)
     
-    }, [interviewQuestions,videoQuestionURLs])
+
 
     useEffect(() => {
         setIsDesktop(window.innerWidth >= 768);
@@ -93,6 +91,7 @@ export default function page({params}) {
       const handleStartCaptureClick = useCallback(() => {
         const startTimer = document.getElementById("startTimer");
         setinitialIndex(0)
+        console.log(displayURLs)
         if (startTimer) {
           startTimer.style.display = "none";
           setNextButton("Next")
@@ -101,7 +100,7 @@ export default function page({params}) {
         if (vidRef.current) {
           vidRef.current.play();
         }
-      }, [webcamRef, setCapturing, mediaRecorderRef]);
+      }, [webcamRef, setCapturing, mediaRecorderRef,displayURLs]);
     
       const handleDataAvailable = useCallback(
         ({ data }) => {
@@ -289,7 +288,16 @@ export default function page({params}) {
           setCameraLoaded(true);
         }, 1000);
       };
-    
+      
+      const handleNextButton = (e) => {
+          e.preventDefault();
+          setinitialIndex(initialIndex + 1)
+          if(interviewQuestions.length - 2 === initialIndex){
+            
+            setNextButton("EndInterview")
+            console.log("last question")
+          }
+      }
        
   return (
     <div>
@@ -354,7 +362,7 @@ export default function page({params}) {
             <div className="h-full w-full items-center flex flex-col mt-5">
               {recordingPermission ? (
                 <div className="w-full flex flex-col max-w-[1080px] mx-auto justify-center">
-                  
+                  {/* These buttons will be activated after video starts. We will show questions then. */}
                   {(nextButton==="Next" || nextButton==="EndInterview") && (
                     <>
                     <h2 className="text-xl font-semibold text-left text-[#1D2B3A] mb-2">
@@ -418,7 +426,7 @@ export default function page({params}) {
                               crossOrigin="anonymous"
                             >
                               <source
-                                src={videoQuestionURLs[initialIndex]}
+                                src={displayURLs[initialIndex]}
                                 
                                 type="video/mp4"
                               />
@@ -503,6 +511,7 @@ export default function page({params}) {
                                 {nextButton==="Next" &&(
                                     <button
                                     id="nextButton" 
+                                    onClick={(e)=>handleNextButton(e)}
                                     className="group mb-5 mr-5 rounded-lg px-4 py-2 text-[16px] transition-all flex items-center justify-end text-white bg-[#1E2B3A] hover:[linear-gradient(0deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.1)), #0D2247] no-underline flex gap-x-2  active:scale-95 scale-100 duration-75"
                                     >
                                         Next
