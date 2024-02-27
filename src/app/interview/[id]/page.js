@@ -4,6 +4,7 @@ import Webcam from "react-webcam";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { FaArrowRight } from "react-icons/fa6";
+import Loader from '../../../../loaders/Loader';
 
 
 export default function page({params}) {
@@ -30,15 +31,8 @@ export default function page({params}) {
     const [videoQuestionURLs, setvideoQuestionURLs] = useState([]);
     const [initialIndex, setinitialIndex] = useState(Number)
 
-    const [nextButton, setNextButton] = useState("")
-    var displayURLs=[]
-    //const videosrc="https://files.heygen.ai/aws_pacific/avatar_tmp/7740845df6884d7e896875db7a46faf8/7ba707a3da1a40cdac5edb6b77f83e76.mp4?Expires=1709637238&Signature=jUyvwpJfRmi0STMWiWcx18tF8FYRnFLW257t6J7eJF5qu4-xbu7Ubw0lME9w-8HL62kkgSxoKusIDEvhINajxuNzXyg8GD09-NJlDRlSaoamZjHTrvngJ0npcIWIi9A2jFHwDd2kT35F9-wrFKyRIhFF~3lFQ0Wg0zCy9VN2tFguSoLDb7X5R7S0K87Lvtna3Y10hoRPCGLorS8jTM1I7MSQulmvtQb8D3wUy0JGGfgGkBtC0z-4FbHFFijjvt612pUmE5~OvFAE5TrDShIPkKKlmINKAxnvG4i~1~SRzgIuSXp6hXphLpnpXTpZaHaJBI6s3HQaQWj15AFEznYBsQ__&Key-Pair-Id=K49TZTO9GZI6K"
-    
-
-
-
-
-    //Fetch job information and AI Video Questions on Page Load
+    const [nextButton, setNextButton] = useState("start")
+    const [isLoading, setisLoading] = useState(true)
     useEffect(() => {
     
         var requestOptions = {
@@ -50,11 +44,10 @@ export default function page({params}) {
           .then(response => response.json())
           .then(result => {
             if(result.success){
-                //console.log("result")
+                setisLoading(false)
                 setvideoQuestionURLs(result.videoURLs)
                 setinterviewQuestions(result.job.interviewQuestions)
-                displayURLs = result.videoURLs
-                //console.log(displayURLs)
+                
             }
         })
           .catch(error => console.log('error', error));
@@ -91,7 +84,7 @@ export default function page({params}) {
       const handleStartCaptureClick = useCallback(() => {
         const startTimer = document.getElementById("startTimer");
         setinitialIndex(0)
-        console.log(displayURLs)
+        
         if (startTimer) {
           startTimer.style.display = "none";
           setNextButton("Next")
@@ -100,7 +93,7 @@ export default function page({params}) {
         if (vidRef.current) {
           vidRef.current.play();
         }
-      }, [webcamRef, setCapturing, mediaRecorderRef,displayURLs]);
+      }, [webcamRef, setCapturing, mediaRecorderRef]);
     
       const handleDataAvailable = useCallback(
         ({ data }) => {
@@ -283,10 +276,10 @@ export default function page({params}) {
         : { width: 480, height: 640, facingMode: "user" };
     
       const handleUserMedia = () => {
-        setTimeout(() => {
           setLoading(false);
           setCameraLoaded(true);
-        }, 1000);
+        // setTimeout(() => {
+        // }, 1000);
       };
       
       const handleNextButton = (e) => {
@@ -297,7 +290,21 @@ export default function page({params}) {
             setNextButton("EndInterview")
             console.log("last question")
           }
+          if (vidRef.current) {
+            
+            vidRef.current.play();
+          }
+          
       }
+      useEffect(() => {
+        // Update video source based on initialIndex and videoQuestionURLs
+        if (vidRef.current && videoQuestionURLs.length > 0 &&initialIndex>0) {
+          vidRef.current.src = videoQuestionURLs[initialIndex];
+          vidRef.current.load(); // Reload the video source
+          vidRef.current.play(); // Play the video
+        }
+      }, [videoQuestionURLs, initialIndex]);
+    
        
   return (
     <div>
@@ -416,21 +423,26 @@ export default function page({params}) {
                       {isVisible && ( // If the video is visible (on screen) we show it
                         <div className="block absolute top-[10px] sm:top-[20px] lg:top-[40px] left-auto right-[10px] sm:right-[20px] md:right-10 h-[80px] sm:h-[140px] md:h-[180px] aspect-video rounded z-20">
                           <div className="h-full w-full aspect-video rounded md:rounded-lg lg:rounded-xl">
-                            <video
-                              id="question-video"
-                              onEnded={() => setVideoEnded(true)}
-                              controls={false}
-                              ref={vidRef}
-                              playsInline
-                              className="h-full object-cover w-full rounded-md md:rounded-[12px] aspect-video"
-                              crossOrigin="anonymous"
-                            >
-                              <source
-                                src={displayURLs[initialIndex]}
+                          {isLoading ? (
+                            // Render the video player once videoQuestionURLs is available
+                            //onEnded={() => setVideoEnded(true)}
+                            <div className='flex justify-center'>
+                                Loading...
+                            </div>
+                            
+                            ) : (
+                                <video
+                                id="question-video"
                                 
-                                type="video/mp4"
-                              />
-                            </video>
+                                controls={false}
+                                ref={vidRef}
+                                playsInline
+                                className="h-full object-cover w-full rounded-md md:rounded-[12px] aspect-video"
+                                crossOrigin="anonymous"
+                                >
+                                <source src={videoQuestionURLs[initialIndex]} type="video/mp4" />
+                                </video>
+                            )}
                           </div>
                         </div>
                       )}
@@ -493,12 +505,14 @@ export default function page({params}) {
                         ) : (
                           <div className="absolute bottom-[6px] md:bottom-5 left-5 right-5">
                             <div className="lg:mt-4 flex flex-col items-center justify-center gap-2">
-                              
+                              {nextButton==="start" && (
+
                                 <button
                                   id="startTimer"
                                   onClick={handleStartCaptureClick}
                                   className="flex h-8 w-8 sm:h-8 sm:w-8 flex-col items-center justify-center rounded-full bg-red-500 text-white hover:shadow-xl ring-4 ring-white ring-offset-gray-500 ring-offset-2 active:scale-95 scale-100 duration-75"
                                 ></button>
+                              )}
                                 
                                 
                                 
