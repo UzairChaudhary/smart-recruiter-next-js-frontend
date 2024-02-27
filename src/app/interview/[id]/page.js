@@ -3,6 +3,7 @@ import React, {useRef, useState, useEffect, useCallback} from 'react'
 import Webcam from "react-webcam";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { FaArrowRight } from "react-icons/fa6";
 
 
 export default function page({params}) {
@@ -27,9 +28,11 @@ export default function page({params}) {
 
     const [interviewQuestions, setinterviewQuestions] = useState([]);
     const [videoQuestionURLs, setvideoQuestionURLs] = useState([]);
+    const [initialIndex, setinitialIndex] = useState(Number)
 
+    const [nextButton, setNextButton] = useState("")
 
-
+    const videosrc="https://files.heygen.ai/aws_pacific/avatar_tmp/7740845df6884d7e896875db7a46faf8/7ba707a3da1a40cdac5edb6b77f83e76.mp4?Expires=1709637238&Signature=jUyvwpJfRmi0STMWiWcx18tF8FYRnFLW257t6J7eJF5qu4-xbu7Ubw0lME9w-8HL62kkgSxoKusIDEvhINajxuNzXyg8GD09-NJlDRlSaoamZjHTrvngJ0npcIWIi9A2jFHwDd2kT35F9-wrFKyRIhFF~3lFQ0Wg0zCy9VN2tFguSoLDb7X5R7S0K87Lvtna3Y10hoRPCGLorS8jTM1I7MSQulmvtQb8D3wUy0JGGfgGkBtC0z-4FbHFFijjvt612pUmE5~OvFAE5TrDShIPkKKlmINKAxnvG4i~1~SRzgIuSXp6hXphLpnpXTpZaHaJBI6s3HQaQWj15AFEznYBsQ__&Key-Pair-Id=K49TZTO9GZI6K"
     
 
 
@@ -54,6 +57,12 @@ export default function page({params}) {
         })
           .catch(error => console.log('error', error));
     }, [])
+
+    useEffect(() => {
+        console.log(interviewQuestions)
+        console.log(videoQuestionURLs)
+    
+    }, [interviewQuestions,videoQuestionURLs])
 
     useEffect(() => {
         setIsDesktop(window.innerWidth >= 768);
@@ -83,8 +92,10 @@ export default function page({params}) {
     
       const handleStartCaptureClick = useCallback(() => {
         const startTimer = document.getElementById("startTimer");
+        setinitialIndex(0)
         if (startTimer) {
           startTimer.style.display = "none";
+          setNextButton("Next")
         }
     
         if (vidRef.current) {
@@ -285,7 +296,7 @@ export default function page({params}) {
        <div className="w-full min-h-screen flex flex-col px-4 pt-2 pb-8 md:px-8 md:py-2 bg-[#FCFCFC] relative overflow-x-hidden">
           
           {completed ? (
-            <div className="w-full flex flex-col max-w-[1080px] mx-auto mt-[10vh] overflow-y-auto pb-8 md:pb-12">
+            <div className="w-full flex flex-col max-w-[1080px] mx-auto overflow-y-auto pb-8 md:pb-12">
               <motion.div
                 initial={{ y: 20 }}
                 animate={{ y: 0 }}
@@ -340,12 +351,20 @@ export default function page({params}) {
               </motion.div>
             </div>
           ) : (
-            <div className="h-full w-full items-center flex flex-col mt-[10vh]">
+            <div className="h-full w-full items-center flex flex-col mt-5">
               {recordingPermission ? (
                 <div className="w-full flex flex-col max-w-[1080px] mx-auto justify-center">
-                  <h2 className="text-2xl font-semibold text-left text-[#1D2B3A] mb-2">
-                    {interviewQuestions[0]}
+                  
+                  {(nextButton==="Next" || nextButton==="EndInterview") && (
+                    <>
+                    <h2 className="text-xl font-semibold text-left text-[#1D2B3A] mb-2">
+                    Question: 0{initialIndex+1}
                   </h2>
+                  <h2 className="text-2xl font-semibold text-left text-[#1D2B3A] mb-2">
+                    {interviewQuestions[initialIndex]}
+                  </h2>
+                    </>
+                  )}
                   
                   <motion.div
                     initial={{ y: -20 }}
@@ -399,7 +418,7 @@ export default function page({params}) {
                               crossOrigin="anonymous"
                             >
                               <source
-                                src={videoQuestionURLs[0]}
+                                src={videoQuestionURLs[initialIndex]}
                                 
                                 type="video/mp4"
                               />
@@ -434,7 +453,7 @@ export default function page({params}) {
                       <div className="absolute bottom-0 left-0 z-50 flex h-[82px] w-full items-center justify-center">
                         {recordedChunks.length > 0 ? (
                           <>
-                            {isSuccess ? (
+                            {isSuccess && (
                               <button
                                 className="cursor-disabled group rounded-full min-w-[140px] px-4 py-2 text-[13px] font-semibold group inline-flex items-center justify-center text-sm text-white duration-150 bg-green-500 hover:bg-green-600 hover:text-slate-100 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600 active:scale-100 active:bg-green-800 active:text-green-100"
                                 style={{
@@ -460,100 +479,45 @@ export default function page({params}) {
                                   />
                                 </svg>
                               </button>
-                            ) : (
-                              <div className="flex flex-row gap-2">
-                                {!isSubmitting && (
-                                  <button
-                                    onClick={() => restartVideo()}
-                                    className="group rounded-full px-4 py-2 text-[13px] font-semibold transition-all flex items-center justify-center bg-white text-[#1E2B3A] hover:[linear-gradient(0deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.1)), #0D2247] no-underline flex gap-x-2  active:scale-95 scale-100 duration-75"
-                                  >
-                                    Restart
-                                  </button>
-                                )}
-                                <button
-                                  onClick={handleDownload}
-                                  disabled={isSubmitting}
-                                  className="group rounded-full min-w-[140px] px-4 py-2 text-[13px] font-semibold transition-all flex items-center justify-center bg-[#1E2B3A] text-white hover:[linear-gradient(0deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.1)), #0D2247] no-underline flex  active:scale-95 scale-100 duration-75  disabled:cursor-not-allowed"
-                                  style={{
-                                    boxShadow:
-                                      "0px 1px 4px rgba(13, 34, 71, 0.17), inset 0px 0px 0px 1px #061530, inset 0px 0px 0px 2px rgba(255, 255, 255, 0.1)",
-                                  }}
-                                >
-                                  <span>
-                                    {isSubmitting ? (
-                                      <div className="flex items-center justify-center gap-x-2">
-                                        <svg
-                                          className="animate-spin h-5 w-5 text-slate-50 mx-auto"
-                                          xmlns="http://www.w3.org/2000/svg"
-                                          fill="none"
-                                          viewBox="0 0 24 24"
-                                        >
-                                          <circle
-                                            className="opacity-25"
-                                            cx="12"
-                                            cy="12"
-                                            r="10"
-                                            stroke="currentColor"
-                                            strokeWidth={3}
-                                          ></circle>
-                                          <path
-                                            className="opacity-75"
-                                            fill="currentColor"
-                                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                                          ></path>
-                                        </svg>
-                                        <span>{status}</span>
-                                      </div>
-                                    ) : (
-                                      <div className="flex items-center justify-center gap-x-2">
-                                        <span>Process transcript</span>
-                                        <svg
-                                          className="w-5 h-5"
-                                          viewBox="0 0 24 24"
-                                          fill="none"
-                                          xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                          <path
-                                            d="M13.75 6.75L19.25 12L13.75 17.25"
-                                            stroke="white"
-                                            strokeWidth="1.5"
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                          />
-                                          <path
-                                            d="M19 12H4.75"
-                                            stroke="white"
-                                            strokeWidth="1.5"
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                          />
-                                        </svg>
-                                      </div>
-                                    )}
-                                  </span>
-                                </button>
-                              </div>
+                            
                             )}
                           </>
                         ) : (
                           <div className="absolute bottom-[6px] md:bottom-5 left-5 right-5">
                             <div className="lg:mt-4 flex flex-col items-center justify-center gap-2">
-                              {capturing ? (
-                                <div
-                                  id="stopTimer"
-                                  onClick={handleStopCaptureClick}
-                                  className="flex h-10 w-10 flex-col items-center justify-center rounded-full bg-transparent text-white hover:shadow-xl ring-4 ring-white  active:scale-95 scale-100 duration-75 cursor-pointer"
-                                >
-                                  <div className="h-5 w-5 rounded bg-red-500 cursor-pointer"></div>
-                                </div>
-                              ) : (
+                              
                                 <button
                                   id="startTimer"
                                   onClick={handleStartCaptureClick}
                                   className="flex h-8 w-8 sm:h-8 sm:w-8 flex-col items-center justify-center rounded-full bg-red-500 text-white hover:shadow-xl ring-4 ring-white ring-offset-gray-500 ring-offset-2 active:scale-95 scale-100 duration-75"
                                 ></button>
-                              )}
-                              <div className="w-12"></div>
+                                
+                                
+                                
+                                {/*Show next question button after start recording*/}
+                                
+                              
+                              
+                            </div>
+                            <div className='flex justify-end'>
+                                {nextButton==="Next" &&(
+                                    <button
+                                    id="nextButton" 
+                                    className="group mb-5 mr-5 rounded-lg px-4 py-2 text-[16px] transition-all flex items-center justify-end text-white bg-[#1E2B3A] hover:[linear-gradient(0deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.1)), #0D2247] no-underline flex gap-x-2  active:scale-95 scale-100 duration-75"
+                                    >
+                                        Next
+                                        <FaArrowRight/>
+                                    </button>
+                                )}
+                                {nextButton==="EndInterview" &&(
+                                    <button
+                                    id="EndInterview" 
+                                    className="group mb-5 mr-5 rounded-lg px-4 py-2 text-[16px] transition-all flex items-center justify-end text-white bg-[#1E2B3A] hover:[linear-gradient(0deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.1)), #0D2247] no-underline flex gap-x-2  active:scale-95 scale-100 duration-75"
+                                    >
+                                        End Interview
+                                        <FaArrowRight/>
+                                    </button>
+                                )}
                             </div>
                           </div>
                         )}
