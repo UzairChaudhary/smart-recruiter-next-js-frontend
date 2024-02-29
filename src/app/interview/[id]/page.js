@@ -109,6 +109,7 @@ export default function page({params}) {
           mediaRecorderRef.current.stop();
         }
         setCapturing(false);
+        setCompleted(true)
       }, [mediaRecorderRef, webcamRef, setCapturing]);
     
       useEffect(() => {
@@ -118,7 +119,10 @@ export default function page({params}) {
             setSeconds((seconds) => seconds - 1);
           }, 1000);
           if (seconds === 0) {
-            handleStopCaptureClick();
+            if(nextButton==="Next"){
+              handleNextButton()
+            }
+            else handleStopCaptureClick();
             setCapturing(false);
             setSeconds(0);
           }
@@ -303,7 +307,7 @@ export default function page({params}) {
           vidRef.current.load(); // Reload the video source
           vidRef.current.play(); // Play the video
         }
-      }, [videoQuestionURLs, initialIndex]);
+      }, [videoQuestionURLs, initialIndex, isLoading]);
     
        
   return (
@@ -311,59 +315,8 @@ export default function page({params}) {
        <div className="w-full min-h-screen flex flex-col px-4 pt-2 pb-8 md:px-8 md:py-2 bg-[#FCFCFC] relative overflow-x-hidden">
           
           {completed ? (
-            <div className="w-full flex flex-col max-w-[1080px] mx-auto overflow-y-auto pb-8 md:pb-12">
-              <motion.div
-                initial={{ y: 20 }}
-                animate={{ y: 0 }}
-                transition={{ duration: 0.35, ease: [0.075, 0.82, 0.165, 1] }}
-                className="relative md:aspect-[16/9] w-full max-w-[1080px] overflow-hidden bg-[#1D2B3A] rounded-lg ring-1 ring-gray-900/5 shadow-md flex flex-col items-center justify-center"
-              >
-                <video
-                  className="w-full h-full rounded-lg"
-                  controls
-                  crossOrigin="anonymous"
-                  autoPlay
-                >
-                  <source
-                    src={URL.createObjectURL(
-                      new Blob(recordedChunks, { type: "video/mp4" })
-                    )}
-                    type="video/mp4"
-                  />
-                </video>
-              </motion.div>
-              
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{
-                  delay: 0.5,
-                  duration: 0.15,
-                  ease: [0.23, 1, 0.82, 1],
-                }}
-                className="mt-8 flex flex-col"
-              >
-                <div>
-                  <h2 className="text-xl font-semibold text-left text-[#1D2B3A] mb-2">
-                    Transcript
-                  </h2>
-                  <p className="prose prose-sm max-w-none">
-                    {transcript.length > 0
-                      ? transcript
-                      : "Don't think you said anything. Want to try again?"}
-                  </p>
-                </div>
-                <div className="mt-8">
-                  <h2 className="text-xl font-semibold text-left text-[#1D2B3A] mb-2">
-                    Feedback
-                  </h2>
-                  <div className="mt-4 text-sm flex gap-2.5 rounded-lg border border-[#EEEEEE] bg-[#FAFAFA] p-4 leading-6 text-gray-900 min-h-[100px]">
-                    <p className="prose prose-sm max-w-none">
-                      {generatedFeedback}
-                    </p>
-                  </div>
-                </div>
-              </motion.div>
+            <div>
+              Interview completed
             </div>
           ) : (
             <div className="h-full w-full items-center flex flex-col mt-5">
@@ -372,12 +325,16 @@ export default function page({params}) {
                   {/* These buttons will be activated after video starts. We will show questions then. */}
                   {(nextButton==="Next" || nextButton==="EndInterview") && (
                     <>
-                    <h2 className="text-xl font-semibold text-left text-[#1D2B3A] mb-2">
+                    {isLoading ? (<Loader/>):(
+                      <>
+                      <h2 className="text-xl font-semibold text-left text-[#1D2B3A] mb-2">
                     Question: 0{initialIndex+1}
                   </h2>
                   <h2 className="text-2xl font-semibold text-left text-[#1D2B3A] mb-2">
                     {interviewQuestions[initialIndex]}
                   </h2>
+                      </>
+                    )}
                     </>
                   )}
                   
@@ -510,6 +467,7 @@ export default function page({params}) {
                                 <button
                                   id="startTimer"
                                   onClick={handleStartCaptureClick}
+                                  disabled={isLoading}
                                   className="flex h-8 w-8 sm:h-8 sm:w-8 flex-col items-center justify-center rounded-full bg-red-500 text-white hover:shadow-xl ring-4 ring-white ring-offset-gray-500 ring-offset-2 active:scale-95 scale-100 duration-75"
                                 ></button>
                               )}
@@ -535,6 +493,7 @@ export default function page({params}) {
                                 {nextButton==="EndInterview" &&(
                                     <button
                                     id="EndInterview" 
+                                    onClick={handleStopCaptureClick}
                                     className="group mb-5 mr-5 rounded-lg px-4 py-2 text-[16px] transition-all flex items-center justify-end text-white bg-[#1E2B3A] hover:[linear-gradient(0deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.1)), #0D2247] no-underline flex gap-x-2  active:scale-95 scale-100 duration-75"
                                     >
                                         End Interview
@@ -565,9 +524,7 @@ export default function page({params}) {
                     className="relative md:aspect-[16/9] w-full max-w-[1080px] overflow-hidden bg-[#1D2B3A] rounded-lg ring-1 ring-gray-900/5 shadow-md flex flex-col items-center justify-center"
                   >
                     <p className="text-white font-medium text-lg text-center max-w-3xl">
-                      Camera permission is denied. We don{`'`}t store your
-                      attempts anywhere, but we understand not wanting to give
-                      us access to your camera. Try again by opening this page
+                      Camera permission is denied.Try again by opening this page
                       in an incognito window {`(`}or enable permissions in your
                       browser settings{`)`}.
                     </p>
@@ -580,7 +537,7 @@ export default function page({params}) {
                         boxShadow: "0 1px 1px #0c192714, 0 1px 3px #0c192724",
                       }}
                     >
-                      Restart demo
+                      Restart Interview
                     </button>
                     
                   </div>
