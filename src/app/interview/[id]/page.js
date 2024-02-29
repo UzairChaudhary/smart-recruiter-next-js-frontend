@@ -9,11 +9,13 @@ import Loader from '../../../../loaders/Loader';
 
 export default function page({params}) {
     const [loading, setLoading] = useState(true);
+
     const webcamRef = useRef(null);
     const mediaRecorderRef = useRef(null);
     const [capturing, setCapturing] = useState(false);
     const [recordedChunks, setRecordedChunks] = useState([]);
-    const [seconds, setSeconds] = useState(150);
+
+    const [seconds, setSeconds] = useState(60);
     const [videoEnded, setVideoEnded] = useState(false);
     const [recordingPermission, setRecordingPermission] = useState(true);
     const [cameraLoaded, setCameraLoaded] = useState(false);
@@ -93,6 +95,15 @@ export default function page({params}) {
         if (vidRef.current) {
           vidRef.current.play();
         }
+        setCapturing(true);
+    navigator.mediaDevices
+      .getUserMedia({ video: true, audio: true }) // Adjust audio if needed
+      .then((stream) => {
+        mediaRecorderRef.current = new MediaRecorder(stream);
+        mediaRecorderRef.current.ondataavailable = (e) =>
+          setRecordedChunks([...recordedChunks, e.data]);
+        mediaRecorderRef.current.start();
+      });
       }, [webcamRef, setCapturing, mediaRecorderRef]);
     
       const handleDataAvailable = useCallback(
@@ -110,6 +121,7 @@ export default function page({params}) {
         }
         setCapturing(false);
         setCompleted(true)
+        handleDownload()
       }, [mediaRecorderRef, webcamRef, setCapturing]);
     
       useEffect(() => {
@@ -122,18 +134,20 @@ export default function page({params}) {
             if(nextButton==="Next"){
               handleNextButton()
             }
-            else handleStopCaptureClick();
-            setCapturing(false);
+            else {
+              handleStopCaptureClick()
+              setCapturing(false);
+            };
             setSeconds(0);
           }
         }
         return () => {
           clearInterval(timer);
         };
-      });
+      },[initialIndex]);
 
     
-      const handleDownload = async () => {
+      const handleDownloadVideo = async () => {
         if (recordedChunks.length) {
           setSubmitting(true);
           setStatus("Processing");
@@ -309,14 +323,29 @@ export default function page({params}) {
         }
       }, [videoQuestionURLs, initialIndex, isLoading]);
     
-       
+      const handleDownload = () => {
+        if (recordedChunks.length) {
+          const blob = new Blob(recordedChunks, { type: "video/webm" });
+          const url = window.URL.createObjectURL(blob);
+          const video = document.getElementById("video-replay");
+          video.src = url;
+          video.controls = true;
+          video.play();
+        }
+      };
   return (
     <div>
        <div className="w-full min-h-screen flex flex-col px-4 pt-2 pb-8 md:px-8 md:py-2 bg-[#FCFCFC] relative overflow-x-hidden">
           
           {completed ? (
-            <div>
-              Interview completed
+            <div className="webcam-capture">
+            <video id="video-replay" height={400} width={500} controls style={{ display: capturing ? "none" : "block" }} />
+            
+            {recordedChunks.length > 0 && (
+              <button className="" onClick={handleDownload}>
+                Download
+              </button>
+            )}
             </div>
           ) : (
             <div className="h-full w-full items-center flex flex-col mt-5">
@@ -462,7 +491,7 @@ export default function page({params}) {
                         ) : (
                           <div className="absolute bottom-[6px] md:bottom-5 left-5 right-5">
                             <div className="lg:mt-4 flex flex-col items-center justify-center gap-2">
-                              {nextButton==="start" && (
+                              {(nextButton==="start" && !isLoading) && (
 
                                 <button
                                   id="startTimer"
@@ -510,7 +539,35 @@ export default function page({params}) {
                       id="countdown"
                     ></div>
                   </motion.div>
-                  
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{
+                      delay: 0.5,
+                      duration: 0.15,
+                      ease: [0.23, 1, 0.82, 1],
+                    }}
+                    className="flex flex-row space-x-1 mt-4 items-center"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={2}
+                      stroke="currentColor"
+                      className="w-4 h-4 text-[#407BBF]"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"
+                      />
+                    </svg>
+                    <p className="text-[14px] font-normal leading-[20px] text-[#1a2b3b]">
+                      Video is not stored on our servers, it is solely used for
+                      analysis.
+                    </p>
+                  </motion.div>
                 </div>
               ) : (
                 <div className="w-full flex flex-col max-w-[1080px] mx-auto justify-center">
