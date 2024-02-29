@@ -16,6 +16,7 @@ export default function page({params}) {
     const [recordedChunks, setRecordedChunks] = useState([]);
 
     const [seconds, setSeconds] = useState(60);
+    const [timer, setTimer] = useState(null)
     const [videoEnded, setVideoEnded] = useState(false);
     const [recordingPermission, setRecordingPermission] = useState(true);
     const [cameraLoaded, setCameraLoaded] = useState(false);
@@ -124,27 +125,31 @@ export default function page({params}) {
         handleDownload()
       }, [mediaRecorderRef, webcamRef, setCapturing]);
     
+
       useEffect(() => {
-        let timer = null;
         if (capturing) {
-          timer = setInterval(() => {
-            setSeconds((seconds) => seconds - 1);
-          }, 1000);
-          if (seconds === 0) {
-            if(nextButton==="Next"){
-              handleNextButton()
-            }
-            else {
-              handleStopCaptureClick()
-              setCapturing(false);
-            };
-            setSeconds(0);
-          }
+          setTimer(
+            setInterval(() => {
+              setSeconds((prevSeconds) => {
+                const newSeconds = prevSeconds - 1;
+                if (newSeconds === 0) {
+                  if (nextButton==="Next"){
+                    handleNextButton(); // Automatically call handleNextButton when timer reaches 0
+                  }
+                  else handleStopCaptureClick()
+                }
+                return newSeconds;
+              });
+            }, 1000)
+          );
+        } else {
+          clearInterval(timer); // Clear timer when not capturing
+          setTimer(null);
         }
-        return () => {
-          clearInterval(timer);
-        };
-      },[initialIndex]);
+      
+        return () => clearInterval(timer);
+      }, [capturing,initialIndex]);
+      
 
     
       const handleDownloadVideo = async () => {
@@ -300,8 +305,8 @@ export default function page({params}) {
         // }, 1000);
       };
       
-      const handleNextButton = (e) => {
-          e.preventDefault();
+      const handleNextButton = () => {
+          //e.preventDefault();
           setinitialIndex(initialIndex + 1)
           if(interviewQuestions.length - 2 === initialIndex){
             
@@ -312,6 +317,7 @@ export default function page({params}) {
             
             vidRef.current.play();
           }
+          setSeconds(60); // Reset timer to 60 seconds on next question
           
       }
       useEffect(() => {
@@ -412,8 +418,11 @@ export default function page({params}) {
                           {isLoading ? (
                             // Render the video player once videoQuestionURLs is available
                             //onEnded={() => setVideoEnded(true)}
-                            <div className='flex justify-center'>
-                                Loading...
+                            <div 
+                            className="h-full border bg-white object-cover w-full flex justify-center items-center text-black rounded-md md:rounded-[12px] aspect-video"
+
+                            >
+                                Loading AI Interviewer
                             </div>
                             
                             ) : (
@@ -512,7 +521,7 @@ export default function page({params}) {
                                 {nextButton==="Next" &&(
                                     <button
                                     id="nextButton" 
-                                    onClick={(e)=>handleNextButton(e)}
+                                    onClick={()=>handleNextButton()}
                                     className="group mb-5 mr-5 rounded-lg px-4 py-2 text-[16px] transition-all flex items-center justify-end text-white bg-[#1E2B3A] hover:[linear-gradient(0deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.1)), #0D2247] no-underline flex gap-x-2  active:scale-95 scale-100 duration-75"
                                     >
                                         Next
@@ -581,7 +590,7 @@ export default function page({params}) {
                     className="relative md:aspect-[16/9] w-full max-w-[1080px] overflow-hidden bg-[#1D2B3A] rounded-lg ring-1 ring-gray-900/5 shadow-md flex flex-col items-center justify-center"
                   >
                     <p className="text-white font-medium text-lg text-center max-w-3xl">
-                      Camera permission is denied.Try again by opening this page
+                      Camera permission is denied. Your video will be solely used for analysis purposes. It will be deleted as you end the interview. Try again by opening this page
                       in an incognito window {`(`}or enable permissions in your
                       browser settings{`)`}.
                     </p>
