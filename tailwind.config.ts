@@ -73,6 +73,7 @@ const config: Config = {
         },
       };
       addUtilities(newUtilities);
+      
     }),
   ],
 }

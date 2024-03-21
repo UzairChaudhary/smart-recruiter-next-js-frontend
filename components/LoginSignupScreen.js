@@ -835,6 +835,7 @@ const LoginSignupScreen = ({ onClose }) => {
 
         }
         {selectedOption==="forgetpassword" &&(
+          
           <div className="flex flex-col items-center mt-5">
             <div className="text-center">
               <h1 className="text-2xl font-semibold font-poppins mb-2 text-black">Forgot Password</h1>
