@@ -11,7 +11,7 @@ import { getCookie, setCookie } from "cookies-next";
 import { useUiContext } from "../../../contexts/UiContext";
 import { actioTypes } from "../../../reducers/uiReducer";
 import Loader from "../../../loaders/Loader"
-const CreateJob = () => {
+const MyProfile = () => {
     const [user, setUser] = useState();
     const [fileURL, setfileURL] = useState(null);
     const logoInput = useRef(null);
@@ -247,4 +247,4 @@ useEffect(() => {
   );
 };
 
-export default CreateJob;
+export default MyProfile;
