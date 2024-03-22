@@ -46,10 +46,10 @@ useEffect(() => {
         
         }
         else{
-            console.log("result success false")
+            //console.log("result success false")
           
         }
-        console.log(user)
+        //console.log(user)
     })
       .catch(error => console.log('error', error));
 }, [])
