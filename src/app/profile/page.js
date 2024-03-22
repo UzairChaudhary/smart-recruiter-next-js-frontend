@@ -80,7 +80,7 @@ useEffect(() => {
               }
         } else {
           setIsLoading(false)
-          console.log('NO Changes');
+          //console.log('NO Changes');
           toast.error("You haven't made any changes to your profile");
           return
         }
