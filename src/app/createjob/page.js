@@ -205,7 +205,8 @@ useEffect(() => {
       "descriptionFile": URL,
       "jobType":jobtype,
       "experienceLevel":experience,
-      "skills":tags
+      "skills":tags,
+      "interviewQuestions":questions
       
     });
     console.log(raw1)
@@ -428,6 +429,7 @@ useEffect(() => {
                 type="text"
                 className="input"
                 value={question}
+                disabled={questions.length >= 5}
                 onChange={(e) => setquestion(e.target.value)}
                 required
               />
