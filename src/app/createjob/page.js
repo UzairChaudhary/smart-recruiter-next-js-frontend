@@ -24,10 +24,13 @@ const CreateJob = () => {
     const [tag, setTag] = useState();
     const [tags, setTags] = useState([]);
 
+    const [question, setquestion] = useState()
+    const [questions, setquestions] = useState([])
+
     const router = useRouter()
 
     const [jobType1, setJobType1] = useState("");
-  const [jobType2, setJobType2] = useState("");
+    const [jobType2, setJobType2] = useState("");
 
   const handleJobType1Change = (event) => {
     setJobType1(event.target.value);
@@ -69,19 +72,33 @@ useEffect(() => {
     })
       .catch(error => console.log('error', error));
 }, [])
-
-    const handleSubmit = (e) => {
+  //Handle submit for questions
+    const handleSubmitQuestions = (e) => {
         e.preventDefault();
-        if (tag && !tags.includes(tag)) {
-          setTags([...tags, tag]);
+        if (question && !questions.includes(question)) {
+          setquestions([...questions, question]);
         }
-        setTag("");
-        //console.log(tags)
+        setquestion("");
+        
     };
 
-    const removeTag = (index) => {
-        setTags(tags.filter((_, i) => i !== index));
+    const removeQuestion = (index) => {
+        setquestions(questions.filter((_, i) => i !== index));
       };
+
+    //handle submit for skills
+    const handleSubmit = (e) => {
+      e.preventDefault();
+      if (tag && !tags.includes(tag)) {
+        setTags([...tags, tag]);
+      }
+      setTag("");
+      //console.log(tags)
+  };
+
+  const removeTag = (index) => {
+      setTags(tags.filter((_, i) => i !== index));
+    };
 
       useEffect(() => {
         //console.log("fileURL:", fileURL);
@@ -237,7 +254,7 @@ useEffect(() => {
           
         </button>
         <h1 className='text-md font-poppins absolute top-40 mt-1 left-48  text-white'>Home / Post Job</h1>
-        <div className="avatar font-poppins absolute top-40 mt-12 left-48 flex items-center" suppressHydrationWarning={true}>
+        <div className="avatar gap-1 font-poppins absolute top-40 mt-12 left-48 flex items-center" suppressHydrationWarning={true}>
  
             <div className="w-28 ">
                 <img src={user?.avatar} className="rounded-full border border-blue_color" />
@@ -353,7 +370,7 @@ useEffect(() => {
 
         {/*JOB TYPE 2*/}
 
-        <div className="jobtype-card ">
+        <div className="jobtype-card mb-4 ">
   
           <form>
             
@@ -402,7 +419,39 @@ useEffect(() => {
           </form>
           
         </div>
+        {/*Add Interview Questions*/}
+        <div>
+          <form className=" " onSubmit={handleSubmitQuestions}>
+            <div className="form-input w-full sm:flex-1 relative">
+              
+              <input
+                type="text"
+                className="input"
+                value={question}
+                onChange={(e) => setquestion(e.target.value)}
+                required
+              />
+              <label htmlFor="name">Add 5 Interview Questions</label>
+            </div>
 
+            <div className="flex flex-col mb-5 gap-2 flex-wrap">
+              {questions?.map(( question, index ) => (
+                <div
+                  className="flex-center-between gap-3 px-2 py-2 mb-2 bg-blue_color rounded-lg text-white dark:bg-hover-color"
+                  key={index}
+                >
+                  <span className="text-sm capitalize">{question}</span>
+                  <div
+                    className="sm:cursor-pointer"
+                    onClick={() => removeQuestion(index)}
+                  >
+                    <FaTimes className="text-sm hover:text-black" />
+                  </div>
+                </div>
+              ))}
+              </div>
+          </form>
+        </div>
         
         {/* Upload Job description File */}
         <div className=" w-full sm:flex-1 relative border rounded-md border-slate-300 ">
