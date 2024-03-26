@@ -132,7 +132,7 @@ export default function JobDetails  ({params}) {
                                   {jobDetails?.skills?.map((skill, index) => (
                                     <span
                                       key={index}
-                                      className=" text-sm"
+                                      className=" "
                                       
                                     >
                                       {skill}

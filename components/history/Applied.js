@@ -29,7 +29,7 @@ const Applied = () => {
       .then(result => {
           
           if(result.success){
-              setjobs(result.jobs)
+              setjobs(result.jobs.reverse())
               
           }
       })
@@ -47,6 +47,7 @@ const Applied = () => {
         
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6  ml-20 mr-20  mt-5">
           {jobs
+          
           .map((job) => (
             <div
             
