@@ -19,6 +19,8 @@ const MyProfile = () => {
     const router = useRouter()
     const [isLoading, setIsLoading] = useState(false);
 
+    const [name, setname] = useState();
+
     const { dispatch } = useUiContext();
 
 useEffect(() => {
@@ -228,7 +230,17 @@ useEffect(() => {
 
         <div className="rounded max-w-3xl w-full mx-auto font-poppins">
         <h1 className="text-2xl font-medium mt-10 flex justify-center">Update Profile Information</h1>
-        
+        <div className="form-input w-full sm:flex-1 relative mt-5">
+            <input
+              type="text"
+              className="input"
+              value={name}
+              onChange={(e) => {setname(e.target.value)}}
+              required
+              
+            />
+            <label htmlFor="skills">Job Title</label>
+          </div>
         
         <button 
         className="bg-black_color text-white py-2 rounded-md w-full mt-4 hover:bg-opacity-90"
