@@ -191,7 +191,7 @@ useEffect(() => {
           <input
             type="file"
             accept="image/*" // Specify that only image files are accepted
-
+            className="border"
             hidden
             ref={logoInput}
             onChange={(e) => setLogo(e.target.files[0])}
@@ -209,13 +209,22 @@ useEffect(() => {
                 className="rounded-full border border-black_color"
               />
             ) : (
-              <div className="w-28 h-16 rounded-full grid place-items-center  top-1 -bottom-8 absolute dark:border-hover-color">
-                <img src={user?.avatar} className="rounded-full border border-blue_color"></img>
+              
+              <div className="w-28 h-16 rounded-full grid gap-5 place-items-center  top-1 -bottom-8 absolute dark:border-hover-color">
+                <img src={user?.avatar} className="rounded-full w-28 h-28 border border-blue_color"></img>
                 <FaCamera className="text-3xl opacity-60 dark:text-slate-500 absolute mt-32 " />
                 
               </div>
+              
+              
+              
             )}
           </div>
+          <div className="flex ml-32 flex-col w-80 mt-10">
+            <span className="text-lg font-bold mt-3">{user?.name}</span>
+            <span className="text-sm text-blue_color">{user?.email}</span>
+          </div>
+          
         
                 
             
@@ -229,17 +238,56 @@ useEffect(() => {
         
 
         <div className="rounded max-w-3xl w-full mx-auto font-poppins">
-        <h1 className="text-2xl font-medium mt-10 flex justify-center">Update Profile Information</h1>
-        <div className="form-input w-full sm:flex-1 relative mt-5">
+        <h1 className="text-2xl font-medium mt-14 flex justify-center mb-10 ">Update Profile Information</h1>
+        <label htmlFor="Name">Name</label>
+        <div className="form-input w-full sm:flex-1 relative mt-2">
             <input
               type="text"
               className="input"
               value={name}
               onChange={(e) => {setname(e.target.value)}}
+              
+              placeholder="Enter new name"
+              
+            />
+            
+          </div>
+          <label htmlFor="Email">Email</label>
+          <div className="form-input w-full sm:flex-1 relative mt-2">
+            <input
+              type="text"
+              className="input"
+              value={user?.email}
+              disabled
+              
               required
               
             />
-            <label htmlFor="skills">Job Title</label>
+            
+          </div>
+          <label htmlFor="Name">Change Password</label>
+        <div className="form-input w-full sm:flex-1 relative mt-2">
+            <input
+              type="text"
+              className="input"
+              value={name}
+              onChange={(e) => {setname(e.target.value)}}
+              placeholder="Enter new password"
+              
+            />
+            
+          </div>
+          <label htmlFor="Name">Re-type Password</label>
+        <div className="form-input w-full sm:flex-1 relative mt-2">
+            <input
+              type="text"
+              className="input"
+              value={name}
+              onChange={(e) => {setname(e.target.value)}}
+              placeholder="Retype the new password"
+              
+            />
+            
           </div>
         
         <button 
