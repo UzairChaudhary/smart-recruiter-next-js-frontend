@@ -7,6 +7,11 @@ import Footer from "../../../components/Footer";
 import { toast } from 'react-hot-toast';
 import { useRouter } from "next/navigation";
 import { getCookie, setCookie } from "cookies-next";
+import { FiLock, FiMail,FiEye, FiEyeOff} from "react-icons/fi";
+import { RxCross2 } from "react-icons/rx";
+import { GoPerson } from "react-icons/go";
+import { FcGoogle } from "react-icons/fc";
+import { RiLockPasswordLine  } from "react-icons/ri";
 
 import { useUiContext } from "../../../contexts/UiContext";
 import { actioTypes } from "../../../reducers/uiReducer";
@@ -19,9 +24,33 @@ const MyProfile = () => {
     const router = useRouter()
     const [isLoading, setIsLoading] = useState(false);
 
-    const [name, setname] = useState();
 
     const { dispatch } = useUiContext();
+
+
+    const [isNameFocused, setisNameFocused] = useState(false);
+    const [isEmailFocused, setIsEmailFocused] = useState(false);
+    const [isPasswordFocused, setIsPasswordFocused] = useState(false);
+    const [confirmPasswordFocused, setconfirmPasswordFocused] = useState(false);
+    const [formName, setFormName] = useState('');
+    const [formEmail, setFormEmail] = useState('');
+    const [formPassword, setFormPassword] = useState('');
+    const [formConfirmPassword, setFormConfirmPassword] = useState('');
+    const [isNameValid, setIsNameValid] = useState(true);
+    const [isEmailValid, setIsEmailValid] = useState(true);
+    const [isPasswordValid, setIsPasswordValid] = useState(true);
+    const [passwordsMatch, setPasswordsMatch] = useState(true);
+    const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+    const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = useState(false);
+  
+
+    const checkNameValidation = () => {
+      // Regular expression to match only numbers (no alphabets)
+      const numberRegex = /^\d+$/;
+    
+      // Use the test method of the regular expression to check if the formName matches the pattern
+      setIsNameValid(!numberRegex.test(formName));
+    };
 
 useEffect(() => {
     
@@ -60,27 +89,56 @@ useEffect(() => {
 
       useEffect(() => {
         //console.log("fileURL:", fileURL);
-        if (fileURL){
-          saveProfile(fileURL)
+        if (logo){
+          uploadFileToFirebase();
         }
-      }, [fileURL]);
+      }, [logo]);
     
       
       
     
-      const handleSaveProfile = async (e) => {
+      const handleSaveProfile = (e) => {
         e.preventDefault()
        setIsLoading(true)
-        if (logo) {
-            try {
-                // Upload file to Firebase
-                await uploadFileToFirebase();
+       // If any validation fails, return early
+    
+      
+       if (formName!=='' || formPassword!=='' || formConfirmPassword!=='' || logo ){
+        if (formName===user.name && formPassword==='' && formConfirmPassword==='' && logo===""){
+          toast.error('Your name is the same as before. Please enter new details');
+          setIsLoading(false)
+          return;
+        }
+        if (formName!==''){
+
+          if (!isNameValid) {
+            toast.error('Name should not contain any number');
+            setIsLoading(false)
+            return ;
+          }
+          user.name=formName
+        }
         
-              } catch (error) {
-                setIsLoading(false)
-                console.error('Error uploading file:', error);
-              }
-        } else {
+        if (formPassword!=='' || formConfirmPassword!==''){
+
+          if (!isPasswordValid) {
+            toast.error('Password must be atleast 6 characters');
+            setIsLoading(false)
+            return ;
+          }
+          if (!passwordsMatch) {
+            toast.error('Passwords are not matching');
+            setIsLoading(false)
+            return ;
+          }
+        }
+        
+        saveProfile()
+
+       }
+        
+
+        else {
           setIsLoading(false)
           //console.log('NO Changes');
           toast.error("You haven't made any changes to your profile");
@@ -104,10 +162,11 @@ useEffect(() => {
           const result = await response.json();
       
           console.log(result);
-      
+          console.log("old avatar: ",user.avatar)
           if (result.success) {
             // Update fileURL state
-            setfileURL(result.url);
+            user.avatar=result.url;
+            console.log("New : ",user.avatar)
           } else {
             // Handle the case where the upload was not successful
             console.error('File upload failed:', result.message);
@@ -118,13 +177,27 @@ useEffect(() => {
         }
       };
       
-      const saveProfile=(URL)=>{
+      const saveProfile=()=>{
         var myHeaders2 = new Headers();
     myHeaders2.append("Content-Type", "application/json");
-    var raw1 = JSON.stringify({
-      "avatar": URL
-      
-    });
+    var raw1;
+    if (formPassword!==''){
+
+      raw1 = JSON.stringify({
+        "avatar": user.avatar,
+        "name": user.name,
+        "password": formPassword
+        
+      });
+    }
+    else{
+      raw1 = JSON.stringify({
+        "avatar": user.avatar,
+        "name": user.name,
+        
+        
+      });
+    }
     console.log(raw1)
     
     var requestOptions = {
@@ -206,11 +279,11 @@ useEffect(() => {
               <img
                 src={URL.createObjectURL(logo)}
                 alt=""
-                className="rounded-full border border-black_color"
+                className="rounded-full borderw-28 h-28 border-blue_color"
               />
             ) : (
               
-              <div className="w-28 h-16 rounded-full grid gap-5 place-items-center  top-1 -bottom-8 absolute dark:border-hover-color">
+              <div className="w-28 h-16 rounded-full grid mb-8 place-items-center dark:border-hover-color">
                 <img src={user?.avatar} className="rounded-full w-28 h-28 border border-blue_color"></img>
                 <FaCamera className="text-3xl opacity-60 dark:text-slate-500 absolute mt-32 " />
                 
@@ -220,15 +293,16 @@ useEffect(() => {
               
             )}
           </div>
-          <div className="flex ml-32 flex-col w-80 mt-10">
-            <span className="text-lg font-bold mt-3">{user?.name}</span>
-            <span className="text-sm text-blue_color">{user?.email}</span>
-          </div>
+          
           
         
                 
             
             </div>
+            <div className="flex flex-col w-80 mt-8">
+            <span className="text-lg font-bold mt-3">{user?.name}</span>
+            <span className="text-sm text-blue_color">{user?.email}</span>
+          </div>
             
         
         </div>
@@ -237,65 +311,130 @@ useEffect(() => {
 
         
 
-        <div className="rounded max-w-3xl w-full mx-auto font-poppins">
+        <div className="rounded flex flex-col items-center mx-auto font-poppins">
         <h1 className="text-2xl font-medium mt-14 flex justify-center mb-10 ">Update Profile Information</h1>
-        <label htmlFor="Name">Name</label>
-        <div className="form-input w-full sm:flex-1 relative mt-2">
-            <input
-              type="text"
-              className="input"
-              value={name}
-              onChange={(e) => {setname(e.target.value)}}
-              
-              placeholder="Enter new name"
-              
-            />
-            
-          </div>
-          <label htmlFor="Email">Email</label>
-          <div className="form-input w-full sm:flex-1 relative mt-2">
-            <input
-              type="text"
-              className="input"
-              value={user?.email}
-              disabled
-              
-              required
-              
-            />
-            
-          </div>
-          <label htmlFor="Name">Change Password</label>
-        <div className="form-input w-full sm:flex-1 relative mt-2">
-            <input
-              type="text"
-              className="input"
-              value={name}
-              onChange={(e) => {setname(e.target.value)}}
-              placeholder="Enter new password"
-              
-            />
-            
-          </div>
-          <label htmlFor="Name">Re-type Password</label>
-        <div className="form-input w-full sm:flex-1 relative mt-2">
-            <input
-              type="text"
-              className="input"
-              value={name}
-              onChange={(e) => {setname(e.target.value)}}
-              placeholder="Retype the new password"
-              
-            />
-            
-          </div>
         
-        <button 
-        className="bg-black_color text-white py-2 rounded-md w-full mt-4 hover:bg-opacity-90"
-        onClick={(e)=>handleSaveProfile(e)}
-        >
-        Save Information
-        </button>
+        
+        <div style={{width:"400px"}} className={`mb-3 flex items-center ml-5 border ${isNameFocused ? 'border-teal_color' : 'border-gray-200'} px-4 py-2 rounded-lg focus-within:border-teal_color 
+                ${!isNameValid ? 'border-red-500' : ''} `}>
+              <GoPerson size={20} className={`mr-2 ${isNameFocused ? 'text-teal_color' : 'text-gray-400'}`} />
+              <input
+                id="name"
+                
+                value={formName}
+                placeholder= {`Change ${ getCookie("user")==="recruiter" ? 'Company Name' : 'Name'}`}
+                className={`text-black w-full outline-none focus:outline-none placeholder-gray-400 text-lg
+                `}
+                onFocus={() => setisNameFocused(true)}
+                onBlur={() => {setisNameFocused(false); checkNameValidation() }}
+                onChange={(e) => setFormName(e.target.value)}
+              />
+              </div>
+              {!isNameValid && (
+                <div className='flex justify-end items-end ml-40 mb-3'>
+                  <span className='text-xs text-red-500 '>
+                Name should not contain numbers only
+              </span>
+                </div>
+              )
+              
+              }
+              <div style={{width:"400px"}} className={`mb-3 flex items-center ml-5 border ${isEmailFocused ? 'border-teal_color' : 'border-gray-200'} px-4 py-2 rounded-lg focus-within:border-teal_color
+              ${!isEmailValid ? 'border-red-500' : ''} `}>
+              <FiMail size={20} className={`mr-2 ${isEmailFocused ? 'text-teal_color' : 'text-gray-400'}`} />
+              <input
+                type="email"
+                
+                id="email"
+                value={user?.email}
+                disabled
+                className={` w-full outline-none focus:outline-none text-gray-400 text-lg `}                
+                
+              />
+              </div>
+        
+        
+        <div style={{width:"400px"}}  className={`ml-5 mb-3 flex items-center border ${isPasswordFocused ? 'border-teal_color' : 'border-gray-200'} px-4 py-2 rounded-lg focus-within:border-teal_color
+              ${!isPasswordValid ? 'border-red-500' : ''}`}>
+              <FiLock size={20} className={`mr-2 ${isPasswordFocused ? 'text-teal_color' : 'text-gray-400'}`} />
+              <input
+                type={isPasswordVisible ? 'text' : 'password'}
+                
+                id="password"
+                value={formPassword}
+                placeholder="Change password"
+                className={`text-black w-full outline-none focus:outline-none placeholder-gray-400 text-lg
+                `}
+                onFocus={() => setIsPasswordFocused(true)}
+                onBlur={() => {setIsPasswordFocused(false);setIsPasswordValid(formPassword.length >= 6);}}
+                onChange={(e) => {setFormPassword(e.target.value);setIsPasswordValid(formPassword.length >= 6);}}
+              />
+              <button
+                type="button"
+                onClick={() => setIsPasswordVisible(!isPasswordVisible)}
+                className="text-gray-400 focus:outline-none"
+              >
+                {isPasswordVisible ? <FiEyeOff /> : <FiEye />}
+              </button>
+              </div>
+              
+              {!isPasswordValid && (
+                <div className='flex justify-end ml-40 mb-3'>
+                  <span className='text-xs text-red-500 '>
+                Password must be atleast 6 characters
+              </span>
+                </div>
+              )
+              
+              }
+              <div style={{width:"400px"}}  className={`ml-5 mb-1 flex items-center border ${confirmPasswordFocused ? 'border-teal_color' : 'border-gray-200'} px-4 py-2 rounded-lg focus-within:border-teal_color
+              ${!passwordsMatch ? 'border-red-500' : ''}`}>
+              <RiLockPasswordLine size={20} className={`mr-2 ${confirmPasswordFocused ? 'text-teal_color' : 'text-gray-400'}`} />
+              <input
+                type={isConfirmPasswordVisible ? 'text' : 'password'}
+                value={formConfirmPassword}
+                id="confirm_password"
+                
+                placeholder="Confirm Password"
+                className={`text-black w-full outline-none focus:outline-none placeholder-gray-400 text-lg `}
+                onFocus={() => setconfirmPasswordFocused(true)}
+                onBlur={() => {setconfirmPasswordFocused(false);setPasswordsMatch(formPassword === formConfirmPassword);}}
+                onChange={(e) => {setFormConfirmPassword(e.target.value);setPasswordsMatch(formPassword === formConfirmPassword);}}
+              />
+              <button
+                type="button"
+                onClick={() => setIsConfirmPasswordVisible(!isConfirmPasswordVisible)}
+                className="text-gray-400 focus:outline-none"
+              >
+                {isConfirmPasswordVisible ? <FiEyeOff /> : <FiEye />}
+              </button>
+              </div>
+              
+              {!passwordsMatch && (
+                <div className='flex justify-end ml-56 mb-3'>
+                  <span className='text-xs text-red-500 '>
+                Passwords are not matching
+              </span>
+                </div>
+              )
+              
+              }
+
+
+
+
+        
+        
+              <div className='flex justify-center pr-5 ml-8 mt-6'>
+                <button
+                  type="submit"
+                  style={{ width: '210px' }}
+                  className="w-60 bg-black_color text-white py-2 rounded-full mb-2"
+                  onClick={(e) => handleSaveProfile(e)}
+                  >
+                  Save Profile
+                </button>
+              </div>
       </div>
         {isLoading && <Loader/>}
           
