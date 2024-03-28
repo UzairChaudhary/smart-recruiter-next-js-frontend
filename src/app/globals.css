@@ -134,7 +134,7 @@ footer a:hover {
   border-radius: 7px;
   
   transition: 0.5s;
-  animation: loading_44 45s cubic-bezier(.4,1.01,1,1) forwards;
+  animation: loading_44 60s cubic-bezier(.4,1.01,1,1) forwards;
 }
 
 @keyframes loading_44 {

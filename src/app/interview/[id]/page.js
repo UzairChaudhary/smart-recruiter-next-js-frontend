@@ -127,28 +127,29 @@ export default function page({params}) {
     
 
       useEffect(() => {
+        let intervalId;
+      
         if (capturing) {
-          setTimer(
-            setInterval(() => {
-              setSeconds((prevSeconds) => {
-                const newSeconds = prevSeconds - 1;
-                if (newSeconds === 0) {
-                  if (nextButton==="Next"){
-                    handleNextButton(); // Automatically call handleNextButton when timer reaches 0
-                  }
-                  else handleStopCaptureClick()
+          intervalId = setInterval(() => {
+            setSeconds((prevSeconds) => {
+              const newSeconds = prevSeconds - 1;
+              if (newSeconds === 0) {
+                if (nextButton === "Next") {
+                  handleNextButton(); // Automatically call handleNextButton when timer reaches 0
+                } else {
+                  handleStopCaptureClick();
                 }
-                return newSeconds;
-              });
-            }, 1000)
-          );
+              }
+              return newSeconds;
+            });
+          }, 1000);
         } else {
-          clearInterval(timer); // Clear timer when not capturing
-          setTimer(null);
+          clearInterval(intervalId); // Clear interval when not capturing
         }
       
-        return () => clearInterval(timer);
-      }, [capturing,initialIndex]);
+        return () => clearInterval(intervalId);
+      }, [capturing, initialIndex]);
+      
       
 
     
