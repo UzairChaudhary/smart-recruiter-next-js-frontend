@@ -6,7 +6,6 @@ import Link from "next/link";
 import { FaArrowRight } from "react-icons/fa6";
 import Loader from '../../../../loaders/Loader';
 
-
 export default function page({params}) {
     const [loading, setLoading] = useState(true);
 
@@ -32,10 +31,16 @@ export default function page({params}) {
 
     const [interviewQuestions, setinterviewQuestions] = useState([]);
     const [videoQuestionURLs, setvideoQuestionURLs] = useState([]);
+
     const [initialIndex, setinitialIndex] = useState(Number)
 
     const [nextButton, setNextButton] = useState("start")
     const [isLoading, setisLoading] = useState(true)
+
+
+    
+
+
     useEffect(() => {
     
         var requestOptions = {
@@ -48,8 +53,10 @@ export default function page({params}) {
           .then(result => {
             if(result.success){
                 setisLoading(false)
-                setvideoQuestionURLs(result.videoURLs)
+                //setvideoQuestionURLs(result.videoURLs)
                 setinterviewQuestions(result.job.interviewQuestions)
+                setvideoQuestionURLs(["https://firebasestorage.googleapis.com/v0/b/resumeanalyzer-394112.appspot.com/o/JobDescription%2FInterview.mp4?alt=media&token=e2c14f03-76e5-4039-bb5d-6216e3e82f36"])
+                console.log(result.job)
                 
             }
         })
@@ -87,6 +94,7 @@ export default function page({params}) {
       const handleStartCaptureClick = useCallback(() => {
         const startTimer = document.getElementById("startTimer");
         setinitialIndex(0)
+        
         
         if (startTimer) {
           startTimer.style.display = "none";
@@ -324,7 +332,7 @@ export default function page({params}) {
       useEffect(() => {
         // Update video source based on initialIndex and videoQuestionURLs
         if (vidRef.current && videoQuestionURLs.length > 0 &&initialIndex>0) {
-          vidRef.current.src = videoQuestionURLs[initialIndex];
+          vidRef.current.src = videoQuestionURLs[0];
           vidRef.current.load(); // Reload the video source
           vidRef.current.play(); // Play the video
         }
@@ -369,6 +377,8 @@ export default function page({params}) {
                   <h2 className="text-2xl font-semibold text-left text-[#1D2B3A] mb-2">
                     {interviewQuestions[initialIndex]}
                   </h2>
+                  
+                  
                       </>
                     )}
                     </>
@@ -429,14 +439,14 @@ export default function page({params}) {
                             ) : (
                                 <video
                                 id="question-video"
-                                
+                                muted
                                 controls={false}
                                 ref={vidRef}
                                 playsInline
                                 className="h-full object-cover w-full rounded-md md:rounded-[12px] aspect-video"
                                 crossOrigin="anonymous"
                                 >
-                                <source src={videoQuestionURLs[initialIndex]} type="video/mp4" />
+                                <source src="https://firebasestorage.googleapis.com/v0/b/resumeanalyzer-394112.appspot.com/o/JobDescription%2FInterview.mp4?alt=media&token=e2c14f03-76e5-4039-bb5d-6216e3e82f36" type="video/mp4" />
                                 </video>
                             )}
                           </div>
@@ -502,7 +512,7 @@ export default function page({params}) {
                           <div className="absolute bottom-[6px] md:bottom-5 left-5 right-5">
                             <div className="lg:mt-4 flex flex-col items-center justify-center gap-2">
                               {(nextButton==="start" && !isLoading) && (
-
+                                
                                 <button
                                   id="startTimer"
                                   onClick={handleStartCaptureClick}
