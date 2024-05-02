@@ -6,6 +6,9 @@ import Link from "next/link";
 import { FaArrowRight } from "react-icons/fa6";
 import Loader from '../../../../loaders/Loader';
 
+import { useSpeechSynthesis } from 'react-speech-kit';
+
+
 export default function page({params}) {
     const [loading, setLoading] = useState(true);
 
@@ -36,6 +39,9 @@ export default function page({params}) {
 
     const [nextButton, setNextButton] = useState("start")
     const [isLoading, setisLoading] = useState(true)
+
+    const { speak } = useSpeechSynthesis();
+
 
 
     
@@ -96,6 +102,7 @@ export default function page({params}) {
         setisLoading(false)
         const startTimer = document.getElementById("startTimer");
         setinitialIndex(0)
+        
         
         
         if (startTimer) {
@@ -330,15 +337,17 @@ export default function page({params}) {
           }
           setSeconds(60); // Reset timer to 60 seconds on next question
           
+          
       }
       useEffect(() => {
         // Update video source based on initialIndex and videoQuestionURLs
-        if (vidRef.current && videoQuestionURLs.length > 0 &&initialIndex>0) {
-          vidRef.current.src = videoQuestionURLs[0];
-          vidRef.current.load(); // Reload the video source
+        if (vidRef.current  &&initialIndex>0) {
+          //vidRef.current.src = videoQuestionURLs[0];
+          //vidRef.current.load(); // Reload the video source
           vidRef.current.play(); // Play the video
+          speak({text:interviewQuestions[initialIndex]})
         }
-      }, [videoQuestionURLs, initialIndex, isLoading]);
+      }, [initialIndex, isLoading]);
     
       const handleDownload = () => {
         if (recordedChunks.length) {
@@ -507,7 +516,7 @@ export default function page({params}) {
                                 
                                 <button
                                   id="startTimer"
-                                  onClick={handleStartCaptureClick}
+                                  onClick={()=>{handleStartCaptureClick();speak({ text: interviewQuestions[initialIndex]})}}
                                   disabled={isLoading}
                                   className="flex h-8 w-8 sm:h-8 sm:w-8 flex-col items-center justify-center rounded-full bg-red-500 text-white hover:shadow-xl ring-4 ring-white ring-offset-gray-500 ring-offset-2 active:scale-95 scale-100 duration-75"
                                 ></button>
@@ -524,7 +533,7 @@ export default function page({params}) {
                                 {nextButton==="Next" &&(
                                     <button
                                     id="nextButton" 
-                                    onClick={()=>handleNextButton()}
+                                    onClick={()=>{handleNextButton()}}
                                     className="group mb-5 mr-5 rounded-lg px-4 py-2 text-[16px] transition-all flex items-center justify-end text-white bg-[#1E2B3A] hover:[linear-gradient(0deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.1)), #0D2247] no-underline flex gap-x-2  active:scale-95 scale-100 duration-75"
                                     >
                                         Next
