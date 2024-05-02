@@ -52,11 +52,12 @@ export default function page({params}) {
           .then(response => response.json())
           .then(result => {
             if(result.success){
-                setisLoading(false)
+                
                 //setvideoQuestionURLs(result.videoURLs)
                 setinterviewQuestions(result.job.interviewQuestions)
                 setvideoQuestionURLs(["https://firebasestorage.googleapis.com/v0/b/resumeanalyzer-394112.appspot.com/o/JobDescription%2FInterview.mp4?alt=media&token=e2c14f03-76e5-4039-bb5d-6216e3e82f36"])
                 console.log(result.job)
+                setisLoading(false)
                 
             }
         })
@@ -92,6 +93,7 @@ export default function page({params}) {
       }, [videoEnded, webcamRef, setCapturing, mediaRecorderRef]);
     
       const handleStartCaptureClick = useCallback(() => {
+        setisLoading(false)
         const startTimer = document.getElementById("startTimer");
         setinitialIndex(0)
         
@@ -426,17 +428,7 @@ export default function page({params}) {
                       {isVisible && ( // If the video is visible (on screen) we show it
                         <div className="block absolute top-[10px] sm:top-[20px] lg:top-[40px] left-auto right-[10px] sm:right-[20px] md:right-10 h-[80px] sm:h-[140px] md:h-[180px] aspect-video rounded z-20">
                           <div className="h-full w-full aspect-video rounded md:rounded-lg lg:rounded-xl">
-                          {isLoading ? (
-                            // Render the video player once videoQuestionURLs is available
-                            //onEnded={() => setVideoEnded(true)}
-                            <div 
-                            className="h-full border bg-white object-cover w-full flex justify-center items-center text-black rounded-md md:rounded-[12px] aspect-video"
-
-                            >
-                                Loading AI Interviewer
-                            </div>
-                            
-                            ) : (
+                          
                                 <video
                                 id="question-video"
                                 muted
@@ -446,9 +438,9 @@ export default function page({params}) {
                                 className="h-full object-cover w-full rounded-md md:rounded-[12px] aspect-video"
                                 crossOrigin="anonymous"
                                 >
-                                <source src="https://firebasestorage.googleapis.com/v0/b/resumeanalyzer-394112.appspot.com/o/JobDescription%2FInterview.mp4?alt=media&token=e2c14f03-76e5-4039-bb5d-6216e3e82f36" type="video/mp4" />
+                                <source src="/Demo/interview_2.mp4" type="video/mp4" />
                                 </video>
-                            )}
+                            
                           </div>
                         </div>
                       )}

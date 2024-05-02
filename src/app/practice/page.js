@@ -1,34 +1,29 @@
 "use client"
-import React, { useMemo } from "react";
-import Speech, { HighlightedText } from "react-text-to-speech";
+import React from 'react';
+import Speech from "react-text-to-speech";
 
-export default function App() {
-  const text = useMemo(
-    () => (
+
+class AudioPlayer extends React.Component {
+  render() {
+    return (
       <div>
-        <span>This library is awesome!</span>
-        <div>
-          <div>
-            <span>It can also read and highlight </span>
-            <span>nested text... </span>
-            <span>
-              <span>upto </span>
-              <span>
-                any
-                <span> level.</span>
-              </span>
-            </span>
-          </div>
+        <h2>Audio Player</h2>
+        <audio controls >
+          <source src="/demoInterviewVideo.wav" type="audio/mpeg" />
+          Your browser does not support the audio element.
+        </audio>
+        <Speech text="This is a fully customized speech component." pitch={1.5} volume={0.5} voiceURI="Microsoft Heera - English (India)">
+      {({ speechStatus, isInQueue, start, pause, stop }) => (
+        <div style={{ display: "flex", columnGap: "0.5rem" }}>
+          {speechStatus !== "started" ? <button onClick={start}>Start</button> : <button onClick={pause}>Pause</button>}
+          <button onClick={stop}>Stop</button>
         </div>
+      )}
+    </Speech>
       </div>
-    ),
-    []
-  );
 
-  return (
-    <>
-      <Speech id="unique-id" text={text} highlightText={true} />
-      <HighlightedText id="unique-id">{text}</HighlightedText>
-    </>
-  );
+    );
+  }
 }
+
+export default AudioPlayer;
