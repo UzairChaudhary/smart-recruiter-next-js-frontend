@@ -40,7 +40,7 @@ export default function page({params}) {
     const [nextButton, setNextButton] = useState("start")
     const [isLoading, setisLoading] = useState(true)
 
-    const { speak } = useSpeechSynthesis();
+    const { speak, speaking } = useSpeechSynthesis();
 
 
 
@@ -341,13 +341,26 @@ export default function page({params}) {
       }
       useEffect(() => {
         // Update video source based on initialIndex and videoQuestionURLs
-        if (vidRef.current  &&initialIndex>0) {
+        console.log("speaking: ", speaking)
+        if (vidRef.current  && initialIndex>0) {
           //vidRef.current.src = videoQuestionURLs[0];
           //vidRef.current.load(); // Reload the video source
           vidRef.current.play(); // Play the video
+        
           speak({text:interviewQuestions[initialIndex]})
+          console.log("Speaking: ",speaking)
         }
       }, [initialIndex, isLoading]);
+
+      useEffect(() => {
+        // Update video source based on speech
+        console.log("speaking: ", speaking)
+        if (vidRef.current && !speaking) {
+          vidRef.current.pause()
+          vidRef.current.load()
+        }
+      
+      }, [speaking])
     
       const handleDownload = () => {
         if (recordedChunks.length) {
@@ -447,7 +460,7 @@ export default function page({params}) {
                                 className="h-full object-cover w-full rounded-md md:rounded-[12px] aspect-video"
                                 crossOrigin="anonymous"
                                 >
-                                <source src="/Demo/interview_2.mp4" type="video/mp4" />
+                                <source src="/Demo/JohnTechnical.mp4" type="video/mp4" />
                                 </video>
                             
                           </div>
