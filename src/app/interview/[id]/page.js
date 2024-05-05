@@ -1,12 +1,22 @@
 "use client"
 import React, {useRef, useState, useEffect, useCallback} from 'react'
+
 import Webcam from "react-webcam";
+
 import { motion } from "framer-motion";
+
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+
 import { FaArrowRight } from "react-icons/fa6";
+
 import Loader from '../../../../loaders/Loader';
+import ProgressLoader from '../../../../loaders/progressLoader';
 
 import { useSpeechSynthesis } from 'react-speech-kit';
+
+import toast from 'react-hot-toast';
+import { getCookie } from 'cookies-next';
 
 
 export default function page({params}) {
@@ -42,7 +52,9 @@ export default function page({params}) {
 
     const { speak, speaking } = useSpeechSynthesis();
 
+    const [videoSubmitted, setvideoSubmitted] = useState(false);
 
+    const router = useRouter();
 
     
 
@@ -139,8 +151,18 @@ export default function page({params}) {
         }
         setCapturing(false);
         setCompleted(true)
-        handleDownload()
+        
+        
       }, [mediaRecorderRef, webcamRef, setCapturing]);
+
+      useEffect(() => {
+        if (recordedChunks.length && !capturing && completed) {
+          handleUpload()
+        }
+        else{
+          console.log("Recording...")
+        }
+      }, [recordedChunks,capturing,completed])
     
 
       useEffect(() => {
@@ -362,14 +384,57 @@ export default function page({params}) {
       
       }, [speaking])
     
-      const handleDownload = () => {
+      // const handleDownload = () => {
+      //   if (recordedChunks.length) {
+      //     const blob = new Blob(recordedChunks, { type: "video/webm" });
+      //     const url = window.URL.createObjectURL(blob);
+      //     const video = document.getElementById("video-replay");
+      //     video.src = url;
+      //     video.controls = true;
+      //     video.play();
+      //   }
+      // };
+
+      const handleUpload = async () => {
+        
         if (recordedChunks.length) {
           const blob = new Blob(recordedChunks, { type: "video/webm" });
-          const url = window.URL.createObjectURL(blob);
-          const video = document.getElementById("video-replay");
-          video.src = url;
-          video.controls = true;
-          video.play();
+          const formData = new FormData();
+          formData.append("file", blob,"recorded_video.webm");
+      
+          const requestOptions = {
+            method: "POST",
+            body: formData,
+            headers: {
+              "Cookie": `token=${getCookie('token')}`
+              // Add any other headers if required
+            },
+            credentials:'include',
+            redirect: 'follow'
+          };
+      
+          try {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/job/videoAnalysis/${params.id}`, requestOptions);
+            const data = await response.json();
+            console.log(data); // handle response from the server
+            if(data.success){
+              toast.success(data.message)
+              setvideoSubmitted(true)
+              router.push("/myjobs");
+            }
+            else{
+              toast.error(data.message)
+            }
+            toast.success("Your interview is completed successfully")
+          } catch (error) {
+            console.error("Error:", error);
+          }
+        }
+        else{
+          toast.error("Please record your interview")
+          setCapturing(true);
+          setCompleted(false)
+
         }
       };
   return (
@@ -377,15 +442,45 @@ export default function page({params}) {
        <div className="w-full min-h-screen flex flex-col px-4 pt-2 pb-8 md:px-8 md:py-2 bg-[#FCFCFC] relative overflow-x-hidden">
           
           {completed ? (
-            <div className="webcam-capture">
-            <video id="video-replay" height={400} width={500} controls style={{ display: capturing ? "none" : "block" }} />
-            
-            {recordedChunks.length > 0 && (
-              <button className="" onClick={handleDownload}>
-                Download
-              </button>
-            )}
-            </div>
+             <div className="w-full flex flex-col max-w-[1080px] mx-auto justify-center">
+             {videoSubmitted ? (
+               //If video is submitted successfully
+             <motion.div
+                   initial={{ y: 20 }}
+                   animate={{ y: 0 }}
+                   transition={{
+                     duration: 0.35,
+                     ease: [0.075, 0.82, 0.165, 1],
+                   }}
+                   className="relative md:aspect-[16/9] w-full max-w-[1080px] overflow-hidden bg-[#1D2B3A] rounded-lg ring-1 ring-gray-900/5 shadow-md flex flex-col items-center justify-center"
+                 >
+                   <p className="text-white font-medium text-lg text-center max-w-3xl">
+                     Thankyou for taking your time out. Best of Luck!
+                   </p>
+                   <p className="text-white font-medium text-lg text-center max-w-3xl">
+                     You will be redirected to Homepage.
+                   </p>
+                   
+                 </motion.div>
+             ):(
+               <motion.div
+                   initial={{ y: 20 }}
+                   animate={{ y: 0 }}
+                   transition={{
+                     duration: 0.35,
+                     ease: [0.075, 0.82, 0.165, 1],
+                   }}
+                   className="relative md:aspect-[16/9] w-full max-w-[1080px] overflow-hidden bg-[#1D2B3A] rounded-lg ring-1 ring-gray-900/5 shadow-md flex flex-col items-center justify-center"
+                 >
+                   <p className="text-white font-medium text-lg text-center max-w-3xl mb-16">
+                     Hang on a moment while we are analyzing your video. Please Do not close this window.
+                   </p>
+                   
+                     <ProgressLoader/>
+                 </motion.div>
+             )}
+           
+         </div>
           ) : (
             <div className="h-full w-full items-center flex flex-col mt-5">
               {recordingPermission ? (
@@ -448,8 +543,8 @@ export default function page({params}) {
                         </span>
                       </div>
                       {isVisible && ( // If the video is visible (on screen) we show it
-                        <div className="block absolute top-[10px] sm:top-[20px] lg:top-[40px] left-auto right-[10px] sm:right-[20px] md:right-10 h-[80px] sm:h-[140px] md:h-[180px] aspect-video rounded z-20">
-                          <div className="h-full w-full aspect-video rounded md:rounded-lg lg:rounded-xl">
+                        <div className="block absolute top-[10px] sm:top-[20px] lg:top-[40px] left-auto right-[10px] sm:right-[20px] md:right-10 h-[80px] sm:h-[140px] md:h-[180px] aspect-square rounded z-20">
+                          <div className="h-full w-full aspect-square rounded md:rounded-lg lg:rounded-xl">
                           
                                 <video
                                 id="question-video"
@@ -457,7 +552,7 @@ export default function page({params}) {
                                 controls={false}
                                 ref={vidRef}
                                 playsInline
-                                className="h-full object-cover w-full rounded-md md:rounded-[12px] aspect-video"
+                                className="h-full object-cover w-full rounded-md md:rounded-[12px] aspect-square"
                                 crossOrigin="anonymous"
                                 >
                                 <source src="/Demo/JohnTechnical.mp4" type="video/mp4" />
