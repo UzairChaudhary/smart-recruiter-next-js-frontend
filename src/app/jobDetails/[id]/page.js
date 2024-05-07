@@ -4,12 +4,16 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
-import { FiChevronLeft } from "react-icons/fi"
+import { FiChevronLeft,FiChevronsRight,FiChevronsLeft } from "react-icons/fi"
+
 import { IoMdDownload } from "react-icons/io";
 import { RiErrorWarningLine,RiDeleteBin6Line } from "react-icons/ri";
+
 import Footer from "../../../../components/Footer";
 
 import { toast } from 'react-hot-toast';
+import ReactPaginate from "react-paginate";
+
 
 import SweetAlert from 'react-bootstrap-sweetalert';
 
@@ -17,9 +21,12 @@ import { getCookie } from "cookies-next";
 export default function JobDetails  ({params}) {
     const [jobDetails, setJobDetails] = useState();
     const [confirmOpen, setConfirmOpen] = useState(false);
-    const [user, setuser] = useState("candidate");
+    const [user, setuser] = useState();
     const router = useRouter();
 
+    const [filter, setFilter] = useState("Resume"); // Default filter
+
+    
     useEffect(() => {
     
         var requestOptions = {
@@ -31,6 +38,7 @@ export default function JobDetails  ({params}) {
           .then(response => response.json())
           .then(result => {
             if(result.success){
+              console.log(result.job)
     
                 //setJobDetails(result.job);
                 // Sort applicants based on resumeAnalysisScore in descending order
@@ -77,7 +85,114 @@ export default function JobDetails  ({params}) {
       }
     };
     
+  // Pagination-----------------------------------------------------------------------------------------------------
+  const [offset, setOffset] = useState(0);
+  const jobsPerPage = 5;
 
+
+  const handlePageClick = (e) => {
+    const newOffset = (e.selected * jobsPerPage) % jobDetails?.applicants?.length;
+    setOffset(newOffset);
+  };
+
+  // Handle filter change
+  const handleFilterChange = (e) => {
+    setFilter(e.target.value);
+};
+
+  // Filter Criteria --------------------------------------------------------------------------------------------------
+   // Filter applicants based on selected filter
+   const filteredApplicants = () => {
+    if (!jobDetails || !jobDetails.applicants) return [];
+    switch (filter) {
+        case "Resume":
+            return jobDetails?.applicants?.sort((a, b) => parseFloat(b.resumeAnalysisScore) - parseFloat(a.resumeAnalysisScore));
+        case "Video":
+            // Implement filtering logic for video analysis
+            return jobDetails?.applicants?.sort((a, b) => parseFloat(b.videoAnalysisScore) - parseFloat(a.videoAnalysisScore));
+
+            break;
+        case "Responses":
+            // Implement filtering logic for responses analysis
+            break;
+        default:
+            return jobDetails.applicants;
+      }
+    };
+    // Render applicants based on selected filter
+    const renderApplicants = () => {
+      const applicants = filteredApplicants();
+      const endOffset = offset + jobsPerPage;
+      const currentApplicants = applicants?.slice(offset, endOffset);
+      const pageCount = Math.ceil(applicants?.length / jobsPerPage);
+      
+      console.log(applicants)
+      
+      
+      // Render applicants list...
+      return <div>
+        {currentApplicants?.length ? (
+                  
+                  <div className="items-center justify-center gap-4 p-4">
+                    {currentApplicants?.map((applicants, index)=>(
+                    <div 
+                    key={applicants.applicant._id}
+                    className="applicant-card mb-2 flex items-center justify-between py-4 px-12 border rounded-2xl card-shadow cursor-pointer"
+                    >
+                      <div className="flex items-center gap-4 ">
+
+                    <img src={applicants.applicant.avatar} className="rounded-full w-20"></img>
+                    <div>
+                      <h1 className="text-xl font-poppins">{applicants.applicant.name}</h1>
+                      <h1 className="text-sm text-gray-500  font-poppins">{applicants.applicant.email}</h1>
+                      <div className="flex items-center">
+                      <h1 className="text-sm text-teal_color">{filter} Score: <span className="text-base font-medium">{filter === "Resume" ? applicants.resumeAnalysisScore : filter==="Video" ? applicants.videoAnalysisScore: applicants.responseAnalysisScore}</span></h1>
+
+                    </div>
+                    </div>
+                      </div>
+                    
+                    <div className="flex flex-col items-center">
+                      <h1 className="text-lg text-blue_color font-poppins"># <span className="text-3xl font-bold">{index+1}</span></h1>
+                      <h1 className="text-xs text-gray-500">Rank</h1>
+
+                    </div>
+                    
+                    </div>
+
+                  ))}
+                  </div>
+                
+              ):(
+                <div className="flex justify-center items-center h-96">
+                  <h1 className="text-lg font-semibold font-poppins">No Applicants</h1>
+                </div>
+      
+              )
+            }            
+              
+            <div className="mt-5">
+              <ReactPaginate
+                breakLabel="..."
+                nextLabel={<FiChevronsRight />}
+                onPageChange={handlePageClick}
+                pageRangeDisplayed={2}
+                pageCount={pageCount}
+                previousLabel={<FiChevronsLeft />}
+                renderOnZeroPageCount={null}
+                containerClassName="wb-pagination"
+                pageClassName="pagination-item"
+                pageLinkClassName="pagination-link"
+                activeClassName="pagination-link-active"
+                previousLinkClassName="prev"
+                nextLinkClassName="next"
+                disabledClassName="disabled"
+              />
+            </div>
+
+      </div>
+    };
+    
     return(
         <>
         <div className='rounded-2xl ml-auto mr-auto max-w-7xl bg-hero-gradient py-20 pb-28 '>
@@ -219,48 +334,18 @@ export default function JobDetails  ({params}) {
               <div className=" flex flex-col ml-5">
                 <div className=" flex gap-28 px-10 ">
                   <h1 className="text-lg font-semibold font-poppins">Applicants <span className="text-gray-500 font-normal ml-1">({jobDetails?.applicants.length})</span></h1>
-                  <span className="text-lg font-semibold font-poppins">sort by: <span className="font-normal ml-1 text-blue_color">Resume Analysis</span></span>
+                  <span className=" font-poppins "><span  className="text-lg font-semibold font-poppins ">sort by: </span>
+                      <select value={filter} className="text-teal_color text-lg focus:outline-none" onChange={handleFilterChange}>
+                        <option value="Resume" >Resume Analysis</option>
+                        <option value="Video">Video Analysis</option>
+                        <option value="Responses">Responses Analysis</option>
+                      </select>   
+                  </span>
                 </div>
                 
-                {jobDetails?.applicants?.length ? (
-                  
-                    <div className="items-center justify-center gap-4 p-4">
-                      {jobDetails?.applicants?.map((applicants, index)=>(
-                      <div 
-                      key={applicants.applicant._id}
-                      className="applicant-card mb-2 flex items-center justify-between py-4 px-12 border rounded-2xl card-shadow cursor-pointer"
-                      >
-                        <div className="flex items-center gap-4 ">
+              {renderApplicants()}   
 
-                      <img src={applicants.applicant.avatar} className="rounded-full w-20"></img>
-                      <div>
-                        <h1 className="text-xl font-poppins">{applicants.applicant.name}</h1>
-                        <h1 className="text-sm text-gray-500  font-poppins">{applicants.applicant.email}</h1>
-                        <div className="flex items-center">
-                        <h1 className="text-sm text-teal_color">Resume Score: <span className="text-base font-medium">{applicants.resumeAnalysisScore}</span></h1>
-
-                      </div>
-                      </div>
-                        </div>
-                      
-                      <div className="flex flex-col items-center">
-                        <h1 className="text-lg text-blue_color font-poppins"># <span className="text-3xl font-bold">{index+1}</span></h1>
-                        <h1 className="text-xs text-gray-500">Rank</h1>
-
-                      </div>
-                      
-                      </div>
-
-                    ))}
-                    </div>
-                  
-                ):(
-                  <div className="flex justify-center items-center h-96">
-                    <h1 className="text-lg font-semibold font-poppins">No Applicants</h1>
-                  </div>
-        
-                )
-              }
+              
             </div>
             )}
         </div>

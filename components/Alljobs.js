@@ -214,7 +214,7 @@ const displayedJobCategories = Array.from(jobTitlesSet).reverse().slice(0, 5);
 
                 
               {/* Company Logo */}
-              <Image src={job?.owner.avatar} alt="Company Logo" className="mx-auto rounded-full mb-3 w-16 h-16 bg-white " height={100} width={100} />
+              <Image src={job?.avatar} alt="Company Logo" className="mx-auto border rounded-full mb-3 w-16 h-16 bg-white " height={100} width={100} />
 
               {/* Company Name and Title */}
               <div className="flex flex-col mb-5">
@@ -270,9 +270,12 @@ const displayedJobCategories = Array.from(jobTitlesSet).reverse().slice(0, 5);
                 
 
                 ) : (
-                  <button className="bg-black_color login-btn text-white px-6 py-2 rounded-full hover:bg-white hover:text-black">
+                  <Link
+                    href={`/jobDetails/${job?._id}`}
+                    
+                   className="login-btn bg-black_color text-white px-6 py-2 rounded-full hover:bg-white hover:text-black">
                     Details
-                  </button>
+                  </Link>
                   
                 )}
 

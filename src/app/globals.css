@@ -107,6 +107,48 @@ footer a:hover {
   opacity: 1;
   visibility: visible;
 }
+/* -------------------------PAGINATION---------------------- */
+.wb-pagination {
+  @apply flex-align-center justify-end mt-4 w-full px-4 select-none;
+}
+
+.wb-pagination::-webkit-scrollbar {
+  @apply hidden;
+}
+
+.wb-pagination .pagination-item {
+  @apply p-2;
+}
+
+.wb-pagination .pagination-item .pagination-link {
+  @apply text-inherit w-8 h-8 grid place-items-center mx-3 text-sm;
+}
+
+.wb-pagination .prev,
+.wb-pagination .next {
+  @apply inline-flex text-blue_color;
+}
+
+.wb-pagination .prev {
+  @apply mr-4;
+}
+.wb-pagination .next {
+  @apply ml-4;
+}
+
+.disabled {
+  @apply opacity-40;
+}
+
+.wb-pagination .pagination-item.pagination-link-active .pagination-link {
+  @apply bg-blue_color rounded-full text-white shadow-md ;
+}
+
+@media (max-width: 640px) {
+  .wb-pagination {
+    @apply max-w-[320px] w-full overflow-auto;
+  }
+}
 
 /* Loader */
 .circleloader {
