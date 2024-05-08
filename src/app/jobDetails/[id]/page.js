@@ -18,6 +18,11 @@ import ReactPaginate from "react-paginate";
 import SweetAlert from 'react-bootstrap-sweetalert';
 
 import { getCookie } from "cookies-next";
+
+import { actioTypes } from   "../../../../reducers/uiReducer";
+import { useUiContext } from "../../../../contexts/UiContext";
+
+
 export default function JobDetails  ({params}) {
     const [jobDetails, setJobDetails] = useState();
     const [confirmOpen, setConfirmOpen] = useState(false);
@@ -127,6 +132,10 @@ export default function JobDetails  ({params}) {
       const pageCount = Math.ceil(applicants?.length / jobsPerPage);
       
       console.log(applicants)
+
+      const { dispatch } = useUiContext();
+
+
       
       
       // Render applicants list...
@@ -136,6 +145,8 @@ export default function JobDetails  ({params}) {
                   <div className="items-center justify-center gap-4 p-4">
                     {currentApplicants?.map((applicants, index)=>(
                     <div 
+                    
+                    onClick={()=>{router.push(`/analysis/${params.id}/${applicants.applicant._id}`);dispatch({type:actioTypes.candidateRank,payload:{candidateRank:index+1}})}}
                     key={applicants.applicant._id}
                     className="applicant-card mb-2 flex items-center justify-between py-4 px-12 border rounded-2xl card-shadow cursor-pointer"
                     >
@@ -335,7 +346,7 @@ export default function JobDetails  ({params}) {
                 <div className=" flex gap-28 px-10 ">
                   <h1 className="text-lg font-semibold font-poppins">Applicants <span className="text-gray-500 font-normal ml-1">({jobDetails?.applicants.length})</span></h1>
                   <span className=" font-poppins "><span  className="text-lg font-semibold font-poppins ">sort by: </span>
-                      <select value={filter} className="text-teal_color text-lg focus:outline-none" onChange={handleFilterChange}>
+                      <select value={filter} className="text-teal_color text-lg focus:outline-none hover:cursor-pointer" onChange={handleFilterChange}>
                         <option value="Resume" >Resume Analysis</option>
                         <option value="Video">Video Analysis</option>
                         <option value="Responses">Responses Analysis</option>

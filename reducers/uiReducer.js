@@ -20,7 +20,9 @@ export const actioTypes = {
   searchedJob:"SEARCHED_JOB",
   defaultJobs:"SHOW_DEFAULT_ALL_JOBS",
 
-  profilePicUpdated:"PROFILE_PIC_UPDATED"
+  profilePicUpdated:"PROFILE_PIC_UPDATED",
+
+  candidateRank:"CANDIDATE_ANALYSIS_RANKING"
 };
 
 export const uiReducer = (state, action) => {
@@ -67,6 +69,9 @@ export const uiReducer = (state, action) => {
       break;
     case actioTypes.profilePicUpdated:
       return { ...state, isProfilePicUpdated: true };
+      break;
+    case actioTypes.candidateRank:
+      return { ...state, candidateRank: action.payload.candidateRank };
       break;
 
 

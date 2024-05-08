@@ -14,6 +14,7 @@ const initialState = {
   isProfilePicUpdated: null,
 
   searchedJob:'',
+  candidateRank:'',
 
   user:null,
   token:null
