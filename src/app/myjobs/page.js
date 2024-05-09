@@ -5,27 +5,6 @@ import { getCookie } from "cookies-next"
 import { cookies } from 'next/headers';
 
 const MyJobs= () =>{
-    var appliedJobs=[];
-    var myHeaders = new Headers();
-    
-    myHeaders.append("Cookie", `token=${getCookie("token",{cookies})}`);
-    var requestOptions = {
-    method: 'GET',
-    headers:myHeaders,
-    credentials:'include',
-    redirect: 'follow'
-    };
-
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/candidate/myAppliedJobs`, requestOptions)
-    .then(response => response.json())
-    .then(result => {
-        
-        if(result.success){
-            appliedJobs.push(result.jobs)
-            //console.log(appliedJobs)
-        }
-    })
-    .catch(error => console.log('error', error));
        
 
     return (
@@ -39,13 +18,13 @@ const MyJobs= () =>{
             
             <div className="mt-5">
             
+                <div className="flex-1 basis-[16rem]">
+                    <Offers />
+                </div>
                 <div className="">
                     <Applied />           
                 </div>
                 
-                {/* <div className="flex-1 basis-[16rem]">
-                    <Offers />
-                </div> */}
             
             </div>
                 <Footer/>

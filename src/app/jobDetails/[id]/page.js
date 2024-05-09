@@ -203,6 +203,32 @@ export default function JobDetails  ({params}) {
 
       </div>
     };
+
+
+    const handleRecordInterview = () =>{
+      const myHeaders = new Headers();
+myHeaders.append("Cookie", `token=${getCookie('token')}`);
+
+const requestOptions = {
+  method: "GET",
+  headers: myHeaders,
+  credentials:'include',
+  redirect: "follow"
+};
+
+fetch(`http://localhost:3000/api/v1/candidate/alreadyRecordInterview/${params.id}`, requestOptions)
+  .then((response) => response.json())
+  .then((result) => {
+    console.log(result)
+    if(result.success){
+      router.push(`/interview/${params.id}`)
+    }
+    else{
+      toast.error(result.message)
+    }
+  })
+  .catch((error) => console.error(error));
+    }
     
     return(
         <>
@@ -332,12 +358,13 @@ export default function JobDetails  ({params}) {
                 </ul>
                   <p>When you're ready, click the <span className="font-medium"><span className="font-medium">"Start Interview"</span></span> button to begin the online video interview process.</p>
                   <div className="flex justify-center">
-                  <Link
-                    href={'/interview/' + params.id}
+                  <div
+                    
                     className="btn mt-4 items-center bg-black_color text-white"
+                    onClick={()=>handleRecordInterview()}
                   >    
                   Start Interview
-                  </Link> 
+                  </div> 
                   </div>
               </div>
             )}

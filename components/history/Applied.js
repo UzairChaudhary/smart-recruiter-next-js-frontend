@@ -15,31 +15,38 @@ const Applied = () => {
     
   
     useEffect(() => {
-      var myHeaders = new Headers();
-      myHeaders.append("Cookie", `token=${getCookie("token")}`);
-      var requestOptions = {
-      method: 'GET',
-      headers:myHeaders,
-      credentials:'include',
-      redirect: 'follow'
-      };
 
-      fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/candidate/myAppliedJobs`, requestOptions)
-      .then(response => response.json())
-      .then(result => {
-          
-          if(result.success){
-              setjobs(result.jobs.reverse())
-              
-          }
-      })
-      .catch(error => console.log('error', error));
+      const fetchAppliedJobs = () =>{
+
+        var myHeaders = new Headers();
+        myHeaders.append("Cookie", `token=${getCookie("token")}`);
+        var requestOptions = {
+        method: 'GET',
+        headers:myHeaders,
+        credentials:'include',
+        redirect: 'follow'
+        };
+  
+        fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/candidate/myAppliedJobs`, requestOptions)
+        .then(response => response.json())
+        .then(result => {
+            
+            if(result.success){
+                setjobs(result.jobs.reverse())
+                
+            }
+        })
+        .catch(error => console.log('error', error));
+      }
+
+
+      fetchAppliedJobs()
     }, []);
   
   return (
     <div className="jobs-section mt-5 p-2">
       <div className=" py-1 w-full text-center">
-        <h1>Applied Jobs <span className="text-sm text-muted">({jobs.length})</span>
+        <h1 className="text-lg font-bold">Applied Jobs <span className="">({jobs.length})</span>
         </h1>
       </div>
       
