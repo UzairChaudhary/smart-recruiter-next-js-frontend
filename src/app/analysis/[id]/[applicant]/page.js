@@ -2,11 +2,14 @@
 import React, { useState, useEffect } from "react";
 
 import { IoMdDownload } from "react-icons/io";
+import { BsClipboardCheckFill } from "react-icons/bs";
+
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
-import { Pie } from 'react-chartjs-2';
+import { Pie, Doughnut } from 'react-chartjs-2';
 
 import { useUiContext } from "../../../../../contexts/UiContext";
 import { actioTypes } from "../../../../../reducers/uiReducer";
+import Footer from "../../../../../components/Footer";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -15,7 +18,7 @@ const AnalyticsReport = ({ params }) => {
   const [applicantData, setApplicantData] = useState(null);
   const [jobDetails, setjobDetails] = useState();
 
-  const { dispatch,candidateRank } = useUiContext();
+  const { candidateRank } = useUiContext();
 
 
   useEffect(() => {
@@ -131,17 +134,95 @@ const AnalyticsReport = ({ params }) => {
           </div>
           <div className="shadow-md flex flex-col justify-center w-60 items-center rounded-md p-6 px-8">
             <h1 className="text-lg font-medium">Rank</h1>
-            <h1 className="text-3xl font-bold">{candidateRank}</h1>
+            <h1 className="text-3xl font-bold">{candidateRank ? candidateRank : "N/A"}</h1>
           </div>
         </div>
 
         {/* Pie Chart */}
-          <div className="mt-10">
-          {/* <EmotionPieChart emotionData={applicantData.videoAnalysis} /> */}
-          <EmotionPieChart />
+          <div className="mt-10 ">
+            {/* <EmotionPieChart emotionData={applicantData.videoAnalysis} /> */}
+            <EmotionPieChart />
           </div>
+
+          <div className="flex mt-12 gap-14  ">
+           
+            {/*Confidence and Nervousness Score*/}
+
+            <div className="flex">
+            <div className="flex gap-2 flex-col">
+              <div className="shadow-md flex flex-col justify-center w-60 items-center rounded-md p-6 px-8">
+              <h1 className="text-lg font-medium">Confidence State</h1>
+              <h1 className="text-3xl text-black_color font-bold">{applicantData?.videoAnalysis ? applicantData.videoAnalysis.ConfidenceState : "N/A"}</h1>
+            </div>
+              <div className="shadow-md flex flex-col justify-center w-60 items-center rounded-md p-6 px-8">
+              <h1 className="text-lg font-medium">Nervousness State</h1>
+              <h1 className="text-3xl text-blue_color font-bold">{applicantData?.videoAnalysis ? applicantData.videoAnalysis.NervousnessState : "N/A"}</h1>
+            </div>
+              <div className="shadow-md flex flex-col justify-center w-60 items-center rounded-md p-6 px-8">
+              <h1 className="text-lg font-medium">Posture</h1>
+              <h1 className="text-3xl text-teal_color font-bold">{applicantData?.videoAnalysis ? applicantData.videoAnalysis.Posture : "N/A"}</h1>
+            </div>
+            </div>
+
+            <ConfidenceDoughnut />
+            </div>
+
+              {/*Text Sentiment Analysis */}
+
+            <div className="flex">
+            <div className="flex gap-2 flex-col justify-center">
+              <div className="shadow-md flex flex-col justify-center w-60 items-center rounded-md p-6 px-8">
+                <h1 className="text-lg font-medium">Text Sentiment</h1>
+                <h1 className={`text-3xl text-black_color font-bold  ${applicantData?.videoAnalysis?.Sentiment==="Neutral" ? "text-blue_color" : applicantData?.videoAnalysis?.Sentiment==="Positive" ? "text-teal_color":" #D2042D"}`}>{applicantData?.videoAnalysis ? applicantData.videoAnalysis.Sentiment : "N/A"}</h1>
+              </div>
+              
+              
+              
+            </div>
+
+            <TextSentimentAnalysisDoughnut />
+            </div>
+            
+          </div>
+          
+          <div>
+            <h1 className="text-3xl text-center font-bold mt-20 mb-10">Interview Questions Response Analysis</h1>
+            
+            {jobDetails?.interviewQuestions?.map((question, index) => (
+              <div className="mt-2 p-2 px-6">
+                <div className="flex justify-between">
+                  <h1 className="text-xl font-bold ">Question 0{index+1}: {question}  </h1>
+                  <div className="flex items-center gap-2 text-xl" > 
+                  <BsClipboardCheckFill />
+                  <p>Evaluation: </p>
+                  <span className={`font-bold ${true ? "text-teal_color ":"text-[#D2042D] "}`}>
+
+                  8 
+                  </span>
+                  <span className="font-bold">/ 10</span>
+                  </div>
+                </div>
+
+                <div className=" shadow-md  rounded-lg gap-2">
+                  <h1 className="text-xl  font-bold">Candidate Response: </h1>
+                  <textarea className="text-lg  flex gap-2 w-full">
+                  
+                  Hello, I am Muhammad Uzair and this is my first interview. 
+
+                  </textarea>
+                </div>
+
+              </div>
+            ))}
+            
+          </div>
+        
+        
+        
+        
         </div>
       )}
+      <Footer/>
     </div>
   );
 };
@@ -149,13 +230,13 @@ const AnalyticsReport = ({ params }) => {
 const EmotionPieChart = () => {
   //const emotions = ['Angry', 'Disgust', 'Fear', 'Happy', 'Sad', 'Surprise', 'Neutral'];
   const emotionData = {
-    'Angry': 10,
-    'Disgust': 5,
-    'Fear': 20,
-    'Happy': 30,
-    'Sad': 15,
-    'Surprise': 10,
-    'Neutral': 10
+    'Happy': 10,
+    'Neutral': 40,
+    'Sad': 30,
+    'Angry': 5,
+    'Disgust': 4,
+    'Fear': 2,
+    'Surprise': 2,
   };
   const emotions = Object.keys(emotionData);
   const counts = Object.values(emotionData);
@@ -165,18 +246,76 @@ const EmotionPieChart = () => {
     datasets: [{
       data: counts,
       backgroundColor: [
-        'rgba(255, 99, 132, 0.6)',
-        'rgba(54, 162, 235, 0.6)',
-        'rgba(255, 206, 86, 0.6)',
         '#1ABBAC',
-        'rgba(153, 102, 255, 0.6)',
-        'rgba(255, 159, 64, 0.6)',
+        '#0089B5',
+        'rgba(54, 162, 235, 0.6)',
+        '#FFF1C9',
+        '#F7B7A3',
+        '#EA5F89',
         'rgba(201, 203, 207, 0.6)'
       ],
+      
       
     }]
   };
 
   return <Pie data={data} width={300} height={300} options={{ maintainAspectRatio: false }} />;
+};
+const ConfidenceDoughnut = () => {
+    
+  const data = {
+    labels: [
+      'Confidence',
+      'Nervousness',
+    ],
+    datasets: [{
+      data: [
+        0.7,
+        0.3,
+      ],
+      backgroundColor: [
+        '#01042D', 
+        '#0089B5',
+      ],
+      hoverOffset: 4,
+      
+      
+    }]
+  };
+
+  return<div className="w-80 h-80 mt-6">
+    <Doughnut data={data} width={100} height={100} options={{ maintainAspectRatio: true }} />
+  </div> 
+    
+};
+const TextSentimentAnalysisDoughnut = () => {
+    
+  const data = {
+    labels: [
+      'Neutral',
+      'Positive',
+      'Negative',
+    ],
+    datasets: [{
+      data: [
+        0.78,
+        0.41,
+        0.1,
+      ],
+      backgroundColor: [
+        '#0089B5', // neutral blue color 
+        '#1ABBAC', // positive teal color
+        '#D2042D', //negative red color
+      ],
+      hoverOffset: 4,
+      
+      
+    }]
+  };
+
+  return<div className="w-80 h-80 mt-6">
+    <Doughnut data={data} width={100} height={100} options={{ maintainAspectRatio: true }} />
+  </div> 
+    
 };
 export default AnalyticsReport;
