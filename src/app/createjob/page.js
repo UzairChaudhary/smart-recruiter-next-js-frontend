@@ -24,8 +24,8 @@ const CreateJob = () => {
     const [tag, setTag] = useState();
     const [tags, setTags] = useState([]);
 
-    const [question, setquestion] = useState()
-    const [questions, setquestions] = useState([])
+    // const [question, setquestion] = useState()
+    // const [questions, setquestions] = useState([])
 
     const router = useRouter()
 
@@ -73,18 +73,18 @@ useEffect(() => {
       .catch(error => console.log('error', error));
 }, [])
   //Handle submit for questions
-    const handleSubmitQuestions = (e) => {
-        e.preventDefault();
-        if (question && !questions.includes(question)) {
-          setquestions([...questions, question]);
-        }
-        setquestion("");
+    // const handleSubmitQuestions = (e) => {
+    //     e.preventDefault();
+    //     if (question && !questions.includes(question)) {
+    //       setquestions([...questions, question]);
+    //     }
+    //     setquestion("");
         
-    };
+    // };
 
-    const removeQuestion = (index) => {
-        setquestions(questions.filter((_, i) => i !== index));
-      };
+    // const removeQuestion = (index) => {
+    //     setquestions(questions.filter((_, i) => i !== index));
+    //   };
 
     //handle submit for skills
     const handleSubmit = (e) => {
@@ -206,7 +206,7 @@ useEffect(() => {
       "jobType":jobtype,
       "experienceLevel":experience,
       "skills":tags,
-      "interviewQuestions":questions
+      
       
     });
     console.log(raw1)
@@ -421,7 +421,7 @@ useEffect(() => {
           
         </div>
         {/*Add Interview Questions*/}
-        <div>
+        {/* <div>
           <form className=" " onSubmit={handleSubmitQuestions}>
             <div className="form-input w-full sm:flex-1 relative">
               
@@ -453,7 +453,7 @@ useEffect(() => {
               ))}
               </div>
           </form>
-        </div>
+        </div> */}
         
         {/* Upload Job description File */}
         <div className=" w-full sm:flex-1 relative border rounded-md border-slate-300 ">

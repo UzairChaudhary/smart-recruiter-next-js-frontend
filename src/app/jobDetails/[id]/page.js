@@ -373,7 +373,7 @@ fetch(`http://localhost:3000/api/v1/candidate/alreadyRecordInterview/${params.id
                 <div className=" flex gap-28 px-10 ">
                   <h1 className="text-lg font-semibold font-poppins">Applicants <span className="text-gray-500 font-normal ml-1">({jobDetails?.applicants.length})</span></h1>
                   <span className=" font-poppins "><span  className="text-lg font-semibold font-poppins ">sort by: </span>
-                      <select value={filter} className="text-teal_color text-lg focus:outline-none hover:cursor-pointer" onChange={handleFilterChange}>
+                      <select value={filter} className="text-teal_color bg-white text-lg focus:outline-none hover:cursor-pointer" onChange={handleFilterChange}>
                         <option value="Resume" >Resume Analysis</option>
                         <option value="Video">Video Analysis</option>
                         <option value="Responses">Responses Analysis</option>

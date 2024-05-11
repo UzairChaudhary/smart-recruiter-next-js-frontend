@@ -18,6 +18,7 @@ import { useSpeechSynthesis } from 'react-speech-kit';
 import toast from 'react-hot-toast';
 import { getCookie } from 'cookies-next';
 
+import { useCheetah } from "@picovoice/cheetah-react";
 
 export default function page({params}) {
     const [loading, setLoading] = useState(true);
@@ -39,7 +40,7 @@ export default function page({params}) {
     const [isVisible, setIsVisible] = useState(true);
     const [isDesktop, setIsDesktop] = useState(false);
     const [completed, setCompleted] = useState(false);
-    const [transcript, setTranscript] = useState("");
+    
     const [generatedFeedback, setGeneratedFeedback] = useState("");
 
     const [interviewQuestions, setinterviewQuestions] = useState([]);
@@ -56,8 +57,54 @@ export default function page({params}) {
 
     const router = useRouter();
 
-    
+    const [transcript, setTranscript] = useState("");
+    const [userResponses, setuserResponses] = useState([]);
+  
+    const {
+      result,
+      isLoaded,
+      isListening,
+      error,
+      init,
+      start,
+      stop,
+    } = useCheetah();
+  
+  
+    const initEngine = async () => {
+      await init(
+        "7FUtbR0d6d/EtnCvRTNKQwPax2bBqpL8DcNtObOCIrzEpXm+qzzmCg==",
+        { publicPath: "/cheetah_params.pv" },
+        { enableAutomaticPunctuation: true }
+      );
+    };
+  
+  
+    const toggleRecord = async () => {
+      if (isListening) {
+        await stop();
+      } else {
+        await start();
+      }
+    };
+  
+    useEffect(() => {
+    initEngine()
+    }, [])
 
+    useEffect(() => {
+      if (result !== null) {
+        setTranscript(prev => {
+          let newTranscript = prev + result.transcript
+          if (result.isComplete) {
+            newTranscript += " "
+          }
+          return newTranscript
+        })
+      }
+    }, [result])
+
+    
 
     useEffect(() => {
     
@@ -117,6 +164,8 @@ export default function page({params}) {
         
         
         
+        
+        
         if (startTimer) {
           startTimer.style.display = "none";
           setNextButton("Next")
@@ -153,16 +202,27 @@ export default function page({params}) {
         setCompleted(true)
         
         
+        
       }, [mediaRecorderRef, webcamRef, setCapturing]);
 
       useEffect(() => {
-        if (recordedChunks.length && !capturing && completed) {
+        if (recordedChunks.length && !capturing && completed &&userResponses) {
+          console.log("Speech to text array...")
+          console.log(userResponses)
           handleUpload()
         }
         else{
           console.log("Recording...")
         }
-      }, [recordedChunks,capturing,completed])
+      }, [recordedChunks,capturing,completed, userResponses])
+
+      // useEffect(() => {
+      //   if (userResponses.length===5) {
+      //     console.log("User Responses...")
+      //     console.log(userResponses)
+      //     handleUpload()
+      //   }
+      // }, [userResponses])
     
 
       useEffect(() => {
@@ -347,6 +407,7 @@ export default function page({params}) {
       
       const handleNextButton = () => {
           //e.preventDefault();
+          
           setinitialIndex(initialIndex + 1)
           if(interviewQuestions.length - 2 === initialIndex){
             
@@ -380,20 +441,24 @@ export default function page({params}) {
         if (vidRef.current && !speaking) {
           vidRef.current.pause()
           vidRef.current.load()
+          console.log("Startinggggg")
+          start()
+          
         }
+        else{
+          stop()
+          console.log("Stopingggggg")
+          console.log(transcript)
+          setuserResponses(prevResponses => [...prevResponses, transcript]);
+
+        }
+
+       
+        
       
       }, [speaking])
     
-      // const handleDownload = () => {
-      //   if (recordedChunks.length) {
-      //     const blob = new Blob(recordedChunks, { type: "video/webm" });
-      //     const url = window.URL.createObjectURL(blob);
-      //     const video = document.getElementById("video-replay");
-      //     video.src = url;
-      //     video.controls = true;
-      //     video.play();
-      //   }
-      // };
+
 
       const handleUpload = async () => {
         
@@ -401,6 +466,8 @@ export default function page({params}) {
           const blob = new Blob(recordedChunks, { type: "video/webm" });
           const formData = new FormData();
           formData.append("file", blob,"recorded_video.webm");
+          // Append userResponses array to the formData
+          formData.append("userResponses", JSON.stringify(userResponses));
       
           const requestOptions = {
             method: "POST",
@@ -418,7 +485,7 @@ export default function page({params}) {
             const data = await response.json();
             console.log(data); // handle response from the server
             if(data.success){
-              toast.success(data.message)
+              //toast.success(data.message)
               setvideoSubmitted(true)
               router.push("/myjobs");
             }
@@ -437,8 +504,11 @@ export default function page({params}) {
 
         }
       };
+
   return (
     <div>
+      <h3>Transcript:</h3>
+      <p>{transcript}</p>
        <div className="w-full min-h-screen flex flex-col px-4 pt-2 pb-8 md:px-8 md:py-2 bg-[#FCFCFC] relative overflow-x-hidden">
           
           {completed ? (

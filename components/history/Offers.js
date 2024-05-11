@@ -99,13 +99,13 @@ const Offers = () => {
       ):(
         <div className="flex-center-center mt-5">
               <div className="image-wrapper">
-                <img
+                {/* <img
                   src="/404.png"
                   alt="404"
                   className="mx-auto  object-contain h-[350px] w-[350px]"
-                />
+                /> */}
                 <h1 className="text-center text-black_color mt-5 text-3xl opacity-70">
-                  Oops! No jobs found
+                  No job offers yet
                 </h1>
               </div>
             </div>

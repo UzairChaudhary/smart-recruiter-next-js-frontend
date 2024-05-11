@@ -43,7 +43,7 @@ const config: Config = {
           boxShadow: " 0 0 0.375rem 0.25rem rgb(161 172 184 / 15%)",
         },
         ".shadow-light": {
-          boxShadow: "0 0.3rem 0.6rem .2rem rgba(0, 0, 0, 0.1)",
+          boxShadow: "4px 4px 4px 4px rgba(0, 0, 0, 0.05)",
         },
         ".border-light": {
           border: "1px solid rgba(46, 46, 46, 0.1)",

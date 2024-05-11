@@ -26,6 +26,9 @@ const AnalyticsReport = ({ params }) => {
   const [applicantData, setApplicantData] = useState(null);
   const [jobDetails, setjobDetails] = useState();
 
+  const [total, settotal] = useState();
+  const [responseScore, setresponseScore] = useState();
+
   const { candidateRank } = useUiContext();
 
   const router = useRouter();
@@ -49,12 +52,31 @@ const AnalyticsReport = ({ params }) => {
 
         // If job details are fetched successfully
         if (result.success) {
-          // Find the specific applicant data based on ID
-          
-          // Set the applicant data to state
+          // Log the values for debugging
+          console.log("Resume Score:", result.ApplicantData.resumeAnalysisScore);
+          console.log("Video Score:", result.ApplicantData.videoAnalysisScore);
+          console.log("Response Score:", result.ApplicantData.responseAnalysisScore);
+        
+          // Calculate the total score
+          const totalScore = (
+            parseFloat(result.ApplicantData.resumeAnalysisScore) +
+            parseFloat(result.ApplicantData.videoAnalysisScore) +
+            parseFloat(result.ApplicantData.responseAnalysisScore)
+          ).toFixed(2);
+          const responsesScore = (
+           
+            parseFloat(result.ApplicantData.responseAnalysisScore)
+          ).toFixed(2);
+        
+          console.log("Total Score:", totalScore); // Log the total score
+        
+          // Set the applicant data and total score to state
           setApplicantData(result.ApplicantData);
-          setjobDetails(result.job)
+          setjobDetails(result.job);
+          settotal(totalScore);
+          setresponseScore(responsesScore);
         }
+        
       } catch (error) {
         console.error('Error fetching job details:', error);
       }
@@ -93,6 +115,8 @@ fetch(`http://localhost:3000/api/v1/job/hire/${params.id}/${params.applicant}`, 
   })
   .catch((error) => console.error(error));
   }
+
+
 
   return (
     
@@ -143,7 +167,7 @@ fetch(`http://localhost:3000/api/v1/job/hire/${params.id}/${params.applicant}`, 
                  </button> 
    
                  <div
-                    className="btn mt-4 gap-4 w-full items-center flex bg-black_color text-white"
+                    className="btn mt-4 gap-4 w-full items-center justify-center flex bg-black_color text-white"
                     onClick={()=>hireApplicant()}
                    >  
                     
@@ -151,7 +175,7 @@ fetch(`http://localhost:3000/api/v1/job/hire/${params.id}/${params.applicant}`, 
                        <path strokeLinecap="round" strokeLinejoin="round" d="M11.35 3.836c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m8.9-4.414c.376.023.75.05 1.124.08 1.131.094 1.976 1.057 1.976 2.192V16.5A2.25 2.25 0 0 1 18 18.75h-2.25m-7.5-10.5H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V18.75m-7.5-10.5h6.375c.621 0 1.125.504 1.125 1.125v9.375m-8.25-3 1.5 1.5 3-3.75" />
                      </svg>
    
-                     Hire Candidate
+                     Send Offer
                  </div> 
    
              </div>
@@ -163,7 +187,12 @@ fetch(`http://localhost:3000/api/v1/job/hire/${params.id}/${params.applicant}`, 
            <div className="flex mt-8 gap-4 px-2 ">
              <div className="shadow-md flex flex-col justify-center w-60 items-center rounded-md p-6 px-8">
                <h1 className="text-lg font-medium">Total Score</h1>
-               <h1 className="text-3xl font-bold">{applicantData?.totalAnalysisScore ? applicantData.totalAnalysisScore : "N/A"}</h1>
+               <h1 className="text-3xl font-bold">
+  {applicantData ? 
+     total
+    : "N/A"
+  }
+</h1>
              </div>
              <div className="shadow-md flex flex-col justify-center w-60 items-center rounded-md p-6 px-8">
                <h1 className="text-lg font-medium">Resume Score</h1>
@@ -175,7 +204,7 @@ fetch(`http://localhost:3000/api/v1/job/hire/${params.id}/${params.applicant}`, 
              </div>
              <div className="shadow-md flex flex-col justify-center w-60 items-center rounded-md p-6 px-8">
                <h1 className="text-lg font-medium">Responses Score</h1>
-               <h1 className="text-3xl font-bold">{applicantData?.responsesAnalysisScore ? applicantData.responsesAnalysisScore : "N/A"}</h1>
+               <h1 className="text-3xl font-bold">{applicantData ? responseScore : "N/A"}</h1>
              </div>
              <div className="shadow-md flex flex-col justify-center w-60 items-center rounded-md p-6 px-8">
                <h1 className="text-lg font-medium">Rank</h1>
@@ -185,8 +214,8 @@ fetch(`http://localhost:3000/api/v1/job/hire/${params.id}/${params.applicant}`, 
    
            {/* Pie Chart */}
              <div className="mt-10 ">
-               {/* <EmotionPieChart emotionData={applicantData.videoAnalysis} /> */}
-               <EmotionPieChart />
+               {/* <EmotionPieChart  /> */}
+               <EmotionPieChart emotionData={applicantData.videoAnalysis} />
              </div>
    
              <div className="flex mt-12 gap-14  ">
@@ -209,7 +238,7 @@ fetch(`http://localhost:3000/api/v1/job/hire/${params.id}/${params.applicant}`, 
                </div>
                </div>
    
-               <ConfidenceDoughnut />
+               <ConfidenceDoughnut emotionData={applicantData.videoAnalysis} />
                </div>
    
                  {/*Text Sentiment Analysis */}
@@ -225,7 +254,7 @@ fetch(`http://localhost:3000/api/v1/job/hire/${params.id}/${params.applicant}`, 
                  
                </div>
    
-               <TextSentimentAnalysisDoughnut />
+               <TextSentimentAnalysisDoughnut emotionData={applicantData.videoAnalysis}/>
                </div>
                
              </div>
@@ -234,25 +263,24 @@ fetch(`http://localhost:3000/api/v1/job/hire/${params.id}/${params.applicant}`, 
                <h1 className="text-3xl text-center font-bold mt-20 mb-10">Interview Questions Response Analysis</h1>
                
                {jobDetails?.interviewQuestions?.map((question, index) => (
-                 <div className="mt-2 p-2 px-6">
-                   <div className="flex justify-between">
-                     <h1 className="text-xl font-bold ">Question 0{index+1}: {question}  </h1>
+                 <div key={index} className="mt-2 p-2 px-6">
+                   <div className="flex p-2 justify-between items-center">
+                     <h1 className="text-xl font-bold mr-8">Question 0{index+1}: {question}  </h1>
                      <div className="flex items-center gap-2 text-xl" > 
                      <BsClipboardCheckFill />
                      <p>Evaluation: </p>
                      <span className={`font-bold ${true ? "text-teal_color ":"text-[#D2042D] "}`}>
-   
-                     8 
+                     {applicantData.evaluations[index]}
                      </span>
-                     <span className="font-bold">/ 10</span>
+                     <span className="font-bold">/10</span>
                      </div>
                    </div>
    
-                   <div className=" shadow-md  rounded-lg gap-2">
-                     <h1 className="text-xl  font-bold">Candidate Response: </h1>
-                     <textarea className="text-lg  flex gap-2 w-full">
+                   <div className=" shadow-xl p-4  rounded-2xl gap-2">
+                     <h1 className="text-xl my-2 font-bold">Candidate Response: </h1>
+                     <textarea value={applicantData.responses[0]} className="text-lg  flex gap-2 w-full">
                      
-                     Hello, I am Muhammad Uzair and this is my first interview. 
+                     
    
                      </textarea>
                    </div>
@@ -275,19 +303,20 @@ fetch(`http://localhost:3000/api/v1/job/hire/${params.id}/${params.applicant}`, 
     
   );
 };
-// const EmotionPieChart = ({ emotionData }) => {
-const EmotionPieChart = () => {
+// const EmotionPieChart = () => {
+const EmotionPieChart = ({ emotionData }) => {
   //const emotions = ['Angry', 'Disgust', 'Fear', 'Happy', 'Sad', 'Surprise', 'Neutral'];
-  const emotionData = {
-    'Enthusiastic': 10 + 40, //happy + neutral
-    'Lack of Enthusiasm': 30, //sad
-    'Angry': 5,
-    'Disgust': 4,
-    'Fear': 2,
-    'Surprise': 2,
+  const emotionsData = {
+    'Happy': emotionData.Happy, //happy + neutral
+    'Neutral': emotionData.Neutral, //sad
+    'Sad':5,
+    'Angry': emotionData.Angry,
+    'Disgust': emotionData.Disgust,
+    'Fear': emotionData.Fear,
+    'Surprise': emotionData.Surprise,
   };
-  const emotions = Object.keys(emotionData);
-  const counts = Object.values(emotionData);
+  const emotions = Object.keys(emotionsData);
+  const counts = Object.values(emotionsData);
 
   const data = {
     labels: emotions,
@@ -300,6 +329,7 @@ const EmotionPieChart = () => {
         '#FFF1C9',
         '#0089B5',
         'rgba(54, 162, 235, 0.6)',
+        'rgba(0, 0, 0, 0.1)',
         
         
       ],
@@ -310,7 +340,7 @@ const EmotionPieChart = () => {
 
   return <Pie data={data} width={300} height={300} options={{ maintainAspectRatio: false }} />;
 };
-const ConfidenceDoughnut = () => {
+const ConfidenceDoughnut = ({ emotionData }) => {
     
   const data = {
     labels: [
@@ -319,8 +349,8 @@ const ConfidenceDoughnut = () => {
     ],
     datasets: [{
       data: [
-        0.7,
-        0.3,
+        emotionData.ConfidenceScore,
+        emotionData.NervousnessScore,
       ],
       backgroundColor: [
         '#01042D', 
@@ -337,7 +367,7 @@ const ConfidenceDoughnut = () => {
   </div> 
     
 };
-const TextSentimentAnalysisDoughnut = () => {
+const TextSentimentAnalysisDoughnut = ({ emotionData }) => {
     
   const data = {
     labels: [
@@ -347,9 +377,10 @@ const TextSentimentAnalysisDoughnut = () => {
     ],
     datasets: [{
       data: [
-        0.78,
-        0.41,
-        0.1,
+        emotionData.NeutralSentiment,
+        emotionData.PositiveSentiment,
+        emotionData.NegativeSentiment
+        
       ],
       backgroundColor: [
         '#0089B5', // neutral blue color 
