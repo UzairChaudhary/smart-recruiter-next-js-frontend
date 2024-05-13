@@ -18,6 +18,8 @@ import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import Loader from "../../../../../loaders/Loader";
 
+import Navbar from "../../../../../components/navbar"
+
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -52,6 +54,7 @@ const AnalyticsReport = ({ params }) => {
 
         // If job details are fetched successfully
         if (result.success) {
+          console.log(result)
           // Log the values for debugging
           console.log("Resume Score:", result.ApplicantData.resumeAnalysisScore);
           console.log("Video Score:", result.ApplicantData.videoAnalysisScore);
@@ -122,6 +125,7 @@ fetch(`http://localhost:3000/api/v1/job/hire/${params.id}/${params.applicant}`, 
     
     
          <div>
+          <Navbar />
          {/* Render applicant data */}
          <div className='w-full h-full bg-hero-gradient opacity-20 py-20 pb-32 '>
              </div>
@@ -215,7 +219,7 @@ fetch(`http://localhost:3000/api/v1/job/hire/${params.id}/${params.applicant}`, 
            {/* Pie Chart */}
              <div className="mt-10 ">
                {/* <EmotionPieChart  /> */}
-               <EmotionPieChart emotionData={applicantData.videoAnalysis} />
+               <EmotionPieChart emotionData={applicantData?.videoAnalysis} />
              </div>
    
              <div className="flex mt-12 gap-14  ">
@@ -238,7 +242,7 @@ fetch(`http://localhost:3000/api/v1/job/hire/${params.id}/${params.applicant}`, 
                </div>
                </div>
    
-               <ConfidenceDoughnut emotionData={applicantData.videoAnalysis} />
+               <ConfidenceDoughnut emotionData={applicantData?.videoAnalysis} />
                </div>
    
                  {/*Text Sentiment Analysis */}
@@ -254,7 +258,7 @@ fetch(`http://localhost:3000/api/v1/job/hire/${params.id}/${params.applicant}`, 
                  
                </div>
    
-               <TextSentimentAnalysisDoughnut emotionData={applicantData.videoAnalysis}/>
+               <TextSentimentAnalysisDoughnut emotionData={applicantData?.videoAnalysis}/>
                </div>
                
              </div>
@@ -278,7 +282,7 @@ fetch(`http://localhost:3000/api/v1/job/hire/${params.id}/${params.applicant}`, 
    
                    <div className=" shadow-xl p-4  rounded-2xl gap-2">
                      <h1 className="text-xl my-2 font-bold">Candidate Response: </h1>
-                     <textarea value={applicantData.responses[0]} className="text-lg  flex gap-2 w-full">
+                     <textarea value={applicantData?.responses[0]} className="text-lg  flex gap-2 w-full">
                      
                      
    
@@ -307,13 +311,13 @@ fetch(`http://localhost:3000/api/v1/job/hire/${params.id}/${params.applicant}`, 
 const EmotionPieChart = ({ emotionData }) => {
   //const emotions = ['Angry', 'Disgust', 'Fear', 'Happy', 'Sad', 'Surprise', 'Neutral'];
   const emotionsData = {
-    'Happy': emotionData.Happy, //happy + neutral
-    'Neutral': emotionData.Neutral, //sad
+    'Happy': emotionData?.Happy, //happy + neutral
+    'Neutral': emotionData?.Neutral, //sad
     'Sad':5,
-    'Angry': emotionData.Angry,
-    'Disgust': emotionData.Disgust,
-    'Fear': emotionData.Fear,
-    'Surprise': emotionData.Surprise,
+    'Angry': emotionData?.Angry,
+    'Disgust': emotionData?.Disgust,
+    'Fear': emotionData?.Fear,
+    'Surprise': emotionData?.Surprise,
   };
   const emotions = Object.keys(emotionsData);
   const counts = Object.values(emotionsData);
@@ -349,8 +353,8 @@ const ConfidenceDoughnut = ({ emotionData }) => {
     ],
     datasets: [{
       data: [
-        emotionData.ConfidenceScore,
-        emotionData.NervousnessScore,
+        emotionData?.ConfidenceScore,
+        emotionData?.NervousnessScore,
       ],
       backgroundColor: [
         '#01042D', 
@@ -377,9 +381,9 @@ const TextSentimentAnalysisDoughnut = ({ emotionData }) => {
     ],
     datasets: [{
       data: [
-        emotionData.NeutralSentiment,
-        emotionData.PositiveSentiment,
-        emotionData.NegativeSentiment
+        emotionData?.NeutralSentiment,
+        emotionData?.PositiveSentiment,
+        emotionData?.NegativeSentiment
         
       ],
       backgroundColor: [

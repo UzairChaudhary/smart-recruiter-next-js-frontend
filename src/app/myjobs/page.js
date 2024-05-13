@@ -3,12 +3,14 @@ import Applied from "../../../components/history/Applied"
 import Offers from "../../../components/history/Offers"
 import { getCookie } from "cookies-next"
 import { cookies } from 'next/headers';
+import Navbar from "../../../components/navbar";
 
 const MyJobs= () =>{
        
 
     return (
         <>
+        <Navbar/>
             
             <div className='w-full h-full bg-hero-gradient opacity-20 py-20 pb-32 '>
             </div>

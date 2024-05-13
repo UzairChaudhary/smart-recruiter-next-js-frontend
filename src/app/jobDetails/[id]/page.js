@@ -21,6 +21,7 @@ import { getCookie } from "cookies-next";
 
 import { actioTypes } from   "../../../../reducers/uiReducer";
 import { useUiContext } from "../../../../contexts/UiContext";
+import Navbar from "../../../../components/navbar";
 
 
 export default function JobDetails  ({params}) {
@@ -232,6 +233,7 @@ fetch(`http://localhost:3000/api/v1/candidate/alreadyRecordInterview/${params.id
     
     return(
         <>
+        <Navbar/>
         <div className='rounded-2xl ml-auto mr-auto max-w-7xl bg-hero-gradient py-20 pb-28 '>
         </div>
         <button 

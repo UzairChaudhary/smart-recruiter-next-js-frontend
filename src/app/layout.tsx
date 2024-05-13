@@ -39,7 +39,7 @@ export default function RootLayout({
           <Toaster/>
           <NextTopLoader color='#1ABBAC' />
           
-          <NavBar />
+          
           {children}
         </body>
           

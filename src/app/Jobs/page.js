@@ -6,6 +6,7 @@ import BackToTopButton from '../../../components/BackToTopButton'
 import { getCookie } from "cookies-next";
 import RingLoader from "../../../loaders/RingLoader"
 import Footer from "../../../components/Footer";
+import Navbar from "../../../components/navbar";
 
 const Jobs = () => {
   const [renderComponents, setRenderComponents] = useState(false);
@@ -37,6 +38,7 @@ const Jobs = () => {
 
   return (
     <>
+    <Navbar/>
       {renderComponents ? (
         <>
           <div className='w-full h-full bg-hero-gradient opacity-20 py-20 pb-32 '>

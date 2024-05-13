@@ -136,7 +136,20 @@ if (animatedContentLeft) {
                 </div> 
                 <div className=" ml-5 "> 
                     <h1 className="text-lg font-semibold mb-5">AI powered Resume Analysis</h1> 
-                    <h2 className="text-4xl font-bold mb-5"> Screen, Analyze, and Assess Thousands. Fast. </h2> 
+                    <div className="text-4xl flex font-bold mb-5"> 
+                        <p className='mr-2'>
+                        Screen,
+                        </p> 
+                        <div class="focus"> 
+                            <div class="focus--mask">
+                                <div class="focus--mask-inner"> Analyze</div>
+                            </div>
+                        </div>
+                        <p>
+
+                            and Assess Fast. 
+                        </p>
+                            </div> 
                     <div className=""> 
                         <p>Upload your resume and system will analyze it, extract your qualifications, experiences, and skills and match it with the job description.</p> 
                     </div> 

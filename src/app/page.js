@@ -10,6 +10,7 @@ import ProgressLoader from "../../loaders/progressLoader";
 import Companies from "../../components/LandingPage/Companies";
 import Content from "../../components/LandingPage/Content";
 import { getCookie } from "cookies-next";
+import Navbar from "../../components/navbar";
 const Home = () => {
   const [renderComponents, setRenderComponents] = useState(false);
 
@@ -44,6 +45,7 @@ const Home = () => {
         <>
           
           <BackToTopButton showButton={showButton} />
+          <Navbar/>
           <HeroSection />
           <JobSearchForm />
           <JobSection />

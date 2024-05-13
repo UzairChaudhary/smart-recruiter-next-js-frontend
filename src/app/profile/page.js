@@ -16,6 +16,7 @@ import { RiLockPasswordLine  } from "react-icons/ri";
 import { useUiContext } from "../../../contexts/UiContext";
 import { actioTypes } from "../../../reducers/uiReducer";
 import Loader from "../../../loaders/Loader"
+import Navbar from "../../../components/navbar";
 const MyProfile = () => {
     const [user, setUser] = useState();
     const [fileURL, setfileURL] = useState(null);
@@ -243,6 +244,7 @@ useEffect(() => {
 
   return (
     <>
+    <Navbar/>
         <div className='rounded-2xl ml-auto mr-auto max-w-7xl bg-hero-gradient py-20 pb-28 '>
         </div>
         <button 

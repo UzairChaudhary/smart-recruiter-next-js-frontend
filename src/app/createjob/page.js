@@ -8,6 +8,7 @@ import { toast } from 'react-hot-toast';
 import { useRouter } from "next/navigation";
 import Loader from "../../../loaders/Loader"
 import './style.css'
+import Navbar from "../../../components/navbar";
 
 const CreateJob = () => {
     const [user, setUser] = useState();
@@ -242,6 +243,7 @@ useEffect(() => {
 
   return (
     <>
+    <Navbar/>
         <div className='rounded-2xl ml-auto mr-auto max-w-7xl bg-hero-gradient py-20 pb-28 '>
         </div>
         <button 

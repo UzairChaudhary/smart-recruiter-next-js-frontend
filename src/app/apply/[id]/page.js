@@ -10,7 +10,7 @@ import { toast } from 'react-hot-toast';
 import Footer from '../../../../components/Footer';
 import ProgressLoader from '../../../../loaders/progressLoader';
 
-
+import Navbar from "../../../../components/navbar"
 
 
 const ApplyJob = ({ params }) => {
@@ -219,6 +219,7 @@ fetch(`http://localhost:3000/api/v1/candidate/applyjob/${params.id}`, requestOpt
 
   return (
     <>
+    <Navbar />
       <div className='w-full h-full bg-hero-gradient opacity-20 py-20 mb-10'>
       </div>
       <h1 className='text-2xl font-poppins absolute top-32 left-1/4  text-black_color font-bold'>Job Application</h1>

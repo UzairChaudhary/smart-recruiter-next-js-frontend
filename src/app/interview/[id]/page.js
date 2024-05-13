@@ -207,12 +207,12 @@ export default function page({params}) {
 
       useEffect(() => {
         if (recordedChunks.length && !capturing && completed &&userResponses) {
-          console.log("Speech to text array...")
+          //console.log("Speech to text array...")
           console.log(userResponses)
           handleUpload()
         }
         else{
-          console.log("Recording...")
+          //console.log("Recording...")
         }
       }, [recordedChunks,capturing,completed, userResponses])
 
@@ -412,7 +412,7 @@ export default function page({params}) {
           if(interviewQuestions.length - 2 === initialIndex){
             
             setNextButton("EndInterview")
-            console.log("last question")
+            //console.log("last question")
           }
           if (vidRef.current) {
             
@@ -441,13 +441,13 @@ export default function page({params}) {
         if (vidRef.current && !speaking) {
           vidRef.current.pause()
           vidRef.current.load()
-          console.log("Startinggggg")
+          //console.log("Startinggggg")
           start()
           
         }
         else{
           stop()
-          console.log("Stopingggggg")
+          //console.log("Stopingggggg")
           console.log(transcript)
           setuserResponses(prevResponses => [...prevResponses, transcript]);
 
@@ -507,8 +507,8 @@ export default function page({params}) {
 
   return (
     <div>
-      <h3>Transcript:</h3>
-      <p>{transcript}</p>
+      
+      
        <div className="w-full min-h-screen flex flex-col px-4 pt-2 pb-8 md:px-8 md:py-2 bg-[#FCFCFC] relative overflow-x-hidden">
           
           {completed ? (
