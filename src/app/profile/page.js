@@ -281,12 +281,12 @@ useEffect(() => {
               <img
                 src={URL.createObjectURL(logo)}
                 alt=""
-                className="rounded-full borderw-28 h-28 border-blue_color"
+                className="rounded-full border bg-white w-28 h-28 object-cover"
               />
             ) : (
               
               <div className="w-28 h-16 rounded-full grid mb-8 place-items-center dark:border-hover-color">
-                <img src={user?.avatar} className="rounded-full w-28 h-28 border border-blue_color"></img>
+                <img src={user?.avatar} className="rounded-full w-28 h-28 border object-cover border-blue_color"></img>
                 <FaCamera className="text-3xl opacity-60 dark:text-slate-500 absolute mt-32 " />
                 
               </div>

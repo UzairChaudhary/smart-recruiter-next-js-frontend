@@ -64,11 +64,11 @@ const AnalyticsReport = ({ params }) => {
           const totalScore = (
             parseFloat(result.ApplicantData.resumeAnalysisScore) +
             parseFloat(result.ApplicantData.videoAnalysisScore) +
-            parseFloat(result.ApplicantData.responseAnalysisScore)
+            parseFloat(result.ApplicantData.responseAnalysisScore)*100
           ).toFixed(2);
           const responsesScore = (
            
-            parseFloat(result.ApplicantData.responseAnalysisScore)
+            parseFloat(result.ApplicantData.responseAnalysisScore)*100
           ).toFixed(2);
         
           console.log("Total Score:", totalScore); // Log the total score
@@ -313,7 +313,7 @@ const EmotionPieChart = ({ emotionData }) => {
   const emotionsData = {
     'Happy': emotionData?.Happy, //happy + neutral
     'Neutral': emotionData?.Neutral, //sad
-    'Sad':5,
+    'Sad':emotionData?.Sad,
     'Angry': emotionData?.Angry,
     'Disgust': emotionData?.Disgust,
     'Fear': emotionData?.Fear,

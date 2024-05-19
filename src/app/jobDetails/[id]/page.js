@@ -30,7 +30,7 @@ export default function JobDetails  ({params}) {
     const [user, setuser] = useState();
     const router = useRouter();
 
-    const [filter, setFilter] = useState("Resume"); // Default filter
+    const [filter, setFilter] = useState("Overall"); // Default filter
 
     
     useEffect(() => {
@@ -116,11 +116,18 @@ export default function JobDetails  ({params}) {
         case "Video":
             // Implement filtering logic for video analysis
             return jobDetails?.applicants?.sort((a, b) => parseFloat(b.videoAnalysisScore) - parseFloat(a.videoAnalysisScore));
-
-            break;
+   
         case "Responses":
             // Implement filtering logic for responses analysis
-            break;
+            return jobDetails?.applicants?.sort((a, b) => parseFloat(b.responseAnalysisScore) - parseFloat(a.responseAnalysisScore));
+        case "Overall":
+          return jobDetails?.applicants?.sort((a, b) => {
+            const overallScoreA = parseFloat(a.resumeAnalysisScore) + parseFloat(a.videoAnalysisScore) + parseFloat(a.responseAnalysisScore);
+            const overallScoreB = parseFloat(b.resumeAnalysisScore) + parseFloat(b.videoAnalysisScore) + parseFloat(b.responseAnalysisScore);
+            return overallScoreB - overallScoreA;
+        });
+
+            
         default:
             return jobDetails.applicants;
       }
@@ -153,13 +160,23 @@ export default function JobDetails  ({params}) {
                     >
                       <div className="flex items-center gap-4 ">
 
-                    <img src={applicants.applicant.avatar} className="rounded-full w-20"></img>
+                    <img src={applicants.applicant.avatar} className="rounded-full w-20 h-20 object-cover"></img>
                     <div>
                       <h1 className="text-xl font-poppins">{applicants.applicant.name}</h1>
                       <h1 className="text-sm text-gray-500  font-poppins">{applicants.applicant.email}</h1>
                       <div className="flex items-center">
-                      <h1 className="text-sm text-teal_color">{filter} Score: <span className="text-base font-medium">{filter === "Resume" ? applicants.resumeAnalysisScore : filter==="Video" ? applicants.videoAnalysisScore: applicants.responseAnalysisScore}</span></h1>
-
+                      <h1 className="text-sm text-teal_color">
+                        {filter} Score: 
+                        <span className="text-base font-medium">
+                          {filter === "Overall" 
+                            ? (parseFloat(applicants.resumeAnalysisScore) + parseFloat(applicants.videoAnalysisScore) + parseFloat(applicants.responseAnalysisScore*100)).toFixed(2)
+                            : filter === "Resume"
+                              ? applicants.resumeAnalysisScore
+                              : filter === "Video"
+                                ? applicants.videoAnalysisScore
+                                : parseFloat(applicants.responseAnalysisScore*100).toFixed(2)}
+                        </span>
+                      </h1>
                     </div>
                     </div>
                       </div>
@@ -250,7 +267,7 @@ fetch(`http://localhost:3000/api/v1/candidate/alreadyRecordInterview/${params.id
         <div className="avatar gap-2 font-poppins absolute top-40 mt-12 left-48 flex items-center " suppressHydrationWarning={true}>
  
             <div className="w-28 ">
-                <img src={jobDetails?.avatar} className="rounded-full border border-blue_color" />
+                <img src={jobDetails?.avatar} className="rounded-full bg-white border" />
             </div>
             
            
@@ -376,6 +393,8 @@ fetch(`http://localhost:3000/api/v1/candidate/alreadyRecordInterview/${params.id
                   <h1 className="text-lg font-semibold font-poppins">Applicants <span className="text-gray-500 font-normal ml-1">({jobDetails?.applicants.length})</span></h1>
                   <span className=" font-poppins "><span  className="text-lg font-semibold font-poppins ">sort by: </span>
                       <select value={filter} className="text-teal_color bg-white text-lg focus:outline-none hover:cursor-pointer" onChange={handleFilterChange}>
+                        
+                        <option value="Overall" >Overall Score</option>
                         <option value="Resume" >Resume Analysis</option>
                         <option value="Video">Video Analysis</option>
                         <option value="Responses">Responses Analysis</option>

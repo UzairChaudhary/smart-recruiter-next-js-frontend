@@ -174,10 +174,10 @@ const Navbar = () => {
               <motion.img
                 src={user?.avatar}
                 alt="Avatar"
-                className="w-10 h-10 rounded-full sm:cursor-pointer dropdown-btn"
+                className="w-10 h-10 rounded-full bg-white border object-cover sm:cursor-pointer dropdown-btn"
                 whileTap={{ scale: 0.5 }}
               ></motion.img>
-              <BiChevronDown className="dropdown-btn mt-2 w-5 h-5" />
+              <BiChevronDown className="dropdown-btn w-5 h-5" />
               <Dropdown />
             </div>
           
