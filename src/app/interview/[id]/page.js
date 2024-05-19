@@ -561,7 +561,7 @@ export default function page({params}) {
                     {isLoading ? (<Loader/>):(
                       <>
                       <h2 className="text-xl font-semibold text-left text-[#1D2B3A] mb-2">
-                    Question: 0{initialIndex+1}
+                    Question: {initialIndex+1} of {interviewQuestions.length}
                   </h2>
                   <h2 className="text-2xl font-semibold text-left text-[#1D2B3A] mb-2">
                     {interviewQuestions[initialIndex]}
